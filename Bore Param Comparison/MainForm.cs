@@ -26,20 +26,6 @@ namespace BoreParamCompare
             Directory.CreateDirectory("Output");
         }
 
-        private static PARAM.Row InsertParamRow(PARAM param, PARAM.Row row, int newID)
-        {
-            PARAM.Row newRow = new PARAM.Row(newID, "new row " + newID, param.AppliedParamdef);
-
-            for (var i = 0; i < row.Cells.Count; i++)
-            {
-                newRow.Cells[i].Value = row.Cells[i].Value;
-            }
-            param.Rows.Insert(param.Rows.IndexOf(row) + 1, newRow); //messes up list order if you copy from one param to another
-
-            return newRow;
-        }
-
-
         public bool compareCells(List<string> changeList, PARAM.Row row_old, PARAM.Row row_new, string ID_str)
         {
             var changed = false;
@@ -52,7 +38,6 @@ namespace BoreParamCompare
             {
                 for (var iField = 0; iField < row_old.Cells.Count; iField++)
                 {
-                    var field = row_old.Cells[iField];
                     string oldField = row_old.Cells[iField].Value.ToString();
                     string newField = row_new.Cells[iField].Value.ToString();
 
@@ -355,13 +340,6 @@ namespace BoreParamCompare
                     {
                         //row was moved
                         row_new = param_new[row_old.ID]; //find the corresponding row at its new address
-                        /*
-                        //error with new row here. seems to step from dupe ID rows existing?
-                        if (row_new == null)
-                        {
-                            throw new Exception("no");
-                        }
-                        */
 
                         if (compareCells(changeList, row_old, row_new, ID_old_str))
                             paramChanges++;
@@ -404,7 +382,7 @@ namespace BoreParamCompare
             */
 
             File.WriteAllLines(outputFileName, changeList);
-            System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName);
+            System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
 
             /*
             UpdateConsole("Exporting Params");
@@ -501,20 +479,5 @@ namespace BoreParamCompare
             else
                 cb_fields_share_row.Enabled = false;
         }
-
-        /*
-        private void b_restoreRegulation_Click(object sender, EventArgs e)
-        {
-            string regulationPath = openFileDialog_old.FileName;
-            DialogResult result = MessageBox.Show("Delete current Regulation.bin and restore backup?", "Restore Backup", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {
-                FileSystem.DeleteFile(regulationPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                File.Move(backupFile, regulationPath, false);
-                UpdateConsole("Backup Restored");
-                b_restoreRegulation.Enabled = false;
-            }
-        }
-        */
     }
 }

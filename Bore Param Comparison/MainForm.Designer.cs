@@ -28,9 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.openFileDialog_old = new System.Windows.Forms.OpenFileDialog();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.b_browse_old = new System.Windows.Forms.Button();
             this.b_activate = new System.Windows.Forms.Button();
             this.b_browse_new = new System.Windows.Forms.Button();
@@ -39,7 +37,6 @@
             this.cb_dupe = new System.Windows.Forms.CheckBox();
             this.cb_dupe_no_old = new System.Windows.Forms.CheckBox();
             this.cb_dupe_no_both = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.cb_log_field_specifics = new System.Windows.Forms.CheckBox();
             this.cb_fields_share_row = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
@@ -50,13 +47,6 @@
             this.openFileDialog_old.Filter = "Regulation File|*.bin|All Files|*.*";
             this.openFileDialog_old.Title = "Select old \"regulation.bin\"";
             // 
-            // toolTip1
-            // 
-            this.toolTip1.AutomaticDelay = 200;
-            this.toolTip1.AutoPopDelay = 20000;
-            this.toolTip1.InitialDelay = 200;
-            this.toolTip1.ReshowDelay = 40;
-            // 
             // b_browse_old
             // 
             this.b_browse_old.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -66,7 +56,6 @@
             this.b_browse_old.Size = new System.Drawing.Size(74, 24);
             this.b_browse_old.TabIndex = 60;
             this.b_browse_old.Text = "Open Old";
-            this.toolTip1.SetToolTip(this.b_browse_old, "Browse and load ER\'s Regulation.bin file");
             this.b_browse_old.UseVisualStyleBackColor = true;
             this.b_browse_old.Click += new System.EventHandler(this.b_browse_old_Click);
             // 
@@ -79,7 +68,6 @@
             this.b_activate.Size = new System.Drawing.Size(74, 24);
             this.b_activate.TabIndex = 61;
             this.b_activate.Text = "Activate";
-            this.toolTip1.SetToolTip(this.b_activate, "Initiate Randomizer");
             this.b_activate.UseVisualStyleBackColor = true;
             this.b_activate.Click += new System.EventHandler(this.b_activate_Click);
             // 
@@ -92,7 +80,6 @@
             this.b_browse_new.Size = new System.Drawing.Size(74, 24);
             this.b_browse_new.TabIndex = 63;
             this.b_browse_new.Text = "Open New";
-            this.toolTip1.SetToolTip(this.b_browse_new, "Browse and load ER\'s Regulation.bin file");
             this.b_browse_new.UseVisualStyleBackColor = true;
             this.b_browse_new.Click += new System.EventHandler(this.b_browse_new_Click);
             // 
@@ -116,6 +103,8 @@
             // cb_dupe
             // 
             this.cb_dupe.AutoSize = true;
+            this.cb_dupe.Checked = true;
+            this.cb_dupe.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_dupe.Location = new System.Drawing.Point(12, 97);
             this.cb_dupe.Name = "cb_dupe";
             this.cb_dupe.Size = new System.Drawing.Size(95, 19);
@@ -146,19 +135,6 @@
             this.cb_dupe_no_both.TabIndex = 66;
             this.cb_dupe_no_both.Text = "Don\'t log dupe IDs found in BOTH (unique new/old only)";
             this.cb_dupe_no_both.UseVisualStyleBackColor = true;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Enabled = false;
-            this.checkBox1.Location = new System.Drawing.Point(12, 12);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(366, 19);
-            this.checkBox1.TabIndex = 68;
-            this.checkBox1.Text = "Only Log dupe IDs that were added/removed (not implemented)\r\n";
-            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // cb_log_field_specifics
             // 
@@ -192,7 +168,6 @@
             this.ClientSize = new System.Drawing.Size(781, 182);
             this.Controls.Add(this.cb_fields_share_row);
             this.Controls.Add(this.cb_log_field_specifics);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.cb_dupe_no_old);
             this.Controls.Add(this.cb_dupe_no_both);
             this.Controls.Add(this.cb_dupe);
@@ -212,11 +187,9 @@
 
         #endregion
         private OpenFileDialog openFileDialog_old;
-        private ToolTip toolTip1;
         private TextBox t_console;
         private Button b_browse_old;
         private Button b_activate;
-        private ToolStripMenuItem playgroundToolStripMenuItem;
         private Button b_browse_new;
         private OpenFileDialog openFileDialog_new;
         private CheckBox cb_dupe;
