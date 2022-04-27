@@ -39,6 +39,7 @@
             this.cb_dupe_no_both = new System.Windows.Forms.CheckBox();
             this.cb_log_field_specifics = new System.Windows.Forms.CheckBox();
             this.cb_fields_share_row = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog_old
@@ -51,7 +52,7 @@
             // 
             this.b_browse_old.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_browse_old.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_browse_old.Location = new System.Drawing.Point(513, 92);
+            this.b_browse_old.Location = new System.Drawing.Point(381, 92);
             this.b_browse_old.Name = "b_browse_old";
             this.b_browse_old.Size = new System.Drawing.Size(74, 24);
             this.b_browse_old.TabIndex = 60;
@@ -63,7 +64,7 @@
             // 
             this.b_activate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_activate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_activate.Location = new System.Drawing.Point(602, 151);
+            this.b_activate.Location = new System.Drawing.Point(470, 151);
             this.b_activate.Name = "b_activate";
             this.b_activate.Size = new System.Drawing.Size(74, 24);
             this.b_activate.TabIndex = 61;
@@ -75,7 +76,7 @@
             // 
             this.b_browse_new.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_browse_new.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_browse_new.Location = new System.Drawing.Point(695, 92);
+            this.b_browse_new.Location = new System.Drawing.Point(563, 92);
             this.b_browse_new.Name = "b_browse_new";
             this.b_browse_new.Size = new System.Drawing.Size(74, 24);
             this.b_browse_new.TabIndex = 63;
@@ -86,7 +87,7 @@
             // t_console
             // 
             this.t_console.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.t_console.Location = new System.Drawing.Point(513, 122);
+            this.t_console.Location = new System.Drawing.Point(381, 122);
             this.t_console.Name = "t_console";
             this.t_console.ReadOnly = true;
             this.t_console.Size = new System.Drawing.Size(256, 23);
@@ -138,10 +139,11 @@
             // 
             // cb_log_field_specifics
             // 
+            this.cb_log_field_specifics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_log_field_specifics.AutoSize = true;
             this.cb_log_field_specifics.Checked = true;
             this.cb_log_field_specifics.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_log_field_specifics.Location = new System.Drawing.Point(514, 38);
+            this.cb_log_field_specifics.Location = new System.Drawing.Point(382, 38);
             this.cb_log_field_specifics.Name = "cb_log_field_specifics";
             this.cb_log_field_specifics.Size = new System.Drawing.Size(162, 19);
             this.cb_log_field_specifics.TabIndex = 69;
@@ -151,21 +153,33 @@
             // 
             // cb_fields_share_row
             // 
+            this.cb_fields_share_row.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_fields_share_row.AutoSize = true;
             this.cb_fields_share_row.Checked = true;
             this.cb_fields_share_row.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_fields_share_row.Location = new System.Drawing.Point(514, 63);
+            this.cb_fields_share_row.Location = new System.Drawing.Point(382, 63);
             this.cb_fields_share_row.Name = "cb_fields_share_row";
             this.cb_fields_share_row.Size = new System.Drawing.Size(186, 19);
             this.cb_fields_share_row.TabIndex = 70;
             this.cb_fields_share_row.Text = "Field changes share row per ID";
             this.cb_fields_share_row.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(12, 73);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 21);
+            this.label1.TabIndex = 71;
+            this.label1.Text = "Dupe IDs";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(781, 182);
+            this.ClientSize = new System.Drawing.Size(649, 182);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.cb_fields_share_row);
             this.Controls.Add(this.cb_log_field_specifics);
             this.Controls.Add(this.cb_dupe_no_old);
@@ -198,5 +212,6 @@
         private CheckBox checkBox1;
         private CheckBox cb_log_field_specifics;
         private CheckBox cb_fields_share_row;
+        private Label label1;
     }
 }
