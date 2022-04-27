@@ -217,7 +217,7 @@ namespace BoreParamCompare
                 string paramSpacer = "*** *** *** *** " +item.Key+ " *** *** *** ***";
 
                 changeList.Add(paramSpacer);
-                bool logParamName = false;
+                int paramChanges = 0; //keep track of how many changes were made to this param (and remove the spacer if it's zero)
 
 
                 //check for duplicate rows (old regulation)
@@ -237,7 +237,7 @@ namespace BoreParamCompare
                                 {
                                     string ID_str = MakeIDString(paramNameStr, row2, param_old);//paramNameStr + "[ID " + row2.ID.ToString() + "]";
                                     changeList.Add(ID_str + " DUPLICATE ROW (OLD REGULATION)");
-                                    logParamName = true;
+                                    paramChanges++;
                                 }
                             }
                             param_old.Rows.Remove(row2); //remove the non-first dupe row (only first is loaded in-game)
@@ -265,16 +265,18 @@ namespace BoreParamCompare
                                 {
                                     //dupe is in both old and new param
                                     changeList.Remove(ID_str + " DUPLICATE ROW (OLD REGULATION)");
+                                    paramChanges--;
+
                                     if (cb_dupe_no_both.Checked == false)
                                     {
                                         changeList.Add(ID_str + " DUPLICATE ROW (BOTH REGULATIONS)");
-                                        logParamName = true;
+                                        paramChanges++;
                                     }
                                 }
                                 else
                                 {
                                     changeList.Add(ID_str + " DUPLICATE ROW (NEW REGULATION)");
-                                    logParamName = true;
+                                    paramChanges++;
                                 }
                             }
 
@@ -294,7 +296,7 @@ namespace BoreParamCompare
                     {
                         string ID_new_str = MakeIDString(paramNameStr, row_new, param_new);//paramNameStr+"[ID " + row_new.ID.ToString() + "]";
                         changeList.Add(ID_new_str + " ROW ADDED");
-                        logParamName = true;
+                        paramChanges++;
 
                         param_new.Rows.Remove(row_new);
                         i--;
@@ -310,7 +312,7 @@ namespace BoreParamCompare
                     {
                         string ID_old_str = MakeIDString(paramNameStr, row_old, param_new);//paramNameStr+"[ID " + row_old.ID.ToString() + "]";
                         changeList.Add(ID_old_str + " ROW REMOVED");
-                        logParamName = true;
+                        paramChanges++;
 
                         param_old.Rows.Remove(row_old);
                         i--;
@@ -362,7 +364,7 @@ namespace BoreParamCompare
                         */
 
                         if (compareCells(changeList, row_old, row_new, ID_old_str))
-                            logParamName = true;
+                            paramChanges++;
 
                         param_old.Rows.Remove(row_old);
                         param_new.Rows.Remove(row_new);
@@ -374,7 +376,7 @@ namespace BoreParamCompare
 
                     if (compareCells(changeList, row_old, row_new, ID_old_str))
                     {
-                        logParamName = true;
+                        paramChanges++;
                         //iRow--;
                     }
 
@@ -383,7 +385,8 @@ namespace BoreParamCompare
                     else
                         rowCount = param_old.Rows.Count;
                     }
-                if (logParamName == false)
+
+                if (paramChanges <= 0) 
                     changeList.Remove(paramSpacer); //remove label for unchanged param type
             }
             #endregion
