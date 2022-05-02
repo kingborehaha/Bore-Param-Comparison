@@ -40,6 +40,10 @@
             this.cb_log_field_specifics = new System.Windows.Forms.CheckBox();
             this.cb_fields_share_row = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.t_VersionNew = new System.Windows.Forms.TextBox();
+            this.t_VersionOld = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog_old
@@ -143,7 +147,7 @@
             this.cb_log_field_specifics.AutoSize = true;
             this.cb_log_field_specifics.Checked = true;
             this.cb_log_field_specifics.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_log_field_specifics.Location = new System.Drawing.Point(382, 38);
+            this.cb_log_field_specifics.Location = new System.Drawing.Point(12, 17);
             this.cb_log_field_specifics.Name = "cb_log_field_specifics";
             this.cb_log_field_specifics.Size = new System.Drawing.Size(162, 19);
             this.cb_log_field_specifics.TabIndex = 69;
@@ -157,7 +161,7 @@
             this.cb_fields_share_row.AutoSize = true;
             this.cb_fields_share_row.Checked = true;
             this.cb_fields_share_row.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_fields_share_row.Location = new System.Drawing.Point(382, 63);
+            this.cb_fields_share_row.Location = new System.Drawing.Point(12, 42);
             this.cb_fields_share_row.Name = "cb_fields_share_row";
             this.cb_fields_share_row.Size = new System.Drawing.Size(186, 19);
             this.cb_fields_share_row.TabIndex = 70;
@@ -174,11 +178,55 @@
             this.label1.TabIndex = 71;
             this.label1.Text = "Dupe IDs";
             // 
+            // t_VersionNew
+            // 
+            this.t_VersionNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.t_VersionNew.Location = new System.Drawing.Point(563, 38);
+            this.t_VersionNew.Name = "t_VersionNew";
+            this.t_VersionNew.ReadOnly = true;
+            this.t_VersionNew.Size = new System.Drawing.Size(74, 23);
+            this.t_VersionNew.TabIndex = 72;
+            this.t_VersionNew.Text = "-";
+            this.t_VersionNew.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // t_VersionOld
+            // 
+            this.t_VersionOld.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.t_VersionOld.Location = new System.Drawing.Point(381, 39);
+            this.t_VersionOld.Name = "t_VersionOld";
+            this.t_VersionOld.ReadOnly = true;
+            this.t_VersionOld.Size = new System.Drawing.Size(74, 23);
+            this.t_VersionOld.TabIndex = 73;
+            this.t_VersionOld.Text = "-";
+            this.t_VersionOld.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(381, 21);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 15);
+            this.label2.TabIndex = 74;
+            this.label2.Text = "Old Version #";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(563, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(82, 15);
+            this.label3.TabIndex = 75;
+            this.label3.Text = "New Version #";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(649, 182);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.t_VersionOld);
+            this.Controls.Add(this.t_VersionNew);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cb_fields_share_row);
             this.Controls.Add(this.cb_log_field_specifics);
@@ -213,5 +261,9 @@
         private CheckBox cb_log_field_specifics;
         private CheckBox cb_fields_share_row;
         private Label label1;
+        private TextBox t_VersionNew;
+        private TextBox t_VersionOld;
+        private Label label2;
+        private Label label3;
     }
 }

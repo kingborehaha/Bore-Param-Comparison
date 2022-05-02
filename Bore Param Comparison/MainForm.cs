@@ -126,6 +126,11 @@ namespace BoreParamCompare
             BND4 paramBND_old = SFUtil.DecryptERRegulation(regPath_old); //load and decrypt param regulation
             BND4 paramBND_new = SFUtil.DecryptERRegulation(regPath_new); //load and decrypt param regulation
 
+            string oldVersion = paramBND_old.Version;
+            string newVersion = paramBND_new.Version;
+            t_VersionOld.Text = oldVersion;
+            t_VersionNew.Text = newVersion;
+
             UpdateConsole("Loading ParamDefs");
 
             var paramdefs = new List<PARAMDEF>();
@@ -461,7 +466,7 @@ namespace BoreParamCompare
                 cb_dupe_no_both.Enabled = true;
             }
         }
-
+ 
         private void cb_dupe_CheckedChanged(object sender, EventArgs e)
         {
             toggle_buttons_dupe();
