@@ -4,13 +4,15 @@ namespace BoreParamCompare
 {
 
     /* TODO
+     * add row name to ROW ADDED/ ROW REMOVED occurences (when they should be)
+     * add a new option to list row names, but don't list row name changes 
+     *   (prefer old bnd? prefer new? prefer whichever is not ""?)
      * implement comparing individual .param files
-     *  test it with those JP DeS ones that are apparently different
+     *      test it with those JP DeS ones that are apparently different
      *          EquipParamWeapon.param
      *          NpcParam.param
      *          QwcChange.param
      *          SpEffectParam.param
-     * finish comparing row names
      * 
      */
 
@@ -85,14 +87,15 @@ namespace BoreParamCompare
                 {
                     if (row_old.Name != row_new.Name)
                     {
+                        var nameChangeStr = "\""+row_old.Name+"\"" + " -> " + "\""+row_new.Name+"\"";
                         //Name was changed
                         if (cb_fields_share_row.Checked)
                         {
-                            combinedStr += "[" + row_old.Name + " -> " + row_new.Name + "]";
+                            combinedStr += "[" + nameChangeStr + "]";
                             changed = true;
                         }
                         else
-                            changeList.Add(ID_str + " ROW NAME: " + row_old.Name + " -> " + row_new.Name);
+                            changeList.Add(ID_str + " ROW NAME: " + nameChangeStr);
                     }
                     else if (cb_log_name_changes_only.Checked == false)
                     {
@@ -249,7 +252,7 @@ namespace BoreParamCompare
             UpdateConsole("Loading ParamDefs");
 
             List<PARAMDEF> paramdefs = new();
-            foreach (string path in Directory.GetFiles("Paramdex\\ER\\Defs", "*.xml"))
+            foreach (string path in Directory.GetFiles("Paramdex\\"+gameType+"\\Defs", "*.xml"))
             {
                 var paramdef = PARAMDEF.XmlDeserialize(path);
                 paramdefs.Add(paramdef);
@@ -267,6 +270,10 @@ namespace BoreParamCompare
                 {
                     paramList_old[name] = param;
                 }
+                else
+                {
+                    throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                }
             }
 
             foreach (BinderFile file in fileList_new)
@@ -278,6 +285,10 @@ namespace BoreParamCompare
                 if (param.ApplyParamdefCarefully(paramdefs))
                 {
                     paramList_new[name] = param;
+                }
+                else
+                {
+                    throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                 }
             }
             #endregion
