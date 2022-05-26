@@ -62,6 +62,7 @@
             // 
             this.openFileDialog_old.Filter = "Parambnd, Regulation, or .param|*";
             this.openFileDialog_old.Title = "Select old Parambnd or Regulation.bin";
+            this.openFileDialog_old.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_old_FileOk);
             // 
             // b_browse_old
             // 
@@ -80,7 +81,7 @@
             this.b_activate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_activate.Enabled = false;
             this.b_activate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_activate.Location = new System.Drawing.Point(285, 121);
+            this.b_activate.Location = new System.Drawing.Point(283, 121);
             this.b_activate.Name = "b_activate";
             this.b_activate.Size = new System.Drawing.Size(74, 24);
             this.b_activate.TabIndex = 61;

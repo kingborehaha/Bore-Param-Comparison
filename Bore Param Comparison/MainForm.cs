@@ -582,11 +582,13 @@ namespace BoreParamCompare
         private void b_browse_old_Click(object sender, EventArgs e)
         {
             loadFile(openFileDialog_old);
+            UpdateConsole("Old param selected");
         }
 
         private void b_browse_new_Click(object sender, EventArgs e)
         {
             loadFile(openFileDialog_new);
+            UpdateConsole("New param selected");
         }
 
         public void UpdateConsole(string text)
@@ -674,6 +676,12 @@ namespace BoreParamCompare
         private void menu_log_row_name_behavior_SelectedIndexChanged(object sender, EventArgs e)
         {
             toggle_buttons_logNames();
+        }
+
+        private void openFileDialog_old_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+            UpdateConsole("Reading Params");
         }
     }
 }
