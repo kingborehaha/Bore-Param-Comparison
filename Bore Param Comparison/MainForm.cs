@@ -5,15 +5,10 @@ namespace BoreParamCompare
 
     /* TODO
      * add row name to ROW ADDED/ ROW REMOVED occurences (when they should be)
-     * add a new option to list row names, but don't list row name changes 
+     * add/finish new option to list row names for rows with changed cells, but don't list them if cells are unchanged
      *   (prefer old bnd? prefer new? prefer whichever is not ""?)
-     * implement comparing individual .param files
-     *      test it with those JP DeS ones that are apparently different
-     *          EquipParamWeapon.param
-     *          NpcParam.param
-     *          QwcChange.param
-     *          SpEffectParam.param
-     * 
+     * test parambnds and regulations just to make sure they still work
+     * implement and test remaining games
      */
 
     public partial class MainForm : Form
@@ -218,10 +213,8 @@ namespace BoreParamCompare
                 case "DS2S":
                 case "SDT":
                     throw new Exception("Untested");
-                    break;
                 default:
                     throw new Exception("Bad game type!");
-                    break;
             }
 
             if (is_old)
