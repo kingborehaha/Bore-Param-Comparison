@@ -2,10 +2,51 @@ using SoulsFormats;
 
 namespace BoreParamCompare
 {
+
+    /* TODO
+     * implement comparing individual .param files
+     *  test it with those JP DeS ones that are apparently different
+     *          EquipParamWeapon.param
+     *          NpcParam.param
+     *          QwcChange.param
+     *          SpEffectParam.param
+     * finish comparing row names
+     * 
+     */
+
     public partial class MainForm : Form
     {
 
         //public string backupFile = Directory.GetCurrentDirectory() + "/regulation.bin.backup";
+
+        private string gameType = "";
+
+        private List<string> gameTypes = new()
+        {
+            "DES",
+            "DS1",
+            "DS1R",
+            "DS2",
+            "DS2S",
+            "DS3",
+            "BB",
+            "SDT",
+            "ER",
+        };
+        //private GameTypeEnum gameType = GameTypeEnum.NONE;
+        /*
+        private enum GameTypeEnum
+        {
+            NONE,
+            DES,
+            DS1,
+            DS2,
+            DS3,
+            BB,
+            SEK,
+            ER,
+        }
+        */
 
         public MainForm()
         {
@@ -23,6 +64,9 @@ namespace BoreParamCompare
             else
                 cb_fields_share_row.Enabled = false;
 
+            cb_GameType.Items.Clear();
+            cb_GameType.Items.AddRange(gameTypes.ToArray());
+
             Directory.CreateDirectory("Output");
         }
 
@@ -36,6 +80,14 @@ namespace BoreParamCompare
             }
             else
             {
+                /*
+                //TODO: put this somewhere more smart so it handles single line stuff correctly
+                if (row_old.Name != row_new.Name)
+                {
+                    //name changes
+                    changeList.Add(ID_str + " NAME: " + row_old.Name + " -> " + row_new.Name);
+                }
+                */
                 for (var iField = 0; iField < row_old.Cells.Count; iField++)
                 {
                     string oldField = row_old.Cells[iField].Value.ToString();
@@ -107,12 +159,66 @@ namespace BoreParamCompare
             return str;
         }
 
+        private List<BinderFile> GetBNDFiles(string path, bool is_old)
+        {
+            //Couple hamfisted things in here, but whatever. It works.
+            
+            List<BinderFile> list;
+            string version;
+            BND3 bnd3;
+            BND4 bnd4;
 
+            bool isRegulation = false;
+            if (path.Contains(".bin"))
+                isRegulation = true;
+
+            switch (gameType)
+            {
+                case "DES":
+                case "DS1":
+                case "DS1R":
+                    bnd3 = BND3.Read(path);
+                    list = bnd3.Files;
+                    version = bnd3.Version;
+                    break;
+                case "DS3":
+                    if (isRegulation)
+                        bnd4 = SFUtil.DecryptDS3Regulation(path);
+                    else
+                        bnd4 = BND4.Read(path);
+                    list = bnd4.Files;
+                    version = bnd4.Version;
+                    break;
+                case "ER":
+                    if (isRegulation)
+                        bnd4 = SFUtil.DecryptERRegulation(path);
+                    else
+                        bnd4 = BND4.Read(path);
+                    list = bnd4.Files;
+                    version = bnd4.Version;
+                    break;
+                case "DS2":
+                case "DS2S":
+                case "SDT":
+                    throw new Exception("Untested");
+                    break;
+                default:
+                    throw new Exception("Bad game type!");
+                    break;
+            }
+
+            if (is_old)
+                t_VersionOld.Text = version;
+            else
+                t_VersionNew.Text = version;
+
+            return list;
+        }
 
         private void CompareFiles()
         {
 
-            #region Load ParamBNDs from Regulation.bin
+            #region Load ParamBNDs
             Dictionary<string, PARAM> paramList_old = new();
             Dictionary<string, PARAM> paramList_new = new();
 
@@ -121,29 +227,23 @@ namespace BoreParamCompare
 
             string outputFileName = "Output\\"+openFileDialog_old.SafeFileName + " to " + openFileDialog_new.SafeFileName+".txt";
 
-            UpdateConsole("Decrypting Regulation");
+            UpdateConsole("Loading Params");
 
-            BND4 paramBND_old = SFUtil.DecryptERRegulation(regPath_old); //load and decrypt param regulation
-            BND4 paramBND_new = SFUtil.DecryptERRegulation(regPath_new); //load and decrypt param regulation
-
-            string oldVersion = paramBND_old.Version;
-            string newVersion = paramBND_new.Version;
-            t_VersionOld.Text = oldVersion;
-            t_VersionNew.Text = newVersion;
+            List<BinderFile> fileList_old = GetBNDFiles(regPath_old, true);
+            List<BinderFile> fileList_new = GetBNDFiles(regPath_new, false);
 
             UpdateConsole("Loading ParamDefs");
 
-            var paramdefs = new List<PARAMDEF>();
+            List<PARAMDEF> paramdefs = new();
             foreach (string path in Directory.GetFiles("Paramdex\\ER\\Defs", "*.xml"))
             {
                 var paramdef = PARAMDEF.XmlDeserialize(path);
                 paramdefs.Add(paramdef);
             }
 
-
             UpdateConsole("Handling Params");
 
-            foreach (BinderFile file in paramBND_old.Files)
+            foreach (BinderFile file in fileList_old)
             {
                 string name = Path.GetFileNameWithoutExtension(file.Name);
                 var param = PARAM.Read(file.Bytes);
@@ -155,7 +255,7 @@ namespace BoreParamCompare
                 }
             }
 
-            foreach (BinderFile file in paramBND_new.Files)
+            foreach (BinderFile file in fileList_new)
             {
                 string name = Path.GetFileNameWithoutExtension(file.Name);
                 var param = PARAM.Read(file.Bytes);
@@ -408,8 +508,7 @@ namespace BoreParamCompare
         {
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (openFileDialog_old.FileName != "" && openFileDialog_new.FileName != "")
-                    b_activate.Enabled = true;
+                CheckEnableActivateButton();
             }
         }
         private void b_browse_old_Click(object sender, EventArgs e)
@@ -427,6 +526,15 @@ namespace BoreParamCompare
         {
             t_console.Text = text;
             Application.DoEvents();
+        }
+
+
+
+        private void CheckEnableActivateButton()
+        {
+            if (openFileDialog_old.FileName != "" && openFileDialog_new.FileName != "" && gameType != "")
+                b_activate.Enabled = true;
+            return;
         }
 
         private void b_activate_Click(object sender, EventArgs e)
@@ -483,6 +591,13 @@ namespace BoreParamCompare
                 cb_fields_share_row.Enabled = true;
             else
                 cb_fields_share_row.Enabled = false;
+        }
+
+        private void cb_GameType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            gameType = (string)cb_GameType.SelectedItem;
+            //gameType = Enum.Parse<GameTypeEnum>(cb_GameType.SelectedText);
+            CheckEnableActivateButton();
         }
     }
 }

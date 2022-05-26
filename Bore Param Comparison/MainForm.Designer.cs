@@ -44,19 +44,20 @@
             this.t_VersionOld = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.cb_GameType = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog_old
             // 
-            this.openFileDialog_old.FileName = "regulation.bin";
-            this.openFileDialog_old.Filter = "Regulation File|*.bin|All Files|*.*";
-            this.openFileDialog_old.Title = "Select old \"regulation.bin\"";
+            this.openFileDialog_old.Filter = "Parambnd or Regulation.bin|*.bin;*.parambnd;*.parambnd.dcx|All Files|*.*";
+            this.openFileDialog_old.Title = "Select old Parambnd or Regulation.bin";
             // 
             // b_browse_old
             // 
             this.b_browse_old.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_browse_old.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_browse_old.Location = new System.Drawing.Point(381, 92);
+            this.b_browse_old.Location = new System.Drawing.Point(381, 160);
             this.b_browse_old.Name = "b_browse_old";
             this.b_browse_old.Size = new System.Drawing.Size(74, 24);
             this.b_browse_old.TabIndex = 60;
@@ -68,7 +69,7 @@
             // 
             this.b_activate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_activate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_activate.Location = new System.Drawing.Point(470, 151);
+            this.b_activate.Location = new System.Drawing.Point(470, 219);
             this.b_activate.Name = "b_activate";
             this.b_activate.Size = new System.Drawing.Size(74, 24);
             this.b_activate.TabIndex = 61;
@@ -80,7 +81,7 @@
             // 
             this.b_browse_new.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_browse_new.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_browse_new.Location = new System.Drawing.Point(563, 92);
+            this.b_browse_new.Location = new System.Drawing.Point(563, 160);
             this.b_browse_new.Name = "b_browse_new";
             this.b_browse_new.Size = new System.Drawing.Size(74, 24);
             this.b_browse_new.TabIndex = 63;
@@ -91,7 +92,7 @@
             // t_console
             // 
             this.t_console.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.t_console.Location = new System.Drawing.Point(381, 122);
+            this.t_console.Location = new System.Drawing.Point(381, 190);
             this.t_console.Name = "t_console";
             this.t_console.ReadOnly = true;
             this.t_console.Size = new System.Drawing.Size(256, 23);
@@ -101,9 +102,8 @@
             // 
             // openFileDialog_new
             // 
-            this.openFileDialog_new.FileName = "regulation.bin";
-            this.openFileDialog_new.Filter = "Regulation File|*.bin|All Files|*.*";
-            this.openFileDialog_new.Title = "Select new \"regulation.bin\"";
+            this.openFileDialog_new.Filter = "Parambnd or Regulation.bin|*.bin;*.parambnd;*.parambnd.dcx|All Files|*.*";
+            this.openFileDialog_new.Title = "Select new Parambnd or Regulation.bin";
             // 
             // cb_dupe
             // 
@@ -181,7 +181,7 @@
             // t_VersionNew
             // 
             this.t_VersionNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.t_VersionNew.Location = new System.Drawing.Point(563, 38);
+            this.t_VersionNew.Location = new System.Drawing.Point(563, 106);
             this.t_VersionNew.Name = "t_VersionNew";
             this.t_VersionNew.ReadOnly = true;
             this.t_VersionNew.Size = new System.Drawing.Size(74, 23);
@@ -192,7 +192,7 @@
             // t_VersionOld
             // 
             this.t_VersionOld.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.t_VersionOld.Location = new System.Drawing.Point(381, 39);
+            this.t_VersionOld.Location = new System.Drawing.Point(381, 107);
             this.t_VersionOld.Name = "t_VersionOld";
             this.t_VersionOld.ReadOnly = true;
             this.t_VersionOld.Size = new System.Drawing.Size(74, 23);
@@ -202,8 +202,9 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(381, 21);
+            this.label2.Location = new System.Drawing.Point(381, 89);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 15);
             this.label2.TabIndex = 74;
@@ -211,18 +212,42 @@
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(563, 20);
+            this.label3.Location = new System.Drawing.Point(563, 88);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 75;
             this.label3.Text = "New Version #";
             // 
+            // cb_GameType
+            // 
+            this.cb_GameType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_GameType.FormattingEnabled = true;
+            this.cb_GameType.Items.AddRange(new object[] {
+            "[overwritten]"});
+            this.cb_GameType.Location = new System.Drawing.Point(334, 42);
+            this.cb_GameType.Name = "cb_GameType";
+            this.cb_GameType.Size = new System.Drawing.Size(121, 23);
+            this.cb_GameType.TabIndex = 76;
+            this.cb_GameType.SelectedIndexChanged += new System.EventHandler(this.cb_GameType_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(372, 24);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 15);
+            this.label4.TabIndex = 77;
+            this.label4.Text = "Game";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 182);
+            this.ClientSize = new System.Drawing.Size(649, 250);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.cb_GameType);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.t_VersionOld);
@@ -265,5 +290,7 @@
         private TextBox t_VersionOld;
         private Label label2;
         private Label label3;
+        private ComboBox cb_GameType;
+        private Label label4;
     }
 }
