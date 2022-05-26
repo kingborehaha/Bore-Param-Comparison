@@ -67,7 +67,7 @@
             // 
             this.b_browse_old.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_browse_old.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_browse_old.Location = new System.Drawing.Point(10, 83);
+            this.b_browse_old.Location = new System.Drawing.Point(8, 120);
             this.b_browse_old.Name = "b_browse_old";
             this.b_browse_old.Size = new System.Drawing.Size(74, 24);
             this.b_browse_old.TabIndex = 60;
@@ -80,7 +80,7 @@
             this.b_activate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_activate.Enabled = false;
             this.b_activate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_activate.Location = new System.Drawing.Point(285, 83);
+            this.b_activate.Location = new System.Drawing.Point(283, 121);
             this.b_activate.Name = "b_activate";
             this.b_activate.Size = new System.Drawing.Size(74, 24);
             this.b_activate.TabIndex = 61;
@@ -91,7 +91,7 @@
             // b_browse_new
             // 
             this.b_browse_new.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_browse_new.Location = new System.Drawing.Point(146, 84);
+            this.b_browse_new.Location = new System.Drawing.Point(147, 121);
             this.b_browse_new.Name = "b_browse_new";
             this.b_browse_new.Size = new System.Drawing.Size(74, 24);
             this.b_browse_new.TabIndex = 63;
@@ -102,7 +102,7 @@
             // t_console
             // 
             this.t_console.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.t_console.Location = new System.Drawing.Point(8, 242);
+            this.t_console.Location = new System.Drawing.Point(8, 226);
             this.t_console.Name = "t_console";
             this.t_console.ReadOnly = true;
             this.t_console.Size = new System.Drawing.Size(349, 23);
@@ -162,7 +162,7 @@
             // 
             // t_VersionNew
             // 
-            this.t_VersionNew.Location = new System.Drawing.Point(146, 49);
+            this.t_VersionNew.Location = new System.Drawing.Point(147, 86);
             this.t_VersionNew.Name = "t_VersionNew";
             this.t_VersionNew.ReadOnly = true;
             this.t_VersionNew.Size = new System.Drawing.Size(74, 23);
@@ -173,7 +173,7 @@
             // t_VersionOld
             // 
             this.t_VersionOld.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.t_VersionOld.Location = new System.Drawing.Point(10, 49);
+            this.t_VersionOld.Location = new System.Drawing.Point(8, 86);
             this.t_VersionOld.Name = "t_VersionOld";
             this.t_VersionOld.ReadOnly = true;
             this.t_VersionOld.Size = new System.Drawing.Size(74, 23);
@@ -185,7 +185,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 31);
+            this.label2.Location = new System.Drawing.Point(8, 68);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 15);
             this.label2.TabIndex = 74;
@@ -194,7 +194,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(146, 31);
+            this.label3.Location = new System.Drawing.Point(145, 68);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 75;
@@ -206,7 +206,7 @@
             this.menu_GameType.FormattingEnabled = true;
             this.menu_GameType.Items.AddRange(new object[] {
             "[overwritten]"});
-            this.menu_GameType.Location = new System.Drawing.Point(285, 48);
+            this.menu_GameType.Location = new System.Drawing.Point(283, 86);
             this.menu_GameType.Name = "menu_GameType";
             this.menu_GameType.Size = new System.Drawing.Size(74, 23);
             this.menu_GameType.TabIndex = 76;
@@ -215,7 +215,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(302, 30);
+            this.label4.Location = new System.Drawing.Point(300, 68);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 15);
             this.label4.TabIndex = 77;
@@ -278,7 +278,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(373, 301);
+            this.tabControl1.Size = new System.Drawing.Size(371, 301);
             this.tabControl1.TabIndex = 82;
             // 
             // tabPage1
@@ -296,7 +296,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(365, 273);
+            this.tabPage1.Size = new System.Drawing.Size(363, 273);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;

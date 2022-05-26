@@ -235,7 +235,7 @@ namespace BoreParamCompare
         private void CompareFiles()
         {
 
-            #region Load ParamBNDs
+            #region Load Params
             Dictionary<string, PARAM> paramList_old = new();
             Dictionary<string, PARAM> paramList_new = new();
 
@@ -244,51 +244,88 @@ namespace BoreParamCompare
 
             string outputFileName = "Output\\"+openFileDialog_old.SafeFileName + " to " + openFileDialog_new.SafeFileName+".txt";
 
-            UpdateConsole("Loading Params");
-
-            List<BinderFile> fileList_old = GetBNDFiles(regPath_old, true);
-            List<BinderFile> fileList_new = GetBNDFiles(regPath_new, false);
 
             UpdateConsole("Loading ParamDefs");
 
             List<PARAMDEF> paramdefs = new();
-            foreach (string path in Directory.GetFiles("Paramdex\\"+gameType+"\\Defs", "*.xml"))
+            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType + "\\Defs", "*.xml"))
             {
                 var paramdef = PARAMDEF.XmlDeserialize(path);
                 paramdefs.Add(paramdef);
             }
 
-            UpdateConsole("Handling Params");
 
-            foreach (BinderFile file in fileList_old)
+            UpdateConsole("Loading Params");
+
+            if (regPath_old.EndsWith(".param"))
             {
-                string name = Path.GetFileNameWithoutExtension(file.Name);
-                var param = PARAM.Read(file.Bytes);
+                //single .param
+                PARAM param_old = PARAM.Read(regPath_old);
+                PARAM param_new = PARAM.Read(regPath_new);
 
-                // Recommended method: checks the list for any match, or you can test them one-by-one
-                if (param.ApplyParamdefCarefully(paramdefs))
+                t_VersionOld.Text = "Invalid";
+                t_VersionNew.Text = "Invalid";
+
+                var nameOld = Path.GetFileNameWithoutExtension(regPath_old);
+                var nameNew = Path.GetFileNameWithoutExtension(regPath_new);
+
+                if (param_old.ApplyParamdefCarefully(paramdefs))
                 {
-                    paramList_old[name] = param;
+                    paramList_old[nameOld] = param_old;
                 }
                 else
                 {
                     throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                 }
+
+                if (param_new.ApplyParamdefCarefully(paramdefs))
+                {
+                    paramList_new[nameNew] = param_new;
+                }
+                else
+                {
+                    throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                }
+
             }
-
-            foreach (BinderFile file in fileList_new)
+            else
             {
-                string name = Path.GetFileNameWithoutExtension(file.Name);
-                var param = PARAM.Read(file.Bytes);
+                //multiple params
+                List<BinderFile> fileList_old = GetBNDFiles(regPath_old, true);
+                List<BinderFile> fileList_new = GetBNDFiles(regPath_new, false);
 
-                // Recommended method: checks the list for any match, or you can test them one-by-one
-                if (param.ApplyParamdefCarefully(paramdefs))
+                UpdateConsole("Applying Defs");
+
+                foreach (BinderFile file in fileList_old)
                 {
-                    paramList_new[name] = param;
+                    string name = Path.GetFileNameWithoutExtension(file.Name);
+                    var param = PARAM.Read(file.Bytes);
+
+                    // Recommended method: checks the list for any match, or you can test them one-by-one
+                    if (param.ApplyParamdefCarefully(paramdefs))
+                    {
+                        paramList_old[name] = param;
+                    }
+                    else
+                    {
+                        throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                    }
                 }
-                else
+
+                foreach (BinderFile file in fileList_new)
                 {
-                    throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                    string name = Path.GetFileNameWithoutExtension(file.Name);
+                    var param = PARAM.Read(file.Bytes);
+
+                    // Recommended method: checks the list for any match, or you can test them one-by-one
+                    if (param.ApplyParamdefCarefully(paramdefs))
+                    {
+                        paramList_new[name] = param;
+                    }
+                    else
+                    {
+                        throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                    }
                 }
             }
             #endregion
