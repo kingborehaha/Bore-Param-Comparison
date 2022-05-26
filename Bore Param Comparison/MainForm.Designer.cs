@@ -50,9 +50,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
             this.cb_log_field_specifics = new System.Windows.Forms.CheckBox();
             this.cb_fields_share_row = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -60,8 +60,7 @@
             // 
             // openFileDialog_old
             // 
-            this.openFileDialog_old.Filter = "Param\\Parambnd\\Regulation.bin|*.bin;*.param;*.parambnd;*.parambnd.dcx|All Files|*" +
-    ".*";
+            this.openFileDialog_old.Filter = "Parambnd, Regulation, or .param|*";
             this.openFileDialog_old.Title = "Select old Parambnd or Regulation.bin";
             // 
             // b_browse_old
@@ -112,8 +111,7 @@
             // 
             // openFileDialog_new
             // 
-            this.openFileDialog_new.Filter = "Param\\Parambnd\\Regulation.bin|*.bin;*.param;*.parambnd;*.parambnd.dcx|All Files|*" +
-    ".*";
+            this.openFileDialog_new.Filter = "Parambnd, Regulation, or .param|*";
             this.openFileDialog_new.Title = "Select new Parambnd or Regulation.bin";
             // 
             // cb_dupe
@@ -311,6 +309,16 @@
             this.tabPage2.Text = "Options";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label6.Location = new System.Drawing.Point(6, 13);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(91, 21);
+            this.label6.TabIndex = 82;
+            this.label6.Text = "Formatting";
+            // 
             // cb_log_field_specifics
             // 
             this.cb_log_field_specifics.AutoSize = true;
@@ -335,16 +343,6 @@
             this.cb_fields_share_row.TabIndex = 70;
             this.cb_fields_share_row.Text = "Field changes share row per ID";
             this.cb_fields_share_row.UseVisualStyleBackColor = true;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(6, 13);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(91, 21);
-            this.label6.TabIndex = 82;
-            this.label6.Text = "Formatting";
             // 
             // MainForm
             // 

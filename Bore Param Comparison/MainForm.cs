@@ -181,7 +181,7 @@ namespace BoreParamCompare
             BND4 bnd4;
 
             bool isRegulation = false;
-            if (path.Contains(".bin"))
+            if (path.Contains(".bin")) //TODO: something more safe
                 isRegulation = true;
 
             switch (gameType)
@@ -193,7 +193,14 @@ namespace BoreParamCompare
                     list = bnd3.Files;
                     version = bnd3.Version;
                     break;
-                case "DS3":
+                case "DS2": //untested
+                case "DS2S": //untested
+                case "SDT": //untested
+                    bnd4 = BND4.Read(path);
+                    list = bnd4.Files;
+                    version = bnd4.Version;
+                    break;
+                case "DS3": //untested
                     if (isRegulation)
                         bnd4 = SFUtil.DecryptDS3Regulation(path);
                     else
@@ -209,10 +216,6 @@ namespace BoreParamCompare
                     list = bnd4.Files;
                     version = bnd4.Version;
                     break;
-                case "DS2":
-                case "DS2S":
-                case "SDT":
-                    throw new Exception("Untested");
                 default:
                     throw new Exception("Bad game type!");
             }
