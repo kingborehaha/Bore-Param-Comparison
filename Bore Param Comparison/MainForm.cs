@@ -55,17 +55,16 @@ namespace BoreParamCompare
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            b_activate.Enabled = false;
-
             toggle_buttons_dupe();
+            toggle_buttons_logNames();
 
             if (cb_log_field_specifics.Checked)
                 cb_fields_share_row.Enabled = true;
             else
                 cb_fields_share_row.Enabled = false;
 
-            cb_GameType.Items.Clear();
-            cb_GameType.Items.AddRange(gameTypes.ToArray());
+            menu_GameType.Items.Clear();
+            menu_GameType.Items.AddRange(gameTypes.ToArray());
 
             Directory.CreateDirectory("Output");
         }
@@ -73,25 +72,40 @@ namespace BoreParamCompare
         public bool compareCells(List<string> changeList, PARAM.Row row_old, PARAM.Row row_new, string ID_str)
         {
             var changed = false;
-            var combinedStr = ID_str+"";
+            var combinedStr = ID_str;
+
             if (row_old.Cells.Count != row_new.Cells.Count)
             {
                 throw new Exception("Field cell count mismatch! Was a new field introduced?");
             }
             else
             {
-                /*
-                //TODO: put this somewhere more smart so it handles single line stuff correctly
-                if (row_old.Name != row_new.Name)
+
+                if (cb_log_names.Checked)
                 {
-                    //name changes
-                    changeList.Add(ID_str + " NAME: " + row_old.Name + " -> " + row_new.Name);
+                    if (row_old.Name != row_new.Name)
+                    {
+                        //Name was changed
+                        if (cb_fields_share_row.Checked)
+                        {
+                            combinedStr += "[" + row_old.Name + " -> " + row_new.Name + "]";
+                            changed = true;
+                        }
+                        else
+                            changeList.Add(ID_str + " ROW NAME: " + row_old.Name + " -> " + row_new.Name);
+                    }
+                    else if (cb_log_name_changes_only.Checked == false)
+                    {
+                        //Log all names
+                        ID_str += "[" + row_old.Name + "]";
+                        combinedStr += "[" + row_old.Name + "]";
+                    }
                 }
-                */
+
                 for (var iField = 0; iField < row_old.Cells.Count; iField++)
                 {
-                    string oldField = row_old.Cells[iField].Value.ToString();
-                    string newField = row_new.Cells[iField].Value.ToString();
+                    string? oldField = row_old.Cells[iField].Value.ToString();
+                    string? newField = row_new.Cells[iField].Value.ToString();
 
                     if (oldField == null || newField == null)
                     {
@@ -521,14 +535,11 @@ namespace BoreParamCompare
             loadFile(openFileDialog_new);
         }
 
-
         public void UpdateConsole(string text)
         {
             t_console.Text = text;
             Application.DoEvents();
         }
-
-
 
         private void CheckEnableActivateButton()
         {
@@ -539,13 +550,11 @@ namespace BoreParamCompare
 
         private void b_activate_Click(object sender, EventArgs e)
         {
-
             CompareFiles(); //do all the stuff
 
             GC.Collect(); //clear memory
 
             UpdateConsole("Finished!");
-
         }
 
         private void toggle_buttons_dupe()
@@ -595,9 +604,22 @@ namespace BoreParamCompare
 
         private void cb_GameType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            gameType = (string)cb_GameType.SelectedItem;
+            gameType = (string)menu_GameType.SelectedItem;
             //gameType = Enum.Parse<GameTypeEnum>(cb_GameType.SelectedText);
             CheckEnableActivateButton();
+        }
+
+        private void toggle_buttons_logNames()
+        {
+            if (cb_log_names.Checked)
+                cb_log_name_changes_only.Enabled = true;
+            else
+                cb_log_name_changes_only.Enabled = false;
+        }
+
+        private void cb_log_names_CheckedChanged(object sender, EventArgs e)
+        {
+            toggle_buttons_logNames();
         }
     }
 }
