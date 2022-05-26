@@ -44,12 +44,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.menu_GameType = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.cb_log_name_changes_only = new System.Windows.Forms.CheckBox();
-            this.cb_log_names = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.menu_log_row_name_behavior = new System.Windows.Forms.ComboBox();
+            this.cb_log_name_changes_only = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cb_log_field_specifics = new System.Windows.Forms.CheckBox();
             this.cb_fields_share_row = new System.Windows.Forms.CheckBox();
@@ -119,7 +119,7 @@
             this.cb_dupe.AutoSize = true;
             this.cb_dupe.Checked = true;
             this.cb_dupe.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_dupe.Location = new System.Drawing.Point(6, 185);
+            this.cb_dupe.Location = new System.Drawing.Point(6, 200);
             this.cb_dupe.Name = "cb_dupe";
             this.cb_dupe.Size = new System.Drawing.Size(95, 19);
             this.cb_dupe.TabIndex = 65;
@@ -130,7 +130,7 @@
             // cb_dupe_no_old
             // 
             this.cb_dupe_no_old.AutoSize = true;
-            this.cb_dupe_no_old.Location = new System.Drawing.Point(6, 210);
+            this.cb_dupe_no_old.Location = new System.Drawing.Point(6, 225);
             this.cb_dupe_no_old.Name = "cb_dupe_no_old";
             this.cb_dupe_no_old.Size = new System.Drawing.Size(279, 19);
             this.cb_dupe_no_old.TabIndex = 67;
@@ -143,7 +143,7 @@
             this.cb_dupe_no_both.AutoSize = true;
             this.cb_dupe_no_both.Checked = true;
             this.cb_dupe_no_both.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_dupe_no_both.Location = new System.Drawing.Point(6, 235);
+            this.cb_dupe_no_both.Location = new System.Drawing.Point(6, 250);
             this.cb_dupe_no_both.Name = "cb_dupe_no_both";
             this.cb_dupe_no_both.Size = new System.Drawing.Size(326, 19);
             this.cb_dupe_no_both.TabIndex = 66;
@@ -154,7 +154,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(6, 161);
+            this.label1.Location = new System.Drawing.Point(6, 176);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 21);
             this.label1.TabIndex = 71;
@@ -221,36 +221,11 @@
             this.label4.TabIndex = 77;
             this.label4.Text = "Game";
             // 
-            // cb_log_name_changes_only
-            // 
-            this.cb_log_name_changes_only.AutoSize = true;
-            this.cb_log_name_changes_only.Checked = true;
-            this.cb_log_name_changes_only.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_log_name_changes_only.Location = new System.Drawing.Point(6, 133);
-            this.cb_log_name_changes_only.Name = "cb_log_name_changes_only";
-            this.cb_log_name_changes_only.Size = new System.Drawing.Size(181, 19);
-            this.cb_log_name_changes_only.TabIndex = 78;
-            this.cb_log_name_changes_only.Text = "Only log changed row names";
-            this.cb_log_name_changes_only.UseVisualStyleBackColor = true;
-            // 
-            // cb_log_names
-            // 
-            this.cb_log_names.AutoSize = true;
-            this.cb_log_names.Checked = true;
-            this.cb_log_names.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_log_names.Location = new System.Drawing.Point(6, 108);
-            this.cb_log_names.Name = "cb_log_names";
-            this.cb_log_names.Size = new System.Drawing.Size(107, 19);
-            this.cb_log_names.TabIndex = 79;
-            this.cb_log_names.Text = "Log row names";
-            this.cb_log_names.UseVisualStyleBackColor = true;
-            this.cb_log_names.CheckedChanged += new System.EventHandler(this.cb_log_names_CheckedChanged);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(6, 84);
+            this.label5.Location = new System.Drawing.Point(8, 92);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(96, 21);
             this.label5.TabIndex = 81;
@@ -291,14 +266,14 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.menu_log_row_name_behavior);
+            this.tabPage2.Controls.Add(this.cb_log_name_changes_only);
             this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.cb_log_field_specifics);
             this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.cb_dupe);
             this.tabPage2.Controls.Add(this.cb_dupe_no_both);
-            this.tabPage2.Controls.Add(this.cb_log_names);
             this.tabPage2.Controls.Add(this.cb_dupe_no_old);
-            this.tabPage2.Controls.Add(this.cb_log_name_changes_only);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Controls.Add(this.cb_fields_share_row);
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
@@ -308,6 +283,32 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Options";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // menu_log_row_name_behavior
+            // 
+            this.menu_log_row_name_behavior.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.menu_log_row_name_behavior.FormattingEnabled = true;
+            this.menu_log_row_name_behavior.Items.AddRange(new object[] {
+            "Log row names (old row names by default)",
+            "Log row names (new row names by default)",
+            "Don\'t log row names"});
+            this.menu_log_row_name_behavior.Location = new System.Drawing.Point(6, 116);
+            this.menu_log_row_name_behavior.Name = "menu_log_row_name_behavior";
+            this.menu_log_row_name_behavior.Size = new System.Drawing.Size(256, 23);
+            this.menu_log_row_name_behavior.TabIndex = 84;
+            this.menu_log_row_name_behavior.SelectedIndexChanged += new System.EventHandler(this.menu_log_row_name_behavior_SelectedIndexChanged);
+            // 
+            // cb_log_name_changes_only
+            // 
+            this.cb_log_name_changes_only.AutoSize = true;
+            this.cb_log_name_changes_only.Checked = true;
+            this.cb_log_name_changes_only.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_log_name_changes_only.Location = new System.Drawing.Point(6, 145);
+            this.cb_log_name_changes_only.Name = "cb_log_name_changes_only";
+            this.cb_log_name_changes_only.Size = new System.Drawing.Size(181, 19);
+            this.cb_log_name_changes_only.TabIndex = 83;
+            this.cb_log_name_changes_only.Text = "Only log changed row names";
+            this.cb_log_name_changes_only.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -381,8 +382,6 @@
         private Label label3;
         private ComboBox menu_GameType;
         private Label label4;
-        private CheckBox cb_log_name_changes_only;
-        private CheckBox cb_log_names;
         private Label label5;
         private TabControl tabControl1;
         private TabPage tabPage1;
@@ -390,5 +389,7 @@
         private CheckBox cb_log_field_specifics;
         private CheckBox cb_fields_share_row;
         private Label label6;
+        private CheckBox cb_log_name_changes_only;
+        private ComboBox menu_log_row_name_behavior;
     }
 }

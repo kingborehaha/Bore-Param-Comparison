@@ -30,6 +30,14 @@ namespace BoreParamCompare
             "SDT",
             "ER",
         };
+
+        private enum RowNameBehaviorEnum
+        {
+            PriorityNew = 0,
+            PriorityOld = 1,
+            NoLog = 2,
+        }
+
         //private GameTypeEnum gameType = GameTypeEnum.NONE;
         /*
         private enum GameTypeEnum
@@ -63,9 +71,24 @@ namespace BoreParamCompare
             menu_GameType.Items.Clear();
             menu_GameType.Items.AddRange(gameTypes.ToArray());
 
+            menu_log_row_name_behavior.SelectedIndex = 0;
+
             Directory.CreateDirectory("Output");
         }
 
+        public string GetPreferredRowName(PARAM.Row row_old, PARAM.Row row_new)
+        {
+            string rowname = "";
+
+            if (menu_log_row_name_behavior.SelectedIndex == ((int)RowNameBehaviorEnum.PriorityOld))
+                rowname = row_old.Name;
+            else if (menu_log_row_name_behavior.SelectedIndex == ((int)RowNameBehaviorEnum.PriorityNew))
+                rowname = row_new.Name;
+            else
+                throw new Exception("Unexpected rowNameBehaviorEnum! Offending dropdown menu index: " + menu_log_row_name_behavior.SelectedIndex);
+
+            return rowname;
+        }
         public bool compareCells(List<string> changeList, PARAM.Row row_old, PARAM.Row row_new, string ID_str)
         {
             var changed = false;
@@ -77,8 +100,8 @@ namespace BoreParamCompare
             }
             else
             {
-
-                if (cb_log_names.Checked)
+                //if (cb_log_names.Checked)
+                if (menu_log_row_name_behavior.SelectedIndex != ((int)RowNameBehaviorEnum.NoLog))
                 {
                     if (row_old.Name != row_new.Name)
                     {
@@ -95,8 +118,9 @@ namespace BoreParamCompare
                     else if (cb_log_name_changes_only.Checked == false)
                     {
                         //Log all names
-                        ID_str += "[" + row_old.Name + "]";
-                        combinedStr += "[" + row_old.Name + "]";
+                        var rowname = GetPreferredRowName(row_old, row_new);
+                        ID_str += "[" + rowname + "]";
+                        combinedStr += "[" + rowname + "]";
                     }
                 }
 
@@ -148,26 +172,10 @@ namespace BoreParamCompare
         private string MakeIDString(string paramNameStr, PARAM.Row row, PARAM param)
         {
             string str = paramNameStr + "[ID " + row.ID.ToString() + "]";
-            /*
-            string namePath = "Paramdex\\ER\\" + param.ParamType + ".txt";
-            if (File.Exists(namePath))
+            if (menu_log_row_name_behavior.SelectedIndex != ((int)RowNameBehaviorEnum.NoLog))
             {
-                //todo. parse name list better (id and name are part of the same line, for a start)
-                /*
-                List<string> nameList = File.ReadAllLines(namePath).ToList();
-                foreach (string ID in nameList)
-                {
-                    if (ID == row.ID.ToString())
-                    {
-                        //this row has a name definition, add it to the label.
-                        str += "";
-                        break;
-                    }
-
-                }
-                //
+                str += "[" + row.Name + "]";
             }
-            */
             return str;
         }
 
@@ -195,6 +203,7 @@ namespace BoreParamCompare
                     break;
                 case "DS2": //untested
                 case "DS2S": //untested
+                case "BB": //untested
                 case "SDT": //untested
                     bnd4 = BND4.Read(path);
                     list = bnd4.Files;
@@ -217,7 +226,7 @@ namespace BoreParamCompare
                     version = bnd4.Version;
                     break;
                 default:
-                    throw new Exception("Bad game type!");
+                    throw new Exception("Bad game type: "+gameType);
             }
 
             if (is_old)
@@ -289,6 +298,7 @@ namespace BoreParamCompare
                 //multiple params
                 List<BinderFile> fileList_old = GetBNDFiles(regPath_old, true);
                 List<BinderFile> fileList_new = GetBNDFiles(regPath_new, false);
+
 
                 UpdateConsole("Applying Defs");
 
@@ -655,13 +665,13 @@ namespace BoreParamCompare
 
         private void toggle_buttons_logNames()
         {
-            if (cb_log_names.Checked)
+            if (menu_log_row_name_behavior.SelectedIndex != ((int)RowNameBehaviorEnum.NoLog))
                 cb_log_name_changes_only.Enabled = true;
             else
                 cb_log_name_changes_only.Enabled = false;
         }
 
-        private void cb_log_names_CheckedChanged(object sender, EventArgs e)
+        private void menu_log_row_name_behavior_SelectedIndexChanged(object sender, EventArgs e)
         {
             toggle_buttons_logNames();
         }
