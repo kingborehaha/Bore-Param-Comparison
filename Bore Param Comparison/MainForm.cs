@@ -8,6 +8,7 @@ namespace BoreParamCompare
         * considering the setting (and GetPreferredRowName) are only used when there are no row name changes
             * I can remove menu_log_row_name_behavior and replace it with a tick box
             * and make GetPreferredRowName just check if either of the names != "" and use it if so.
+     * add default option to make output file name include date/time?
      * test row names added to ROW ADDED/ ROW REMOVED occurences
      * test multi row single row row name change garbage
      * Don't include row name changes in each field change with multi-line logs since it'll be included separately?
