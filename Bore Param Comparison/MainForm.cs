@@ -4,6 +4,8 @@ namespace BoreParamCompare
 {
 
     /* TODO
+     * program exploded with ER regulations (1.02 to 1.03) on paramdef application
+        * maybe applyParamDefCarefully was ALWAYS failing before and my recent checks are the only difference?
      * Redo GetPreferredRowName & menu_log_row_name_behavior
         * considering the setting (and GetPreferredRowName) are only used when there are no row name changes
             * I can remove menu_log_row_name_behavior and replace it with a tick box
@@ -63,7 +65,7 @@ namespace BoreParamCompare
             menu_GameType.Items.Clear();
             menu_GameType.Items.AddRange(gameTypes.ToArray());
 
-            menu_log_row_name_behavior.SelectedIndex = 0;
+            menu_log_row_name_behavior.SelectedIndex = (int)RowNameBehaviorEnum.NoLog;
 
             Directory.CreateDirectory("Output");
         }
