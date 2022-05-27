@@ -4,11 +4,12 @@ namespace BoreParamCompare
 {
 
     /* TODO
-     * add row name to ROW ADDED/ ROW REMOVED occurences (when they should be)
-     * add/finish new option to list row names for rows with changed cells, but don't list them if cells are unchanged
-     *   (prefer old bnd? prefer new? prefer whichever is not ""?)
+     * test row names added to ROW ADDED/ ROW REMOVED occurences
+     * test multi row single row row name change garbage
+     * Don't include row name changes in each field change with multi-line logs since it'll be included separately?
+     * 
      * test parambnds and regulations just to make sure they still work
-     * implement and test remaining games
+     * test remaining games
      */
 
     public partial class MainForm : Form
@@ -36,22 +37,8 @@ namespace BoreParamCompare
             PriorityNew = 0,
             PriorityOld = 1,
             NoLog = 2,
-        }
 
-        //private GameTypeEnum gameType = GameTypeEnum.NONE;
-        /*
-        private enum GameTypeEnum
-        {
-            NONE,
-            DES,
-            DS1,
-            DS2,
-            DS3,
-            BB,
-            SEK,
-            ER,
         }
-        */
 
         public MainForm()
         {
@@ -78,8 +65,7 @@ namespace BoreParamCompare
 
         public string GetPreferredRowName(PARAM.Row row_old, PARAM.Row row_new)
         {
-            string rowname = "";
-
+            string rowname;
             if (menu_log_row_name_behavior.SelectedIndex == ((int)RowNameBehaviorEnum.PriorityOld))
                 rowname = row_old.Name;
             else if (menu_log_row_name_behavior.SelectedIndex == ((int)RowNameBehaviorEnum.PriorityNew))
@@ -93,6 +79,8 @@ namespace BoreParamCompare
         {
             var changed = false;
             var combinedStr = ID_str;
+            string nameChangeStr;
+            string oneLineNameDiffstr = "";
 
             if (row_old.Cells.Count != row_new.Cells.Count)
             {
@@ -105,15 +93,22 @@ namespace BoreParamCompare
                 {
                     if (row_old.Name != row_new.Name)
                     {
-                        var nameChangeStr = "\""+row_old.Name+"\"" + " -> " + "\""+row_new.Name+"\"";
+                        nameChangeStr = "\""+row_old.Name+"\"" + " -> " + "\""+row_new.Name+"\"";
                         //Name was changed
                         if (cb_fields_share_row.Checked)
                         {
                             combinedStr += "[" + nameChangeStr + "]";
-                            changed = true;
+                            if (cb_LogNamesOnlyIf_FieldChange.Enabled == false)
+                            {
+                                //Mandate inclusion in changelog since name is different
+                                changed = true;
+                            }
                         }
                         else
-                            changeList.Add(ID_str + " ROW NAME: " + nameChangeStr);
+                        {
+                            //Prepare row name change for multi-line changelog
+                            oneLineNameDiffstr = ID_str + " ROW NAME: " + nameChangeStr;
+                        }
                     }
                     else if (cb_log_name_changes_only.Checked == false)
                     {
@@ -162,20 +157,38 @@ namespace BoreParamCompare
                 }
             }
 
-            if (cb_fields_share_row.Checked && changed)
-                changeList.Add(combinedStr);
-
+            if (changed)
+            {
+                //a field was changed
+                if (cb_fields_share_row.Checked)
+                {
+                    //single row
+                    changeList.Add(combinedStr);
+                }
+                else if (oneLineNameDiffstr != "")
+                {
+                    //multi row and name wa schanged, add it
+                    changeList.Add(oneLineNameDiffstr);
+                }
+            }
+            else if (cb_LogNamesOnlyIf_FieldChange.Checked == false && oneLineNameDiffstr != "")
+            {
+                //no field changes, but name was changed. log it.
+                changeList.Add(oneLineNameDiffstr);
+            }
 
             return changed;
         }
 
-        private string MakeIDString(string paramNameStr, PARAM.Row row, PARAM param)
+        private string MakeIDString(string paramNameStr, PARAM.Row row, bool addName)
         {
             string str = paramNameStr + "[ID " + row.ID.ToString() + "]";
-            if (menu_log_row_name_behavior.SelectedIndex != ((int)RowNameBehaviorEnum.NoLog))
+            /*
+            if (addName == true && menu_log_row_name_behavior.SelectedIndex != ((int)RowNameBehaviorEnum.NoLog))
             {
                 str += "[" + row.Name + "]";
             }
+            */
             return str;
         }
 
@@ -393,7 +406,7 @@ namespace BoreParamCompare
                             {
                                 if (cb_dupe_no_old.Checked == false)
                                 {
-                                    string ID_str = MakeIDString(paramNameStr, row2, param_old);//paramNameStr + "[ID " + row2.ID.ToString() + "]";
+                                    string ID_str = MakeIDString(paramNameStr, row2, false);//paramNameStr + "[ID " + row2.ID.ToString() + "]";
                                     changeList.Add(ID_str + " DUPLICATE ROW (OLD REGULATION)");
                                     paramChanges++;
                                 }
@@ -418,7 +431,7 @@ namespace BoreParamCompare
                             //duplicate row found
                             if (cb_dupe.Checked)
                             {
-                                string ID_str = MakeIDString(paramNameStr, row2, param_new);//paramNameStr+"[ID " + row2.ID.ToString() + "]";
+                                string ID_str = MakeIDString(paramNameStr, row2, false);
                                 if (changeList.Contains(ID_str + " DUPLICATE ROW (OLD REGULATION)"))
                                 {
                                     //dupe is in both old and new param
@@ -452,7 +465,7 @@ namespace BoreParamCompare
 
                     if (param_old[row_new.ID] == null)
                     {
-                        string ID_new_str = MakeIDString(paramNameStr, row_new, param_new);//paramNameStr+"[ID " + row_new.ID.ToString() + "]";
+                        string ID_new_str = MakeIDString(paramNameStr, row_new, true);
                         changeList.Add(ID_new_str + " ROW ADDED");
                         paramChanges++;
 
@@ -468,7 +481,7 @@ namespace BoreParamCompare
 
                     if (param_new[row_old.ID] == null)
                     {
-                        string ID_old_str = MakeIDString(paramNameStr, row_old, param_new);//paramNameStr+"[ID " + row_old.ID.ToString() + "]";
+                        string ID_old_str = MakeIDString(paramNameStr, row_old, true);
                         changeList.Add(ID_old_str + " ROW REMOVED");
                         paramChanges++;
 
@@ -490,8 +503,8 @@ namespace BoreParamCompare
 
                     PARAM.Row row_new = param_new.Rows[iRow];
                     PARAM.Row row_old = param_old.Rows[iRow];
-                    string ID_old_str = MakeIDString(paramNameStr, row_old, param_old);//paramNameStr+"[ID " + row_old.ID.ToString() + "]";
-                    string ID_new_str = MakeIDString(paramNameStr, row_new, param_new);//paramNameStr+"[ID " + row_new.ID.ToString() + "]";
+                    string ID_old_str = MakeIDString(paramNameStr, row_old, false);
+                    string ID_new_str = MakeIDString(paramNameStr, row_new, false);
 
                     if (row_new == null || param_new[row_old.ID] == null)
                     {
@@ -522,16 +535,14 @@ namespace BoreParamCompare
                         iRow -= 2;
                         rowCount -= 2;
                         continue;
-                        //}
                     }
 
                     if (compareCells(changeList, row_old, row_new, ID_old_str))
                     {
                         paramChanges++;
-                        //iRow--;
                     }
 
-                    if (param_old.Rows.Count < param_new.Rows.Count)
+                    if (param_old.Rows.Count < param_new.Rows.Count) //ham fist
                         rowCount = param_new.Rows.Count;
                     else
                         rowCount = param_old.Rows.Count;
@@ -541,18 +552,6 @@ namespace BoreParamCompare
                     changeList.Remove(paramSpacer); //remove label for unchanged param type
             }
             #endregion
-
-            //done
-            /*
-            if (cb_log_field_specifics.Checked)
-            {
-                outputFileName = "Changes FULL "+outputFileName'
-            }
-            else
-            {
-                outputFileName = "Changes BRIEF " + outputFileName;
-            }
-            */
 
             File.WriteAllLines(outputFileName, changeList);
             System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
@@ -668,9 +667,15 @@ namespace BoreParamCompare
         private void toggle_buttons_logNames()
         {
             if (menu_log_row_name_behavior.SelectedIndex != ((int)RowNameBehaviorEnum.NoLog))
+            {
                 cb_log_name_changes_only.Enabled = true;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = true;
+            }
             else
+            {
                 cb_log_name_changes_only.Enabled = false;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
+            }
         }
 
         private void menu_log_row_name_behavior_SelectedIndexChanged(object sender, EventArgs e)
