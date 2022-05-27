@@ -260,6 +260,7 @@ namespace BoreParamCompare
             #region Load Params
             Dictionary<string, PARAM> paramList_old = new();
             Dictionary<string, PARAM> paramList_new = new();
+            List<string> changeList = new(); //
 
             string regPath_old = openFileDialog_old.FileName;
             string regPath_new = openFileDialog_new.FileName;
@@ -297,7 +298,8 @@ namespace BoreParamCompare
                 }
                 else
                 {
-                    throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                    changeList.Add("ERROR: Could not apply ParamDef for (old) " + param_old.ParamType + "If correct game was selected, param is incompatible with up-to-date ParamDef");
+                    //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                 }
 
                 if (param_new.ApplyParamdefCarefully(paramdefs))
@@ -306,7 +308,8 @@ namespace BoreParamCompare
                 }
                 else
                 {
-                    throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                    changeList.Add("ERROR: Could not apply ParamDef for (new) " + param_new.ParamType + "If correct game was selected, param is incompatible with up-to-date ParamDef");
+                    //throw new Exception("Could not apply paramDef for new ! You probably selected the wrong game");
                 }
 
             }
@@ -324,14 +327,14 @@ namespace BoreParamCompare
                     string name = Path.GetFileNameWithoutExtension(file.Name);
                     var param = PARAM.Read(file.Bytes);
 
-                    // Recommended method: checks the list for any match, or you can test them one-by-one
                     if (param.ApplyParamdefCarefully(paramdefs))
                     {
                         paramList_old[name] = param;
                     }
                     else
                     {
-                        throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                        changeList.Add("ERROR: Could not apply ParamDef for (old) " + param.ParamType + ". If correct game was selected, param is incompatible with up-to-date ParamDef");
+                        //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
 
@@ -347,7 +350,8 @@ namespace BoreParamCompare
                     }
                     else
                     {
-                        throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                        changeList.Add("ERROR: Could not apply ParamDef for (new) " + param.ParamType + ". If correct game was selected, param is incompatible with up-to-date ParamDef");
+                        //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
             }
@@ -358,7 +362,6 @@ namespace BoreParamCompare
             //
 
             #region Read Params
-            List<string> changeList = new(); //
 
             //scan for added params
             foreach (KeyValuePair<string, PARAM> item in paramList_new)
@@ -366,7 +369,7 @@ namespace BoreParamCompare
                 if (paramList_old.ContainsKey(item.Key) == false)
                 {
                     //param was added
-                    changeList.Insert(0,"PARAM ADDED: " + item.Key);
+                    changeList.Insert(0,"PARAM TYPE ADDED OR MODIFIED: " + item.Key);
                     paramList_new.Remove(item.Key);
                     continue;
                 }
