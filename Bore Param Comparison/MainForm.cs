@@ -560,6 +560,8 @@ namespace BoreParamCompare
             }
             #endregion
 
+            changeList.Insert(0, "Game Type: " + gameType);
+
             File.WriteAllLines(outputFileName, changeList);
             System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
 
