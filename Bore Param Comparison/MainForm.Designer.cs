@@ -298,9 +298,9 @@
             this.cb_LogNamesOnlyIf_FieldChange.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_LogNamesOnlyIf_FieldChange.Location = new System.Drawing.Point(6, 152);
             this.cb_LogNamesOnlyIf_FieldChange.Name = "cb_LogNamesOnlyIf_FieldChange";
-            this.cb_LogNamesOnlyIf_FieldChange.Size = new System.Drawing.Size(263, 19);
+            this.cb_LogNamesOnlyIf_FieldChange.Size = new System.Drawing.Size(336, 19);
             this.cb_LogNamesOnlyIf_FieldChange.TabIndex = 85;
-            this.cb_LogNamesOnlyIf_FieldChange.Text = "Only log row names when fields are changed\r\n";
+            this.cb_LogNamesOnlyIf_FieldChange.Text = "Only log changed row names when fields are also changed\r\n";
             this.cb_LogNamesOnlyIf_FieldChange.UseVisualStyleBackColor = true;
             // 
             // menu_log_row_name_behavior
@@ -320,14 +320,13 @@
             // cb_log_name_changes_only
             // 
             this.cb_log_name_changes_only.AutoSize = true;
-            this.cb_log_name_changes_only.Checked = true;
-            this.cb_log_name_changes_only.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_log_name_changes_only.Location = new System.Drawing.Point(6, 127);
             this.cb_log_name_changes_only.Name = "cb_log_name_changes_only";
-            this.cb_log_name_changes_only.Size = new System.Drawing.Size(181, 19);
+            this.cb_log_name_changes_only.Size = new System.Drawing.Size(199, 19);
             this.cb_log_name_changes_only.TabIndex = 83;
-            this.cb_log_name_changes_only.Text = "Only log changed row names";
+            this.cb_log_name_changes_only.Text = "Don\'t log unchanged row names";
             this.cb_log_name_changes_only.UseVisualStyleBackColor = true;
+            this.cb_log_name_changes_only.CheckedChanged += new System.EventHandler(this.cb_log_name_changes_only_CheckedChanged);
             // 
             // label6
             // 
