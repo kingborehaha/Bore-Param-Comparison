@@ -61,7 +61,7 @@
             // 
             // openFileDialog_old
             // 
-            this.openFileDialog_old.Filter = "Parambnd, Regulation, or .param|*";
+            this.openFileDialog_old.Filter = "Parambnd, Regulation, Data0, or .param|*";
             this.openFileDialog_old.Title = "Select old Parambnd or Regulation.bin";
             this.openFileDialog_old.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_old_FileOk);
             // 
@@ -113,7 +113,7 @@
             // 
             // openFileDialog_new
             // 
-            this.openFileDialog_new.Filter = "Parambnd, Regulation, or .param|*";
+            this.openFileDialog_new.Filter = "Parambnd, Regulation, Data0, or .param|*";
             this.openFileDialog_new.Title = "Select new Parambnd or Regulation.bin";
             // 
             // cb_dupe

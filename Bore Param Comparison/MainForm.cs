@@ -4,19 +4,20 @@ namespace BoreParamCompare
 {
 
     /* TODO
-     * program exploded with ER regulations (1.02 to 1.03) on paramdef application
-        * maybe applyParamDefCarefully was ALWAYS failing before and my recent checks are the only difference?
      * Redo GetPreferredRowName & menu_log_row_name_behavior
         * considering the setting (and GetPreferredRowName) are only used when there are no row name changes
             * I can remove menu_log_row_name_behavior and replace it with a tick box
             * and make GetPreferredRowName just check if either of the names != "" and use it if so.
      * add default option to make output file name include date/time?
-     * test row names added to ROW ADDED/ ROW REMOVED occurences
-     * test multi row single row row name change garbage
+     * test multi row single row + row name garbage
      * Don't include row name changes in each field change with multi-line logs since it'll be included separately?
-     * 
      * test parambnds and regulations just to make sure they still work
      * test remaining games
+     * 
+     * notes
+        * bhd/bdt BXF4 support:
+            * ds3 read isn't working for some reason I don't understand
+        * 
      */
 
     public partial class MainForm : Form
@@ -101,7 +102,7 @@ namespace BoreParamCompare
                     if (row_old.Name != row_new.Name)
                     {
                         //Name was changed
-                        nameChangeStr = "\""+row_old.Name+"\"" + " -> " + "\""+row_new.Name+"\"";
+                        nameChangeStr = $"\"{row_old.Name}\" -> \"{row_new.Name}\"";
                         if (cb_fields_share_row.Checked)
                         {
                             combinedStr += "[" + nameChangeStr + "]";
@@ -206,7 +207,8 @@ namespace BoreParamCompare
             BND4 bnd4;
 
             bool isRegulation = false;
-            if (path.Contains(".bin")) //TODO: something more safe
+            //if (path.Contains(".bin")) //TODO: something more safe
+            if (BND3.Is(path) == false && BND4.Is(path) == false)
                 isRegulation = true;
 
             switch (gameType)
@@ -219,14 +221,14 @@ namespace BoreParamCompare
                     version = bnd3.Version;
                     break;
                 case "DS2": //untested
-                case "DS2S": //untested
+                case "DS2S": //not thoroughly tested
                 case "BB": //untested
                 case "SDT": //untested
                     bnd4 = BND4.Read(path);
                     list = bnd4.Files;
                     version = bnd4.Version;
                     break;
-                case "DS3": //untested
+                case "DS3":
                     if (isRegulation)
                         bnd4 = SFUtil.DecryptDS3Regulation(path);
                     else
@@ -298,7 +300,7 @@ namespace BoreParamCompare
                 }
                 else
                 {
-                    changeList.Add("ERROR: Could not apply ParamDef for (old) " + param_old.ParamType + "If correct game was selected, param is incompatible with up-to-date ParamDef");
+                    changeList.Add($": Could not apply ParamDef for (old) {param_old.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
                     //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                 }
 
@@ -308,7 +310,7 @@ namespace BoreParamCompare
                 }
                 else
                 {
-                    changeList.Add("ERROR: Could not apply ParamDef for (new) " + param_new.ParamType + "If correct game was selected, param is incompatible with up-to-date ParamDef");
+                    changeList.Add($": Could not apply ParamDef for (new) {param_new.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
                     //throw new Exception("Could not apply paramDef for new ! You probably selected the wrong game");
                 }
 
@@ -319,11 +321,12 @@ namespace BoreParamCompare
                 List<BinderFile> fileList_old = GetBNDFiles(regPath_old, true);
                 List<BinderFile> fileList_new = GetBNDFiles(regPath_new, false);
 
-
                 UpdateConsole("Applying Defs");
 
                 foreach (BinderFile file in fileList_old)
                 {
+                    if (file.Name.Contains(".param") == false)
+                        continue; //not a param.
                     string name = Path.GetFileNameWithoutExtension(file.Name);
                     var param = PARAM.Read(file.Bytes);
 
@@ -333,13 +336,15 @@ namespace BoreParamCompare
                     }
                     else
                     {
-                        changeList.Add("ERROR: Could not apply ParamDef for (old) " + param.ParamType + ". If correct game was selected, param is incompatible with up-to-date ParamDef");
+                        changeList.Add($": Could not apply ParamDef for (old) {param.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
                         //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
 
                 foreach (BinderFile file in fileList_new)
                 {
+                    if (file.Name.Contains(".param") == false)
+                        continue; //not a param.
                     string name = Path.GetFileNameWithoutExtension(file.Name);
                     var param = PARAM.Read(file.Bytes);
 
@@ -350,7 +355,7 @@ namespace BoreParamCompare
                     }
                     else
                     {
-                        changeList.Add("ERROR: Could not apply ParamDef for (new) " + param.ParamType + ". If correct game was selected, param is incompatible with up-to-date ParamDef");
+                        changeList.Add($": Could not apply ParamDef for (new) {param.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
                         //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
