@@ -3,9 +3,7 @@ using SoulsFormats;
 namespace BoreParamCompare
 {
     /* TODO
-     * test multi row single row + row name garbage
-     * Don't include row name changes in each field change with multi-line logs since it'll be included separately?
-     * test parambnds and regulations just to make sure they still work
+     * yell at user to include oodle when sekiro/ER gametype is selected and user is trying to load parambnd or data0 (probably data0...)
      * test remaining games
      */
     public partial class MainForm : Form
@@ -58,21 +56,12 @@ namespace BoreParamCompare
         public string GetPreferredRowName(PARAM.Row row_old, PARAM.Row row_new)
         {
             string rowname = "";
-            /*
-            if (menu_log_row_name_behavior.SelectedIndex == ((int)RowNameBehaviorEnum.PriorityOld))
-                rowname = row_old.Name;
-            else if (menu_log_row_name_behavior.SelectedIndex == ((int)RowNameBehaviorEnum.PriorityNew))
-                rowname = row_new.Name;
-            else
-                throw new Exception("Unexpected rowNameBehaviorEnum! Offending dropdown menu index: " + menu_log_row_name_behavior.SelectedIndex);
-            return rowname;
-            */
             if (cb_LogRowNames.Checked == true && row_old.Name != "")
                 rowname = row_old.Name;
 
-
             return rowname;
         }
+
         public bool compareCells(List<string> changeList, PARAM.Row row_old, PARAM.Row row_new, string ID_str)
         {
             var changed = false;
@@ -187,7 +176,31 @@ namespace BoreParamCompare
             return str;
         }
 
-        private List<BinderFile> GetBNDFiles(string path, bool is_old)
+
+
+        private bool CheckOodle(string path)
+        {
+
+            if (File.Exists("oo2core_6_win64.dll") == false)
+            {
+                DialogResult result;
+                do
+                {
+                     result = MessageBox.Show(
+                        $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {gameType} directory." +
+                        $"\n\nPlease copy and paste \"oo2core_6_win64.dll\" from your {gameType} directory to \"{Directory.GetCurrentDirectory()}\".",
+                        $"Could not find oo2core_6_win64.dll", MessageBoxButtons.RetryCancel);
+
+                    if (result == DialogResult.Cancel)
+                        return false;
+                }
+                while (File.Exists("oo2core_6_win64.dll") == false);
+            }
+
+            return true;
+        }
+
+        private List<BinderFile>? GetBNDFiles(string path, bool is_old)
         {
             //Couple hamfisted things in here, but whatever. It works.
             
@@ -197,8 +210,20 @@ namespace BoreParamCompare
             BND4 bnd4;
 
             bool isRegulation = true;
-            if (BND4.Is(path) || BND3.Is(path))
-                isRegulation = false; //file is a BND
+            try
+            {
+                if (BND4.Is(path) || BND3.Is(path))
+                    isRegulation = false; //file is a BND
+            }
+            catch (DllNotFoundException)
+            {
+                //oodle dll is required
+                if (CheckOodle(path) == false)
+                    return null;
+
+                if (BND4.Is(path) || BND3.Is(path))
+                    isRegulation = false; //file is a BND
+            }
 
             switch (gameType)
             {
@@ -229,7 +254,9 @@ namespace BoreParamCompare
                     if (isRegulation)
                         bnd4 = SFUtil.DecryptERRegulation(path);
                     else
+                    {
                         bnd4 = BND4.Read(path);
+                    }
                     list = bnd4.Files;
                     version = bnd4.Version;
                     break;
@@ -307,8 +334,12 @@ namespace BoreParamCompare
             else
             {
                 //multiple params
-                List<BinderFile> fileList_old = GetBNDFiles(regPath_old, true);
-                List<BinderFile> fileList_new = GetBNDFiles(regPath_new, false);
+                List<BinderFile>? fileList_old = GetBNDFiles(regPath_old, true);
+                if (fileList_old == null)
+                    return;
+                List<BinderFile>? fileList_new = GetBNDFiles(regPath_new, false);
+                if (fileList_new == null)
+                    return;
 
                 UpdateConsole("Applying Defs");
 
@@ -325,7 +356,7 @@ namespace BoreParamCompare
                     }
                     else
                     {
-                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in old param. If correct game was selected, param is incompatible with current ParamDef");
+                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in OLD file. If correct game was selected, Param is incompatible with current ParamDef");
                         //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
@@ -344,7 +375,7 @@ namespace BoreParamCompare
                     }
                     else
                     {
-                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in new param. If correct game was selected, param is incompatible with current ParamDef");
+                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in NEW file. If correct game was selected, Param is incompatible with current ParamDef");
                         //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
