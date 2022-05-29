@@ -296,9 +296,9 @@
             this.cb_LogRowNames.AutoSize = true;
             this.cb_LogRowNames.Location = new System.Drawing.Point(6, 102);
             this.cb_LogRowNames.Name = "cb_LogRowNames";
-            this.cb_LogRowNames.Size = new System.Drawing.Size(107, 19);
+            this.cb_LogRowNames.Size = new System.Drawing.Size(170, 19);
             this.cb_LogRowNames.TabIndex = 86;
-            this.cb_LogRowNames.Text = "Log row names";
+            this.cb_LogRowNames.Text = "Log non-empty row names";
             this.cb_LogRowNames.UseVisualStyleBackColor = true;
             this.cb_LogRowNames.CheckedChanged += new System.EventHandler(this.cb_LogRowNames_CheckedChanged);
             // 
@@ -319,9 +319,9 @@
             this.cb_log_name_changes_only.AutoSize = true;
             this.cb_log_name_changes_only.Location = new System.Drawing.Point(6, 127);
             this.cb_log_name_changes_only.Name = "cb_log_name_changes_only";
-            this.cb_log_name_changes_only.Size = new System.Drawing.Size(199, 19);
+            this.cb_log_name_changes_only.Size = new System.Drawing.Size(242, 19);
             this.cb_log_name_changes_only.TabIndex = 83;
-            this.cb_log_name_changes_only.Text = "Don\'t log unchanged row names";
+            this.cb_log_name_changes_only.Text = "Don\'t log row names that are unchanged";
             this.cb_log_name_changes_only.UseVisualStyleBackColor = true;
             this.cb_log_name_changes_only.CheckedChanged += new System.EventHandler(this.cb_log_name_changes_only_CheckedChanged);
             // 

@@ -325,7 +325,7 @@ namespace BoreParamCompare
                     }
                     else
                     {
-                        changeList.Add($": Could not apply ParamDef for (old) {param.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
+                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in old param. If correct game was selected, param is incompatible with current ParamDef");
                         //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
@@ -344,16 +344,13 @@ namespace BoreParamCompare
                     }
                     else
                     {
-                        changeList.Add($": Could not apply ParamDef for (new) {param.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
+                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in new param. If correct game was selected, param is incompatible with current ParamDef");
                         //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
             }
             #endregion
 
-            //
-            UpdateConsole("Reading Params");
-            //
 
             #region Read Params
 
@@ -372,6 +369,11 @@ namespace BoreParamCompare
             //Check for changes
             foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
+
+                //
+                UpdateConsole($"Scanning Param: {item.Key}");
+                //
+
                 //scan for removed params
                 if (paramList_new.ContainsKey(item.Key) == false)
                 {
@@ -391,7 +393,7 @@ namespace BoreParamCompare
                 changeList.Add(paramSpacer);
                 int paramChanges = 0; //keep track of how many changes were made to this param (and remove the spacer if it's zero)
 
-                UpdateConsole("Reading Params (Duplicate rows)");
+                //UpdateConsole("Reading Params (Duplicate rows)");
 
                 //check for duplicate rows (old regulation)
                 for (var iRow = 0; iRow < param_old.Rows.Count; iRow++)
@@ -460,7 +462,7 @@ namespace BoreParamCompare
                     }
                 }
 
-                UpdateConsole("Reading Params (Added/Removed rows)");
+                //UpdateConsole("Reading Params (Added/Removed rows)");
 
                 //check for added rows
                 for (var i = 0; i < param_new.Rows.Count; i++)
@@ -494,7 +496,7 @@ namespace BoreParamCompare
                     }
                 }
 
-                UpdateConsole("Reading Params (Modified rows)");
+                //UpdateConsole("Reading Params (Modified rows)");
 
                 //check for modified rows (and moved rows)
                 int rowCount = param_old.Rows.Count;
