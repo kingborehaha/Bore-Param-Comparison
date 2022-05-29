@@ -4,26 +4,14 @@ namespace BoreParamCompare
 {
 
     /* TODO
-     * Redo GetPreferredRowName & menu_log_row_name_behavior
-        * considering the setting (and GetPreferredRowName) are only used when there are no row name changes
-            * I can remove menu_log_row_name_behavior and replace it with a tick box
-            * and make GetPreferredRowName just check if either of the names != "" and use it if so.
      * add default option to make output file name include date/time?
      * test multi row single row + row name garbage
      * Don't include row name changes in each field change with multi-line logs since it'll be included separately?
      * test parambnds and regulations just to make sure they still work
      * test remaining games
-     * 
-     * notes
-        * bhd/bdt BXF4 support:
-            * ds3 read isn't working for some reason I don't understand
-        * 
      */
-
     public partial class MainForm : Form
     {
-
-        //public string backupFile = Directory.GetCurrentDirectory() + "/regulation.bin.backup";
 
         private string gameType = "";
 
@@ -66,20 +54,32 @@ namespace BoreParamCompare
             menu_GameType.Items.Clear();
             menu_GameType.Items.AddRange(gameTypes.ToArray());
 
-            menu_log_row_name_behavior.SelectedIndex = (int)RowNameBehaviorEnum.NoLog;
+            //menu_log_row_name_behavior.SelectedIndex = (int)RowNameBehaviorEnum.NoLog;
 
             Directory.CreateDirectory("Output");
         }
 
+        private static string GetTime()
+        {
+            string time = DateTime.Now.ToString("MM.dd.yyyy HH-mm-ss");
+            return time;
+        }
+
         public string GetPreferredRowName(PARAM.Row row_old, PARAM.Row row_new)
         {
-            string rowname;
+            string rowname = "";
+            /*
             if (menu_log_row_name_behavior.SelectedIndex == ((int)RowNameBehaviorEnum.PriorityOld))
                 rowname = row_old.Name;
             else if (menu_log_row_name_behavior.SelectedIndex == ((int)RowNameBehaviorEnum.PriorityNew))
                 rowname = row_new.Name;
             else
                 throw new Exception("Unexpected rowNameBehaviorEnum! Offending dropdown menu index: " + menu_log_row_name_behavior.SelectedIndex);
+            return rowname;
+            */
+            if (cb_LogRowNames.Checked == true && row_old.Name != "")
+                rowname = row_old.Name;
+
 
             return rowname;
         }
@@ -97,7 +97,7 @@ namespace BoreParamCompare
             else
             {
                 //if (cb_log_names.Checked)
-                if (menu_log_row_name_behavior.SelectedIndex != ((int)RowNameBehaviorEnum.NoLog))
+                if (cb_LogRowNames.Checked == true)
                 {
                     if (row_old.Name != row_new.Name)
                     {
@@ -206,10 +206,9 @@ namespace BoreParamCompare
             BND3 bnd3;
             BND4 bnd4;
 
-            bool isRegulation = false;
-            //if (path.Contains(".bin")) //TODO: something more safe
-            if (BND3.Is(path) == false && BND4.Is(path) == false)
-                isRegulation = true;
+            bool isRegulation = true;
+            if (BND4.Is(path) || BND3.Is(path))
+                isRegulation = false; //file is a BND
 
             switch (gameType)
             {
@@ -228,7 +227,7 @@ namespace BoreParamCompare
                     list = bnd4.Files;
                     version = bnd4.Version;
                     break;
-                case "DS3":
+                case "DS3": //not thoroughly tested
                     if (isRegulation)
                         bnd4 = SFUtil.DecryptDS3Regulation(path);
                     else
@@ -267,7 +266,7 @@ namespace BoreParamCompare
             string regPath_old = openFileDialog_old.FileName;
             string regPath_new = openFileDialog_new.FileName;
 
-            string outputFileName = "Output\\"+openFileDialog_old.SafeFileName + " to " + openFileDialog_new.SafeFileName+".txt";
+            string outputFileName = $"Output\\{openFileDialog_old.SafeFileName} to {openFileDialog_new.SafeFileName}.txt";
 
 
             UpdateConsole("Loading ParamDefs");
@@ -680,7 +679,7 @@ namespace BoreParamCompare
 
         private void toggle_buttons_logNames()
         {
-            if (menu_log_row_name_behavior.SelectedIndex != ((int)RowNameBehaviorEnum.NoLog))
+            if (cb_LogRowNames.Checked == true)
             {
                 cb_log_name_changes_only.Enabled = true;
                 cb_LogNamesOnlyIf_FieldChange.Enabled = true;
@@ -692,18 +691,17 @@ namespace BoreParamCompare
             }
         }
 
-        private void menu_log_row_name_behavior_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            toggle_buttons_logNames();
-        }
-
         private void openFileDialog_old_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
             UpdateConsole("Reading Params");
         }
 
         private void cb_log_name_changes_only_CheckedChanged(object sender, EventArgs e)
+        {
+            toggle_buttons_logNames();
+        }
+
+        private void cb_LogRowNames_CheckedChanged(object sender, EventArgs e)
         {
             toggle_buttons_logNames();
         }

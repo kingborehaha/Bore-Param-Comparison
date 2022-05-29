@@ -48,8 +48,8 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cb_LogRowNames = new System.Windows.Forms.CheckBox();
             this.cb_LogNamesOnlyIf_FieldChange = new System.Windows.Forms.CheckBox();
-            this.menu_log_row_name_behavior = new System.Windows.Forms.ComboBox();
             this.cb_log_name_changes_only = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cb_log_field_specifics = new System.Windows.Forms.CheckBox();
@@ -272,8 +272,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.cb_LogRowNames);
             this.tabPage2.Controls.Add(this.cb_LogNamesOnlyIf_FieldChange);
-            this.tabPage2.Controls.Add(this.menu_log_row_name_behavior);
             this.tabPage2.Controls.Add(this.cb_log_name_changes_only);
             this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.cb_log_field_specifics);
@@ -291,6 +291,17 @@
             this.tabPage2.Text = "Options";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // cb_LogRowNames
+            // 
+            this.cb_LogRowNames.AutoSize = true;
+            this.cb_LogRowNames.Location = new System.Drawing.Point(6, 102);
+            this.cb_LogRowNames.Name = "cb_LogRowNames";
+            this.cb_LogRowNames.Size = new System.Drawing.Size(107, 19);
+            this.cb_LogRowNames.TabIndex = 86;
+            this.cb_LogRowNames.Text = "Log row names";
+            this.cb_LogRowNames.UseVisualStyleBackColor = true;
+            this.cb_LogRowNames.CheckedChanged += new System.EventHandler(this.cb_LogRowNames_CheckedChanged);
+            // 
             // cb_LogNamesOnlyIf_FieldChange
             // 
             this.cb_LogNamesOnlyIf_FieldChange.AutoSize = true;
@@ -302,20 +313,6 @@
             this.cb_LogNamesOnlyIf_FieldChange.TabIndex = 85;
             this.cb_LogNamesOnlyIf_FieldChange.Text = "Only log changed row names when fields are also changed\r\n";
             this.cb_LogNamesOnlyIf_FieldChange.UseVisualStyleBackColor = true;
-            // 
-            // menu_log_row_name_behavior
-            // 
-            this.menu_log_row_name_behavior.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.menu_log_row_name_behavior.FormattingEnabled = true;
-            this.menu_log_row_name_behavior.Items.AddRange(new object[] {
-            "Log row names (old row names by default)",
-            "Log row names (new row names by default)",
-            "Don\'t log row names"});
-            this.menu_log_row_name_behavior.Location = new System.Drawing.Point(6, 98);
-            this.menu_log_row_name_behavior.Name = "menu_log_row_name_behavior";
-            this.menu_log_row_name_behavior.Size = new System.Drawing.Size(256, 23);
-            this.menu_log_row_name_behavior.TabIndex = 84;
-            this.menu_log_row_name_behavior.SelectedIndexChanged += new System.EventHandler(this.menu_log_row_name_behavior_SelectedIndexChanged);
             // 
             // cb_log_name_changes_only
             // 
@@ -408,7 +405,7 @@
         private CheckBox cb_fields_share_row;
         private Label label6;
         private CheckBox cb_log_name_changes_only;
-        private ComboBox menu_log_row_name_behavior;
         private CheckBox cb_LogNamesOnlyIf_FieldChange;
+        private CheckBox cb_LogRowNames;
     }
 }
