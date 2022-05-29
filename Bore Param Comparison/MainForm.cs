@@ -1,10 +1,11 @@
 using SoulsFormats;
+using System.Threading.Tasks;
 
 namespace BoreParamCompare
 {
     /* TODO
-     * yell at user to include oodle when sekiro/ER gametype is selected and user is trying to load parambnd or data0 (probably data0...)
      * test remaining games
+     * Consider fooling around with Async to speed things up
      */
     public partial class MainForm : Form
     {
@@ -176,11 +177,8 @@ namespace BoreParamCompare
             return str;
         }
 
-
-
         private bool CheckOodle(string path)
         {
-
             if (File.Exists("oo2core_6_win64.dll") == false)
             {
                 DialogResult result;
@@ -217,7 +215,7 @@ namespace BoreParamCompare
             }
             catch (DllNotFoundException)
             {
-                //oodle dll is required
+                //oodle dll is required, but missing.
                 if (CheckOodle(path) == false)
                     return null;
 
@@ -237,7 +235,7 @@ namespace BoreParamCompare
                 case "DS2": //untested
                 case "DS2S": //not thoroughly tested
                 case "BB": //untested
-                case "SDT": //untested
+                case "SDT": //not thoroughly tested
                     bnd4 = BND4.Read(path);
                     list = bnd4.Files;
                     version = bnd4.Version;
@@ -254,9 +252,7 @@ namespace BoreParamCompare
                     if (isRegulation)
                         bnd4 = SFUtil.DecryptERRegulation(path);
                     else
-                    {
                         bnd4 = BND4.Read(path);
-                    }
                     list = bnd4.Files;
                     version = bnd4.Version;
                     break;
@@ -396,7 +392,7 @@ namespace BoreParamCompare
                     continue;
                 }
             }
-            
+
             //Check for changes
             foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
