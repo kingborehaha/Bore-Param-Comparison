@@ -2,9 +2,7 @@ using SoulsFormats;
 
 namespace BoreParamCompare
 {
-
     /* TODO
-     * add default option to make output file name include date/time?
      * test multi row single row + row name garbage
      * Don't include row name changes in each field change with multi-line logs since it'll be included separately?
      * test parambnds and regulations just to make sure they still work
@@ -27,14 +25,6 @@ namespace BoreParamCompare
             "SDT",
             "ER",
         };
-
-        private enum RowNameBehaviorEnum
-        {
-            PriorityNew = 0,
-            PriorityOld = 1,
-            NoLog = 2,
-
-        }
 
         public MainForm()
         {
@@ -401,6 +391,7 @@ namespace BoreParamCompare
                 changeList.Add(paramSpacer);
                 int paramChanges = 0; //keep track of how many changes were made to this param (and remove the spacer if it's zero)
 
+                UpdateConsole("Reading Params (Duplicate rows)");
 
                 //check for duplicate rows (old regulation)
                 for (var iRow = 0; iRow < param_old.Rows.Count; iRow++)
@@ -469,6 +460,8 @@ namespace BoreParamCompare
                     }
                 }
 
+                UpdateConsole("Reading Params (Added/Removed rows)");
+
                 //check for added rows
                 for (var i = 0; i < param_new.Rows.Count; i++)
                 {
@@ -500,6 +493,8 @@ namespace BoreParamCompare
                         i--;
                     }
                 }
+
+                UpdateConsole("Reading Params (Modified rows)");
 
                 //check for modified rows (and moved rows)
                 int rowCount = param_old.Rows.Count;
@@ -594,12 +589,14 @@ namespace BoreParamCompare
         private void b_browse_old_Click(object sender, EventArgs e)
         {
             loadFile(openFileDialog_old);
+            t_VersionOld.Text = "Loaded";
             UpdateConsole("Old param selected");
         }
 
         private void b_browse_new_Click(object sender, EventArgs e)
         {
             loadFile(openFileDialog_new);
+            t_VersionNew.Text = "Loaded";
             UpdateConsole("New param selected");
         }
 

@@ -173,7 +173,7 @@
             this.t_VersionNew.ReadOnly = true;
             this.t_VersionNew.Size = new System.Drawing.Size(74, 23);
             this.t_VersionNew.TabIndex = 72;
-            this.t_VersionNew.Text = "-";
+            this.t_VersionNew.Text = "Unloaded";
             this.t_VersionNew.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // t_VersionOld
@@ -184,7 +184,7 @@
             this.t_VersionOld.ReadOnly = true;
             this.t_VersionOld.Size = new System.Drawing.Size(74, 23);
             this.t_VersionOld.TabIndex = 73;
-            this.t_VersionOld.Text = "-";
+            this.t_VersionOld.Text = "Unloaded";
             this.t_VersionOld.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label2
@@ -355,9 +355,9 @@
             this.cb_fields_share_row.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_fields_share_row.Location = new System.Drawing.Point(6, 52);
             this.cb_fields_share_row.Name = "cb_fields_share_row";
-            this.cb_fields_share_row.Size = new System.Drawing.Size(186, 19);
+            this.cb_fields_share_row.Size = new System.Drawing.Size(210, 19);
             this.cb_fields_share_row.TabIndex = 70;
-            this.cb_fields_share_row.Text = "Field changes share row per ID";
+            this.cb_fields_share_row.Text = "Changes share the same line per ID";
             this.cb_fields_share_row.UseVisualStyleBackColor = true;
             // 
             // MainForm
