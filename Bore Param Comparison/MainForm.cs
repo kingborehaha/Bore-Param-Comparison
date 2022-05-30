@@ -282,7 +282,7 @@ namespace BoreParamCompare
             foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
                 //
-                //UpdateConsole($"Scanning Param: {item.Key}");
+                UpdateConsole($"Scanning Param: {item.Key}");
                 //
 
                 //scan for removed params
