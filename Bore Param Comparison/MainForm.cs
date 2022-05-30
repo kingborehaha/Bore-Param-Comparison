@@ -1,5 +1,6 @@
 using SoulsFormats;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace BoreParamCompare
 {
@@ -274,26 +275,32 @@ namespace BoreParamCompare
             return list;
         }
 
-        private void CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new, List<List<string>> superChangeDict)
+        private void CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new, List<List<string>> superChangeList)
         {
 
-            //foreach (KeyValuePair<string, PARAM> in paramList_old) { }
+            Dictionary<string, List<string>> changeDict = new();
+            foreach (KeyValuePair<string, PARAM> item in paramList_old)
+            {
+                //create consistent order by using a dictionary (and speed up a bit)
+                List<string> changeList = new();
+                superChangeList.Add(changeList);
+                changeDict.Add(item.Key, changeList);
+            }
 
-            
-            Parallel.ForEach(paramList_old, item =>
+            Parallel.ForEach(Partitioner.Create(paramList_old), item =>
             //foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
                 //
                 //UpdateConsole($"Scanning Param: {item.Key}");
                 //
-                List<string> changeList = new();
-                superChangeDict.Add(changeList);
+                List<string> changeList = changeDict[item.Key];
 
                 //scan for removed params
                 if (paramList_new.ContainsKey(item.Key) == false)
                 {
                     //param was removed
-                    changeList.Insert(0, "PARAM REMOVED: " + item.Key);
+                    //changeList.Insert(0, "PARAM REMOVED: " + item.Key);
+                    superChangeList[0].Insert(0, "PARAM REMOVED: " + item.Key);
                     paramList_old.Remove(item.Key);
                     return;
                 }
@@ -473,6 +480,9 @@ namespace BoreParamCompare
                 if (paramChanges <= 0)
                     changeList.Remove(paramSpacer); //remove label for unchanged param type
             });
+
+            //sort super list
+            superChangeList.OrderBy(list => list[0]);
         }
 
         private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
@@ -481,7 +491,7 @@ namespace BoreParamCompare
             if (is_old == true)
                 oldNew = "OLD";
 
-            Parallel.ForEach(fileList, file =>
+            Parallel.ForEach(Partitioner.Create(fileList), file =>
             {
                 if (file.Name.Contains(".param") == false)
                     return; //not a param.
