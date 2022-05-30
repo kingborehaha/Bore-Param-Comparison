@@ -7,10 +7,6 @@ namespace BoreParamCompare
      * ASYC EXPERIMENTAL
         * to fix changelog ordering issue:
             * make a separate list for each param type, shove them all in a dictionary or something to mantain order
-            * fix up ApplyParamDefs to only apply paramdefs according to (stripped) parameteres. 
-                * run function twice for old params and new params.
-        * run garbage collection after paramdef application?
-            * is there anything i should be marking as null to save memory?
      * test remaining games
      * Consider fooling around with Async to speed things up
      */
@@ -54,18 +50,24 @@ namespace BoreParamCompare
 
             Directory.CreateDirectory("Output");
         }
-
+        /*
         private static string GetTime()
         {
             string time = DateTime.Now.ToString("MM.dd.yyyy HH-mm-ss");
             return time;
         }
+        */
 
         public string GetPreferredRowName(PARAM.Row row_old, PARAM.Row row_new)
         {
             string rowname = "";
-            if (cb_LogRowNames.Checked == true && row_old.Name != "")
-                rowname = row_old.Name;
+            if (cb_LogRowNames.Checked)
+            {
+                if (row_old.Name != "")
+                    rowname = row_old.Name;
+                else if (row_new.Name != "")
+                    rowname = row_new.Name;
+            }
 
             return rowname;
         }
@@ -172,7 +174,7 @@ namespace BoreParamCompare
             return changed;
         }
 
-        private string MakeIDString(string paramNameStr, PARAM.Row row, bool addName)
+        private static string MakeIDString(string paramNameStr, PARAM.Row row, bool addName)
         {
             string str = paramNameStr + "[ID " + row.ID.ToString() + "]";
             /*
@@ -184,7 +186,7 @@ namespace BoreParamCompare
             return str;
         }
 
-        private bool CheckOodle(string path)
+        private bool CheckOodle()
         {
             if (File.Exists("oo2core_6_win64.dll") == false)
             {
@@ -223,7 +225,7 @@ namespace BoreParamCompare
             catch (DllNotFoundException)
             {
                 //oodle dll is required, but missing.
-                if (CheckOodle(path) == false)
+                if (CheckOodle() == false)
                     return null;
 
                 if (BND4.Is(path) || BND3.Is(path))
@@ -472,7 +474,7 @@ namespace BoreParamCompare
             });
         }
 
-        private void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
+        private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
         {
             string oldNew = "NEW";
             if (is_old == true)
