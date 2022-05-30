@@ -4,6 +4,13 @@ using System.Threading.Tasks;
 namespace BoreParamCompare
 {
     /* TODO
+     * ASYC EXPERIMENTAL
+        * to fix changelog ordering issue:
+            * make a separate list for each param type, shove them all in a dictionary or something to mantain order
+            * fix up ApplyParamDefs to only apply paramdefs according to (stripped) parameteres. 
+                * run function twice for old params and new params.
+        * run garbage collection after paramdef application?
+            * is there anything i should be marking as null to save memory?
      * test remaining games
      * Consider fooling around with Async to speed things up
      */
@@ -465,9 +472,13 @@ namespace BoreParamCompare
             });
         }
 
-        private void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList_old, Dictionary<string, PARAM> paramList_old, List<BinderFile> fileList_new, Dictionary<string, PARAM> paramList_new, List<string> changeList)
+        private void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
         {
-            Parallel.ForEach(fileList_old, file =>
+            string oldNew = "NEW";
+            if (is_old == true)
+                oldNew = "OLD";
+
+            Parallel.ForEach(fileList, file =>
             {
                 if (file.Name.Contains(".param") == false)
                     return; //not a param.
@@ -476,33 +487,14 @@ namespace BoreParamCompare
 
                 if (param.ApplyParamdefCarefully(paramdefs))
                 {
-                    paramList_old[name] = param;
+                    paramList[name] = param;
                 }
                 else
                 {
-                    changeList.Add($"Could not apply ParamDef for {param.ParamType} in OLD file. If correct game was selected, Param is incompatible with current ParamDef");
+                    changeList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
                     //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                 }
             });
-
-            foreach (BinderFile file in fileList_new)
-            {
-                if (file.Name.Contains(".param") == false)
-                    continue; //not a param.
-                string name = Path.GetFileNameWithoutExtension(file.Name);
-                var param = PARAM.Read(file.Bytes);
-
-                // Recommended method: checks the list for any match, or you can test them one-by-one
-                if (param.ApplyParamdefCarefully(paramdefs))
-                {
-                    paramList_new[name] = param;
-                }
-                else
-                {
-                    changeList.Add($"Could not apply ParamDef for {param.ParamType} in NEW file. If correct game was selected, Param is incompatible with current ParamDef");
-                    //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
-                }
-            }
         }
 
 
@@ -577,45 +569,8 @@ namespace BoreParamCompare
 
                 UpdateConsole("Applying Defs");
 
-                ApplyParamDefs(paramdefs, fileList_old, paramList_old, fileList_new, paramList_new, changeList);
-                /*
-                foreach (BinderFile file in fileList_old)
-                {
-                    if (file.Name.Contains(".param") == false)
-                        continue; //not a param.
-                    string name = Path.GetFileNameWithoutExtension(file.Name);
-                    var param = PARAM.Read(file.Bytes);
-
-                    if (param.ApplyParamdefCarefully(paramdefs))
-                    {
-                        paramList_old[name] = param;
-                    }
-                    else
-                    {
-                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in OLD file. If correct game was selected, Param is incompatible with current ParamDef");
-                        //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
-                    }
-                }
-
-                foreach (BinderFile file in fileList_new)
-                {
-                    if (file.Name.Contains(".param") == false)
-                        continue; //not a param.
-                    string name = Path.GetFileNameWithoutExtension(file.Name);
-                    var param = PARAM.Read(file.Bytes);
-
-                    // Recommended method: checks the list for any match, or you can test them one-by-one
-                    if (param.ApplyParamdefCarefully(paramdefs))
-                    {
-                        paramList_new[name] = param;
-                    }
-                    else
-                    {
-                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in NEW file. If correct game was selected, Param is incompatible with current ParamDef");
-                        //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
-                    }
-                }
-                */
+                ApplyParamDefs(paramdefs, fileList_old, paramList_old, changeList, true);
+                ApplyParamDefs(paramdefs, fileList_new, paramList_new, changeList, false);
             }
             #endregion
 
@@ -635,6 +590,7 @@ namespace BoreParamCompare
             }
 
             //Check for changes
+            UpdateConsole("Checking param changes");
             CheckParamChanges(paramList_old, paramList_new, changeList);
             #endregion
 
