@@ -277,23 +277,13 @@ namespace BoreParamCompare
 
         private void CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new, List<List<string>> superChangeList)
         {
-
-            Dictionary<string, List<string>> changeDict = new();
-            foreach (KeyValuePair<string, PARAM> item in paramList_old)
-            {
-                //create consistent order by using a dictionary (and speed up a bit)
-                List<string> changeList = new();
-                superChangeList.Add(changeList);
-                changeDict.Add(item.Key, changeList);
-            }
-
             Parallel.ForEach(Partitioner.Create(paramList_old), item =>
             //foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
                 //
                 //UpdateConsole($"Scanning Param: {item.Key}");
                 //
-                List<string> changeList = changeDict[item.Key];
+                List<string> changeList = new();
 
                 //scan for removed params
                 if (paramList_new.ContainsKey(item.Key) == false)
@@ -479,6 +469,8 @@ namespace BoreParamCompare
 
                 if (paramChanges <= 0)
                     changeList.Remove(paramSpacer); //remove label for unchanged param type
+                else
+                    superChangeList.Add(changeList);
             });
 
             //sort super list
@@ -592,7 +584,6 @@ namespace BoreParamCompare
             }
             #endregion
 
-
             #region Read Params
 
             //scan for added params
@@ -609,12 +600,12 @@ namespace BoreParamCompare
 
             //Check for changes
             UpdateConsole("Checking param changes");
+
             List<List<string>> superChangeList = new();
-            //superChangeList.Add(changeList);
             CheckParamChanges(paramList_old, paramList_new, superChangeList);
             #endregion
 
-            //compile changelists to single changelist
+            //compile changelists to single changelist for output
             foreach (List<string> list in superChangeList)
             {
                 changeList.AddRange(list);
@@ -624,19 +615,6 @@ namespace BoreParamCompare
 
             File.WriteAllLines(outputFileName, changeList);
             System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
-
-            /*
-            UpdateConsole("Exporting Params");
-
-            //output regulation
-            foreach (BinderFile file in paramBND.Files)
-            {
-                string name = Path.GetFileNameWithoutExtension(file.Name);
-                if (paramList.ContainsKey(name))
-                    file.Bytes = paramList[name].Write();
-            }
-            SFUtil.EncryptERRegulation(regulationPath, paramBND); //encrypt and write param regulation
-            */
 
         }
 
@@ -731,7 +709,6 @@ namespace BoreParamCompare
         private void cb_GameType_SelectedIndexChanged(object sender, EventArgs e)
         {
             gameType = (string)menu_GameType.SelectedItem;
-            //gameType = Enum.Parse<GameTypeEnum>(cb_GameType.SelectedText);
             CheckEnableActivateButton();
         }
 
