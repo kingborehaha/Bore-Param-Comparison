@@ -1,4 +1,3 @@
-Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
+Compares params for FromSoft games.
 
-Currently only setup to compare Elden Ring params.
-Unfinished functionality.
+Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
