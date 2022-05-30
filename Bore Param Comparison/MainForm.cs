@@ -222,7 +222,7 @@ namespace BoreParamCompare
             {
                 //oodle dll is required, but missing.
                 if (CheckOodle() == false)
-                    return null;
+                    return null; //User cancelled oodle check, cancel comparison.
 
                 if (BND4.Is(path) || BND3.Is(path))
                     isRegulation = false; //file is a BND
@@ -238,14 +238,14 @@ namespace BoreParamCompare
                     version = bnd3.Version;
                     break;
                 case "DS2": //untested
-                case "DS2S": //not thoroughly tested
+                case "DS2S":
                 case "BB": //untested
-                case "SDT": //not thoroughly tested
+                case "SDT":
                     bnd4 = BND4.Read(path);
                     list = bnd4.Files;
                     version = bnd4.Version;
                     break;
-                case "DS3": //not thoroughly tested
+                case "DS3":
                     if (isRegulation)
                         bnd4 = SFUtil.DecryptDS3Regulation(path);
                     else
@@ -561,10 +561,16 @@ namespace BoreParamCompare
                 //multiple params
                 List<BinderFile>? fileList_old = GetBNDFiles(regPath_old, true);
                 if (fileList_old == null)
+                {
+                    UpdateConsole("Comparison Cancelled");
                     return;
+                }
                 List<BinderFile>? fileList_new = GetBNDFiles(regPath_new, false);
                 if (fileList_new == null)
+                {
+                    UpdateConsole("Comparison Cancelled");
                     return;
+                }
 
                 UpdateConsole("Applying Defs");
 
