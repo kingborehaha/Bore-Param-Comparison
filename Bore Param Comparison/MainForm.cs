@@ -5,7 +5,6 @@ namespace BoreParamCompare
 {
     /* TODO
      * test remaining games
-     * Consider fooling around with Async to speed things up
      */
     public partial class MainForm : Form
     {
@@ -47,18 +46,24 @@ namespace BoreParamCompare
 
             Directory.CreateDirectory("Output");
         }
-
+        /*
         private static string GetTime()
         {
             string time = DateTime.Now.ToString("MM.dd.yyyy HH-mm-ss");
             return time;
         }
+        */
 
         public string GetPreferredRowName(PARAM.Row row_old, PARAM.Row row_new)
         {
             string rowname = "";
-            if (cb_LogRowNames.Checked == true && row_old.Name != "")
-                rowname = row_old.Name;
+            if (cb_LogRowNames.Checked)
+            {
+                if (row_old.Name != "")
+                    rowname = row_old.Name;
+                else if (row_new.Name != "")
+                    rowname = row_new.Name;
+            }
 
             return rowname;
         }
@@ -165,7 +170,7 @@ namespace BoreParamCompare
             return changed;
         }
 
-        private string MakeIDString(string paramNameStr, PARAM.Row row, bool addName)
+        private static string MakeIDString(string paramNameStr, PARAM.Row row, bool addName)
         {
             string str = paramNameStr + "[ID " + row.ID.ToString() + "]";
             /*
@@ -177,17 +182,17 @@ namespace BoreParamCompare
             return str;
         }
 
-        private bool CheckOodle(string path)
+        private bool CheckOodle()
         {
             if (File.Exists("oo2core_6_win64.dll") == false)
             {
                 DialogResult result;
                 do
                 {
-                     result = MessageBox.Show(
-                        $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {gameType} directory." +
-                        $"\n\nPlease copy and paste \"oo2core_6_win64.dll\" from your {gameType} directory to \"{Directory.GetCurrentDirectory()}\".",
-                        $"Could not find oo2core_6_win64.dll", MessageBoxButtons.RetryCancel);
+                    result = MessageBox.Show(
+                       $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {gameType} directory." +
+                       $"\n\nPlease copy and paste \"oo2core_6_win64.dll\" from your {gameType} directory to \"{Directory.GetCurrentDirectory()}\".",
+                       $"Could not find oo2core_6_win64.dll", MessageBoxButtons.RetryCancel);
 
                     if (result == DialogResult.Cancel)
                         return false;
@@ -201,7 +206,7 @@ namespace BoreParamCompare
         private List<BinderFile>? GetBNDFiles(string path, bool is_old)
         {
             //Couple hamfisted things in here, but whatever. It works.
-            
+
             List<BinderFile> list;
             string version;
             BND3 bnd3;
@@ -216,7 +221,7 @@ namespace BoreParamCompare
             catch (DllNotFoundException)
             {
                 //oodle dll is required, but missing.
-                if (CheckOodle(path) == false)
+                if (CheckOodle() == false)
                     return null;
 
                 if (BND4.Is(path) || BND3.Is(path))
@@ -257,7 +262,7 @@ namespace BoreParamCompare
                     version = bnd4.Version;
                     break;
                 default:
-                    throw new Exception("Bad game type: "+gameType);
+                    throw new Exception("Bad game type: " + gameType);
             }
 
             if (is_old)
@@ -268,135 +273,14 @@ namespace BoreParamCompare
             return list;
         }
 
-        private void CompareFiles()
+        private void CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new, List<string> changeList)
         {
 
-            #region Load Params
-            Dictionary<string, PARAM> paramList_old = new();
-            Dictionary<string, PARAM> paramList_new = new();
-            List<string> changeList = new(); //
+            //this parallel foreach is probably too unsafe considering how often it's constantly adding/removing entries in multiple lists
+            //Parallel.ForEach(paramList_old, item =>
 
-            string regPath_old = openFileDialog_old.FileName;
-            string regPath_new = openFileDialog_new.FileName;
-
-            string outputFileName = $"Output\\{openFileDialog_old.SafeFileName} to {openFileDialog_new.SafeFileName}.txt";
-
-
-            UpdateConsole("Loading ParamDefs");
-
-            List<PARAMDEF> paramdefs = new();
-            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType + "\\Defs", "*.xml"))
-            {
-                var paramdef = PARAMDEF.XmlDeserialize(path);
-                paramdefs.Add(paramdef);
-            }
-
-
-            UpdateConsole("Loading Params");
-
-            if (regPath_old.EndsWith(".param"))
-            {
-                //single .param
-                PARAM param_old = PARAM.Read(regPath_old);
-                PARAM param_new = PARAM.Read(regPath_new);
-
-                t_VersionOld.Text = "Invalid";
-                t_VersionNew.Text = "Invalid";
-
-                var nameOld = Path.GetFileNameWithoutExtension(regPath_old);
-                var nameNew = Path.GetFileNameWithoutExtension(regPath_new);
-
-                if (param_old.ApplyParamdefCarefully(paramdefs))
-                {
-                    paramList_old[nameOld] = param_old;
-                }
-                else
-                {
-                    changeList.Add($": Could not apply ParamDef for (old) {param_old.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
-                    //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
-                }
-
-                if (param_new.ApplyParamdefCarefully(paramdefs))
-                {
-                    paramList_new[nameNew] = param_new;
-                }
-                else
-                {
-                    changeList.Add($": Could not apply ParamDef for (new) {param_new.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
-                    //throw new Exception("Could not apply paramDef for new ! You probably selected the wrong game");
-                }
-
-            }
-            else
-            {
-                //multiple params
-                List<BinderFile>? fileList_old = GetBNDFiles(regPath_old, true);
-                if (fileList_old == null)
-                    return;
-                List<BinderFile>? fileList_new = GetBNDFiles(regPath_new, false);
-                if (fileList_new == null)
-                    return;
-
-                UpdateConsole("Applying Defs");
-
-                foreach (BinderFile file in fileList_old)
-                {
-                    if (file.Name.Contains(".param") == false)
-                        continue; //not a param.
-                    string name = Path.GetFileNameWithoutExtension(file.Name);
-                    var param = PARAM.Read(file.Bytes);
-
-                    if (param.ApplyParamdefCarefully(paramdefs))
-                    {
-                        paramList_old[name] = param;
-                    }
-                    else
-                    {
-                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in OLD file. If correct game was selected, Param is incompatible with current ParamDef");
-                        //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
-                    }
-                }
-
-                foreach (BinderFile file in fileList_new)
-                {
-                    if (file.Name.Contains(".param") == false)
-                        continue; //not a param.
-                    string name = Path.GetFileNameWithoutExtension(file.Name);
-                    var param = PARAM.Read(file.Bytes);
-
-                    // Recommended method: checks the list for any match, or you can test them one-by-one
-                    if (param.ApplyParamdefCarefully(paramdefs))
-                    {
-                        paramList_new[name] = param;
-                    }
-                    else
-                    {
-                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in NEW file. If correct game was selected, Param is incompatible with current ParamDef");
-                        //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
-                    }
-                }
-            }
-            #endregion
-
-
-            #region Read Params
-
-            //scan for added params
-            foreach (KeyValuePair<string, PARAM> item in paramList_new)
-            {
-                if (paramList_old.ContainsKey(item.Key) == false)
-                {
-                    //param was added
-                    changeList.Insert(0,"PARAM TYPE ADDED OR MODIFIED: " + item.Key);
-                    paramList_new.Remove(item.Key);
-                    continue;
-                }
-            }
-
-            //Check for changes
             foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
-
                 //
                 UpdateConsole($"Scanning Param: {item.Key}");
                 //
@@ -405,9 +289,9 @@ namespace BoreParamCompare
                 if (paramList_new.ContainsKey(item.Key) == false)
                 {
                     //param was removed
-                    changeList.Insert(0,"PARAM REMOVED: " + item.Key);
+                    changeList.Insert(0, "PARAM REMOVED: " + item.Key);
                     paramList_old.Remove(item.Key);
-                    continue;
+                    return;
                 }
 
                 PARAM param_old = paramList_old[item.Key];
@@ -415,7 +299,7 @@ namespace BoreParamCompare
 
                 // formatting
                 string paramNameStr = "[" + item.Key + "]";
-                string paramSpacer = "*** *** *** *** " +item.Key+ " *** *** *** ***";
+                string paramSpacer = "*** *** *** *** " + item.Key + " *** *** *** ***";
 
                 changeList.Add(paramSpacer);
                 int paramChanges = 0; //keep track of how many changes were made to this param (and remove the spacer if it's zero)
@@ -454,7 +338,7 @@ namespace BoreParamCompare
                 {
                     PARAM.Row row = param_new.Rows[iRow];
                     int ID = row.ID;
-                    for (var i = 0; i < param_new.Rows.Count; i++)  
+                    for (var i = 0; i < param_new.Rows.Count; i++)
                     {
                         PARAM.Row row2 = param_new.Rows[i];
                         if (ID == row2.ID && row2 != row)
@@ -488,7 +372,6 @@ namespace BoreParamCompare
                         }
                     }
                 }
-
                 //UpdateConsole("Reading Params (Added/Removed rows)");
 
                 //check for added rows
@@ -581,11 +464,133 @@ namespace BoreParamCompare
                         rowCount = param_new.Rows.Count;
                     else
                         rowCount = param_old.Rows.Count;
-                    }
+                }
 
-                if (paramChanges <= 0) 
+                if (paramChanges <= 0)
                     changeList.Remove(paramSpacer); //remove label for unchanged param type
+            }//);
+        }
+
+        private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
+        {
+            string oldNew = "NEW";
+            if (is_old == true)
+                oldNew = "OLD";
+
+            Parallel.ForEach(fileList, file =>
+            {
+                if (file.Name.Contains(".param") == false)
+                    return; //not a param.
+                string name = Path.GetFileNameWithoutExtension(file.Name);
+                var param = PARAM.Read(file.Bytes);
+
+                if (param.ApplyParamdefCarefully(paramdefs))
+                {
+                    paramList[name] = param;
+                }
+                else
+                {
+                    changeList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+                    //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                }
+            });
+        }
+
+
+        private void CompareFiles()
+        {
+
+            #region Load Params
+            Dictionary<string, PARAM> paramList_old = new();
+            Dictionary<string, PARAM> paramList_new = new();
+            List<string> changeList = new(); //
+
+            string regPath_old = openFileDialog_old.FileName;
+            string regPath_new = openFileDialog_new.FileName;
+
+            string outputFileName = $"Output\\{openFileDialog_old.SafeFileName} to {openFileDialog_new.SafeFileName}.txt";
+
+
+            UpdateConsole("Loading ParamDefs");
+
+            List<PARAMDEF> paramdefs = new();
+            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType + "\\Defs", "*.xml"))
+            {
+                var paramdef = PARAMDEF.XmlDeserialize(path);
+                paramdefs.Add(paramdef);
             }
+
+
+            UpdateConsole("Loading Params");
+
+            if (regPath_old.EndsWith(".param"))
+            {
+                //single .param
+                PARAM param_old = PARAM.Read(regPath_old);
+                PARAM param_new = PARAM.Read(regPath_new);
+
+                t_VersionOld.Text = "Invalid";
+                t_VersionNew.Text = "Invalid";
+
+                var nameOld = Path.GetFileNameWithoutExtension(regPath_old);
+                var nameNew = Path.GetFileNameWithoutExtension(regPath_new);
+
+                if (param_old.ApplyParamdefCarefully(paramdefs))
+                {
+                    paramList_old[nameOld] = param_old;
+                }
+                else
+                {
+                    changeList.Add($": Could not apply ParamDef for (old) {param_old.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
+                    //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                }
+
+                if (param_new.ApplyParamdefCarefully(paramdefs))
+                {
+                    paramList_new[nameNew] = param_new;
+                }
+                else
+                {
+                    changeList.Add($": Could not apply ParamDef for (new) {param_new.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
+                    //throw new Exception("Could not apply paramDef for new ! You probably selected the wrong game");
+                }
+
+            }
+            else
+            {
+                //multiple params
+                List<BinderFile>? fileList_old = GetBNDFiles(regPath_old, true);
+                if (fileList_old == null)
+                    return;
+                List<BinderFile>? fileList_new = GetBNDFiles(regPath_new, false);
+                if (fileList_new == null)
+                    return;
+
+                UpdateConsole("Applying Defs");
+
+                ApplyParamDefs(paramdefs, fileList_old, paramList_old, changeList, true);
+                ApplyParamDefs(paramdefs, fileList_new, paramList_new, changeList, false);
+            }
+            #endregion
+
+
+            #region Read Params
+
+            //scan for added params
+            foreach (KeyValuePair<string, PARAM> item in paramList_new)
+            {
+                if (paramList_old.ContainsKey(item.Key) == false)
+                {
+                    //param was added
+                    changeList.Insert(0,"PARAM TYPE ADDED OR MODIFIED: " + item.Key);
+                    paramList_new.Remove(item.Key);
+                    continue;
+                }
+            }
+
+            //Check for changes
+            UpdateConsole("Checking param changes");
+            CheckParamChanges(paramList_old, paramList_new, changeList);
             #endregion
 
             changeList.Insert(0, "Game Type: " + gameType);
