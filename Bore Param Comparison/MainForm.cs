@@ -4,11 +4,7 @@ using System.Threading.Tasks;
 namespace BoreParamCompare
 {
     /* TODO
-     * ASYC EXPERIMENTAL
-        * to fix changelog ordering issue:
-            * make a separate list for each param type, shove them all in a dictionary or something to mantain order
      * test remaining games
-     * Consider fooling around with Async to speed things up
      */
     public partial class MainForm : Form
     {
@@ -280,9 +276,10 @@ namespace BoreParamCompare
         private void CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new, List<string> changeList)
         {
 
-            //foreach (KeyValuePair<string, PARAM> item in paramList_old)
+            //this parallel foreach is probably too unsafe considering how often it's constantly adding/removing entries in multiple lists
+            //Parallel.ForEach(paramList_old, item =>
 
-            Parallel.ForEach(paramList_old, item =>
+            foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
                 //
                 //UpdateConsole($"Scanning Param: {item.Key}");
@@ -471,7 +468,7 @@ namespace BoreParamCompare
 
                 if (paramChanges <= 0)
                     changeList.Remove(paramSpacer); //remove label for unchanged param type
-            });
+            }//);
         }
 
         private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
