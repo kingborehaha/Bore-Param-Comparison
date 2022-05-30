@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 namespace BoreParamCompare
 {
     /* TODO
+     * figure out a way to sort change lists alphabetically (without messing up ID order, headers, etc)
      * test remaining games
      */
     public partial class MainForm : Form
@@ -273,17 +274,20 @@ namespace BoreParamCompare
             return list;
         }
 
-        private void CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new, List<string> changeList)
+        private void CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new, List<List<string>> superChangeDict)
         {
 
-            //this parallel foreach is probably too unsafe considering how often it's constantly adding/removing entries in multiple lists
-            //Parallel.ForEach(paramList_old, item =>
+            //foreach (KeyValuePair<string, PARAM> in paramList_old) { }
 
-            foreach (KeyValuePair<string, PARAM> item in paramList_old)
+            
+            Parallel.ForEach(paramList_old, item =>
+            //foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
                 //
-                UpdateConsole($"Scanning Param: {item.Key}");
+                //UpdateConsole($"Scanning Param: {item.Key}");
                 //
+                List<string> changeList = new();
+                superChangeDict.Add(changeList);
 
                 //scan for removed params
                 if (paramList_new.ContainsKey(item.Key) == false)
@@ -468,7 +472,7 @@ namespace BoreParamCompare
 
                 if (paramChanges <= 0)
                     changeList.Remove(paramSpacer); //remove label for unchanged param type
-            }//);
+            });
         }
 
         private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
@@ -495,7 +499,6 @@ namespace BoreParamCompare
                 }
             });
         }
-
 
         private void CompareFiles()
         {
@@ -596,8 +599,16 @@ namespace BoreParamCompare
 
             //Check for changes
             UpdateConsole("Checking param changes");
-            CheckParamChanges(paramList_old, paramList_new, changeList);
+            List<List<string>> superChangeList = new();
+            //superChangeList.Add(changeList);
+            CheckParamChanges(paramList_old, paramList_new, superChangeList);
             #endregion
+
+            //compile changelists to single changelist
+            foreach (List<string> list in superChangeList)
+            {
+                changeList.AddRange(list);
+            }
 
             changeList.Insert(0, "Game Type: " + gameType);
 
