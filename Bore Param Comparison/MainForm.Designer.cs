@@ -47,7 +47,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.cb_open_output = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cb_LogRowNames = new System.Windows.Forms.CheckBox();
             this.cb_LogNamesOnlyIf_FieldChange = new System.Windows.Forms.CheckBox();
@@ -253,7 +252,6 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.cb_open_output);
             this.tabPage1.Controls.Add(this.t_console);
             this.tabPage1.Controls.Add(this.b_browse_old);
             this.tabPage1.Controls.Add(this.b_activate);
@@ -271,19 +269,6 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // cb_open_output
-            // 
-            this.cb_open_output.AutoSize = true;
-            this.cb_open_output.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cb_open_output.Checked = true;
-            this.cb_open_output.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_open_output.Location = new System.Drawing.Point(188, 201);
-            this.cb_open_output.Name = "cb_open_output";
-            this.cb_open_output.Size = new System.Drawing.Size(171, 19);
-            this.cb_open_output.TabIndex = 78;
-            this.cb_open_output.Text = "Open output when finished";
-            this.cb_open_output.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -422,6 +407,5 @@
         private CheckBox cb_log_name_changes_only;
         private CheckBox cb_LogNamesOnlyIf_FieldChange;
         private CheckBox cb_LogRowNames;
-        private CheckBox cb_open_output;
     }
 }

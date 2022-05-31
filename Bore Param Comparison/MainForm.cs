@@ -617,8 +617,12 @@ namespace BoreParamCompare
 
             File.WriteAllLines(outputFileName, changeList);
 
-            if (cb_open_output.Checked)
+            System.Media.SystemSounds.Exclamation.Play(); //make noise
+
+            var result = MessageBox.Show("All done! Open the output file?", "Comparison Finished", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
                 System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
+
 
         }
 
