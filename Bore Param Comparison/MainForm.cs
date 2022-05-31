@@ -5,7 +5,6 @@ using System.Collections.Concurrent;
 namespace BoreParamCompare
 {
     /* TODO
-     * figure out a way to sort change lists alphabetically (without messing up ID order, headers, etc)
      * test remaining games
      */
     public partial class MainForm : Form
@@ -275,8 +274,10 @@ namespace BoreParamCompare
             return list;
         }
 
-        private void CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new, List<List<string>> superChangeList)
+        private List<List<string>> CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new)
         {
+            List<List<string>> superChangeList = new();
+
             Parallel.ForEach(Partitioner.Create(paramList_old), item =>
             //foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
@@ -475,6 +476,7 @@ namespace BoreParamCompare
 
             //sort super list
             superChangeList = superChangeList.OrderBy(list => list[0]).ToList();
+            return superChangeList;
         }
 
         private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
@@ -601,8 +603,7 @@ namespace BoreParamCompare
             //Check for changes
             UpdateConsole("Checking param changes");
 
-            List<List<string>> superChangeList = new();
-            CheckParamChanges(paramList_old, paramList_new, superChangeList);
+            var superChangeList = CheckParamChanges(paramList_old, paramList_new); //check param changes, return list of lists
             #endregion
 
             //compile changelists to single changelist for output
@@ -611,7 +612,8 @@ namespace BoreParamCompare
                 changeList.AddRange(list);
             }
 
-            changeList.Insert(0, "Game Type: " + gameType);
+            changeList.Insert(0, $"Game: {gameType}");
+            changeList.Insert(1, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
 
             File.WriteAllLines(outputFileName, changeList);
             System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
