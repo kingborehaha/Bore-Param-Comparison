@@ -616,7 +616,9 @@ namespace BoreParamCompare
             changeList.Insert(1, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
 
             File.WriteAllLines(outputFileName, changeList);
-            System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
+
+            if (cb_open_output.Checked)
+                System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
 
         }
 
