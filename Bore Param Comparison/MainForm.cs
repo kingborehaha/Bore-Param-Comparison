@@ -474,7 +474,7 @@ namespace BoreParamCompare
             });
 
             //sort super list
-            superChangeList.OrderBy(list => list[0]);
+            superChangeList = superChangeList.OrderBy(list => list[0]).ToList();
         }
 
         private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
