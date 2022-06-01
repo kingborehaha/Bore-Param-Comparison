@@ -504,7 +504,7 @@ namespace BoreParamCompare
             });
         }
 
-        private void CompareFiles()
+        private string? CompareFiles()
         {
 
             #region Load Params
@@ -570,13 +570,13 @@ namespace BoreParamCompare
                 if (fileList_old == null)
                 {
                     UpdateConsole("Comparison Cancelled");
-                    return;
+                    return null;
                 }
                 List<BinderFile>? fileList_new = GetBNDFiles(regPath_new, false);
                 if (fileList_new == null)
                 {
                     UpdateConsole("Comparison Cancelled");
-                    return;
+                    return null;
                 }
 
                 UpdateConsole("Applying Defs");
@@ -617,6 +617,7 @@ namespace BoreParamCompare
 
             File.WriteAllLines(outputFileName, changeList);
 
+            return outputFileName;
 
         }
 
@@ -656,17 +657,20 @@ namespace BoreParamCompare
 
         private void b_activate_Click(object sender, EventArgs e)
         {
-            CompareFiles(); //do all the stuff
+            string? outputFileName = CompareFiles(); //do all the stuff
 
             GC.Collect(); //clear memory
 
-            UpdateConsole("Finished!");
+            if (outputFileName != null)
+            {
+                UpdateConsole("Finished!");
 
-            System.Media.SystemSounds.Exclamation.Play(); //make noise
+                System.Media.SystemSounds.Exclamation.Play(); //make noise
 
-            var result = MessageBox.Show("All done! Open the output file?", "Comparison Finished", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-                System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory + outputFileName); //open up the output file
+                var result = MessageBox.Show("All done! Open the output file?", "Comparison Finished", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                    System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory + outputFileName); //open up the output file
+            }
 
 
         }
