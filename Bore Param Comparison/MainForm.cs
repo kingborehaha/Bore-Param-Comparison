@@ -617,12 +617,6 @@ namespace BoreParamCompare
 
             File.WriteAllLines(outputFileName, changeList);
 
-            System.Media.SystemSounds.Exclamation.Play(); //make noise
-
-            var result = MessageBox.Show("All done! Open the output file?", "Comparison Finished", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-                System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory+ outputFileName); //open up the output file
-
 
         }
 
@@ -667,6 +661,14 @@ namespace BoreParamCompare
             GC.Collect(); //clear memory
 
             UpdateConsole("Finished!");
+
+            System.Media.SystemSounds.Exclamation.Play(); //make noise
+
+            var result = MessageBox.Show("All done! Open the output file?", "Comparison Finished", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+                System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory + outputFileName); //open up the output file
+
+
         }
 
         private void toggle_buttons_dupe()
