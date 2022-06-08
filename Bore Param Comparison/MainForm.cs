@@ -4,7 +4,12 @@ using System.Collections.Concurrent;
 namespace BoreParamCompare
 {
     /* TODO
+     * finish byte array padding checks
+        * compile lists of how byte array are changed, and have some sort of logging behavior so that 800 of the exact same changes are only logged once
+            * I do want to catch abnormal byte array changes in a sea of other byte array changes though (like with spEffectParam)
+        * add a menu option for logging behavior.
      * test remaining games
+     * try to handle misapplied paramDefs... somehow.
      */
     public partial class MainForm : Form
     {
@@ -111,28 +116,61 @@ namespace BoreParamCompare
 
                 for (var iField = 0; iField < row_old.Cells.Count; iField++)
                 {
-                    string? oldField = row_old.Cells[iField].Value.ToString();
-                    string? newField = row_new.Cells[iField].Value.ToString();
+                    var log = false;
+                    object? oldField = row_old.Cells[iField].Value;
+                    object? newField = row_new.Cells[iField].Value;
+
+                    string? oldField_str = oldField.ToString();
+                    string? newField_str = newField.ToString();
 
                     if (oldField == null || newField == null)
                     {
                         throw new Exception("Field was null! Was a new field introduced?");
                     }
 
-                    if (oldField != newField)
+                    string fieldName = row_old.Cells[iField].Def.InternalName;
+
+                    //check for field differences
+                    if (oldField.GetType() == typeof(byte[])) //check and handle if field is a byte array (padding)
+                    {
+                        //is a byte array
+                        var oldFieldArray = (byte[])oldField;
+                        var newFieldArray = (byte[])newField;
+                        for (var i=0; i < oldFieldArray.Length; i++)
+                        {
+                            var old_byte = oldFieldArray[i];
+                            var new_byte = newFieldArray[i];
+                            if (old_byte != new_byte)
+                            {
+                                //byte was changed
+                                oldField_str = old_byte.ToString();
+                                newField_str = new_byte.ToString();
+
+                                log = true;
+                                changed = true;
+                            }
+                        }
+
+                    }
+                    else if (oldField_str != newField_str) //check fields normally
                     {
                         //field was changed
-                        string fieldName = row_old.Cells[iField].Def.InternalName;
+                        log = true;
+                        changed = true;
+                    }
+
+                    if (log == true)
+                    {
                         if (cb_log_field_specifics.Checked)
                         {
                             //log details and continue loop
                             if (cb_fields_share_row.Checked)
                             {
-                                combinedStr += " [] " + fieldName + ": " + oldField + " -> " + newField + "";
+                                combinedStr += " [] " + fieldName + ": " + oldField_str + " -> " + newField_str + "";
                             }
                             else
                             {
-                                changeList.Add(ID_str + " " + fieldName + ": " + oldField + " -> " + newField);
+                                changeList.Add(ID_str + " " + fieldName + ": " + oldField_str + " -> " + newField_str);
                             }
                         }
                         else
@@ -141,8 +179,6 @@ namespace BoreParamCompare
                             changeList.Add(ID_str + " WAS MODIFIED");
                             return true;
                         }
-
-                        changed = true;
                     }
                 }
             }
