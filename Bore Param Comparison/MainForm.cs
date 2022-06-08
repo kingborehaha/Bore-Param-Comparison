@@ -1,5 +1,4 @@
 using SoulsFormats;
-using System.Threading.Tasks;
 using System.Collections.Concurrent;
 
 namespace BoreParamCompare
