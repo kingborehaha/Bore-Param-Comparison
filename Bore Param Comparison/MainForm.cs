@@ -80,107 +80,99 @@ namespace BoreParamCompare
             string nameChangeStr;
             string oneLineNameDiffstr = "";
 
-            if (row_old.Cells.Count != row_new.Cells.Count)
+            if (cb_LogRowNames.Checked == true)
             {
-                throw new Exception("Field cell count mismatch! Was a new field introduced?");
-            }
-            else
-            {
-                //if (cb_log_names.Checked)
-                if (cb_LogRowNames.Checked == true)
+                if (row_old.Name != row_new.Name)
                 {
-                    if (row_old.Name != row_new.Name)
+                    //Name was changed
+                    nameChangeStr = $"\"{row_old.Name}\" -> \"{row_new.Name}\"";
+                    if (cb_fields_share_row.Checked)
                     {
-                        //Name was changed
-                        nameChangeStr = $"\"{row_old.Name}\" -> \"{row_new.Name}\"";
-                        if (cb_fields_share_row.Checked)
-                        {
-                            combinedStr += "[" + nameChangeStr + "]";
-                            if (cb_LogNamesOnlyIf_FieldChange.Enabled == false)
-                                changed = true; //Mandate inclusion in changelog since name is different
-                        }
-                        else
-                        {
-                            //Prepare row name change for multi-line changelog
-                            oneLineNameDiffstr = ID_str + " ROW NAME: " + nameChangeStr;
-                        }
+                        combinedStr += "[" + nameChangeStr + "]";
+                        if (cb_LogNamesOnlyIf_FieldChange.Enabled == false)
+                            changed = true; //Mandate inclusion in changelog since name is different
                     }
-                    else if (cb_log_name_changes_only.Checked == false)
+                    else
                     {
-                        //Name unchanged, include the name in the string anyway
-                        var rowname = GetPreferredRowName(row_old, row_new);
-                        ID_str += "[" + rowname + "]";
-                        combinedStr += "[" + rowname + "]";
+                        //Prepare row name change for multi-line changelog
+                        oneLineNameDiffstr = ID_str + " ROW NAME: " + nameChangeStr;
                     }
                 }
-
-                for (var iField = 0; iField < row_old.Cells.Count; iField++)
+                else if (cb_log_name_changes_only.Checked == false)
                 {
-                    var log = false;
-                    object? oldField = row_old.Cells[iField].Value;
-                    object? newField = row_new.Cells[iField].Value;
+                    //Name unchanged, include the name in the string anyway
+                    var rowname = GetPreferredRowName(row_old, row_new);
+                    ID_str += "[" + rowname + "]";
+                    combinedStr += "[" + rowname + "]";
+                }
+            }
 
-                    string oldField_str = oldField.ToString();
-                    string newField_str = newField.ToString();
+            for (var iField = 0; iField < row_old.Cells.Count; iField++)
+            {
+                var log = false;
+                object? oldField = row_old.Cells[iField].Value;
+                object? newField = row_new.Cells[iField].Value;
 
-                    /*
-                    if (oldField == null || newField == null)
+                var oldField_str = oldField.ToString();
+                var newField_str = newField.ToString();
+
+                /*
+                if (oldField == null || newField == null)
+                {
+                    throw new Exception("Field was null!");
+                }
+                */
+                string fieldName = row_old.Cells[iField].Def.InternalName;
+
+                //check for field differences
+                if (oldField.GetType() == typeof(byte[])) //check and handle if field is a byte array (padding)
+                {
+                    //is a byte array
+                    var oldFieldArray = (byte[])oldField;
+                    var newFieldArray = (byte[])newField;
+                    for (var i=0; i < oldFieldArray.Length; i++)
                     {
-                        throw new Exception("Field was null!");
-                    }
-                    */
-                    string fieldName = row_old.Cells[iField].Def.InternalName;
+                        var old_byte = oldFieldArray[i];
+                        var new_byte = newFieldArray[i];
 
-                    //check for field differences
-                    if (oldField.GetType() == typeof(byte[])) //check and handle if field is a byte array (padding)
-                    {
-                        //is a byte array
-                        var oldFieldArray = (byte[])oldField;
-                        var newFieldArray = (byte[])newField;
-                        for (var i=0; i < oldFieldArray.Length; i++)
+                        if (old_byte != new_byte)
                         {
-                            var old_byte = oldFieldArray[i];
-                            var new_byte = newFieldArray[i];
-
-                            if (old_byte != new_byte)
-                            {
-                                //byte was changed
-                                oldField_str = Convert.ToHexString(oldFieldArray);
-                                newField_str = Convert.ToHexString(newFieldArray);
-                                log = true;
-                                changed = true;
-                                break;
-                            }
+                            //byte was changed
+                            oldField_str = Convert.ToHexString(oldFieldArray);
+                            newField_str = Convert.ToHexString(newFieldArray);
+                            log = true;
+                            changed = true;
+                            break;
                         }
-
-                    }
-                    else if (oldField_str != newField_str) //check fields normally
-                    {
-                        //field was changed
-                        log = true;
-                        changed = true;
                     }
 
-                    if (log == true)
+                }
+                else if (oldField_str != newField_str) //check fields normally
+                {
+                    //field was changed
+                    log = true;
+                    changed = true;
+                }
+
+                if (log == true)
+                {
+                    if (cb_log_field_specifics.Checked)
                     {
-                        if (cb_log_field_specifics.Checked)
+                        //log details and continue loop
+                        if (cb_fields_share_row.Checked)
                         {
-                            //log details and continue loop
-                            if (cb_fields_share_row.Checked)
-                            {
-                                combinedStr += " [] " + fieldName + ": " + oldField_str + " -> " + newField_str + "";
-                            }
-                            else
-                            {
-                                changeList.Add(ID_str + " " + fieldName + ": " + oldField_str + " -> " + newField_str);
-                            }
+                            combinedStr += " [] " + fieldName + ": " + oldField_str + " -> " + newField_str + "";
                         }
                         else
                         {
-                            //only log ID and end loop
-                            changeList.Add(ID_str + " WAS MODIFIED");
-                            return true;
+                            changeList.Add(ID_str + " " + fieldName + ": " + oldField_str + " -> " + newField_str);
                         }
+                    }
+                    else
+                    {
+                        //only log ID and end loop
+                        changeList.Add(ID_str + " WAS MODIFIED");
+                        return true;
                     }
                 }
             }
