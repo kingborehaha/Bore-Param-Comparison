@@ -4,12 +4,9 @@ using System.Collections.Concurrent;
 namespace BoreParamCompare
 {
     /* TODO
-     * finish byte array padding checks
-        * compile lists of how byte array are changed, and have some sort of logging behavior so that 800 of the exact same changes are only logged once
-            * I do want to catch abnormal byte array changes in a sea of other byte array changes though (like with spEffectParam)
-        * add a menu option for logging behavior.
+     * Figure out a way to compile byte array changes that apply to most rows in a param so the log is less crowded
+        * add menu options accordingly
      * test remaining games
-     * try to handle misapplied paramDefs... somehow.
      */
     public partial class MainForm : Form
     {
