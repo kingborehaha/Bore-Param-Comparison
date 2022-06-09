@@ -120,14 +120,15 @@ namespace BoreParamCompare
                     object? oldField = row_old.Cells[iField].Value;
                     object? newField = row_new.Cells[iField].Value;
 
-                    string? oldField_str = oldField.ToString();
-                    string? newField_str = newField.ToString();
+                    string oldField_str = oldField.ToString();
+                    string newField_str = newField.ToString();
 
+                    /*
                     if (oldField == null || newField == null)
                     {
-                        throw new Exception("Field was null! Was a new field introduced?");
+                        throw new Exception("Field was null!");
                     }
-
+                    */
                     string fieldName = row_old.Cells[iField].Def.InternalName;
 
                     //check for field differences
@@ -140,14 +141,15 @@ namespace BoreParamCompare
                         {
                             var old_byte = oldFieldArray[i];
                             var new_byte = newFieldArray[i];
+
                             if (old_byte != new_byte)
                             {
                                 //byte was changed
-                                oldField_str = old_byte.ToString();
-                                newField_str = new_byte.ToString();
-
+                                oldField_str = Convert.ToHexString(oldFieldArray);
+                                newField_str = Convert.ToHexString(newFieldArray);
                                 log = true;
                                 changed = true;
+                                break;
                             }
                         }
 
