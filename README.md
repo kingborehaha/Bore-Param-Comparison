@@ -3,6 +3,8 @@ Compares params for FromSoft games.
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
 
 ## Changes
+### v1.1.2
+* Properly check for added/removed params
 ### v1.1.1
 * Log entire changed byte array (in hex) instead of just the changed byte (as a decimal)
 ### v1.1
