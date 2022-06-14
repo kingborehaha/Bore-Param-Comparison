@@ -312,16 +312,12 @@ namespace BoreParamCompare
                 //
                 List<string> changeList = new();
 
-                //scan for removed params
                 if (paramList_new.ContainsKey(item.Key) == false)
                 {
-                    //param was removed
-                    //changeList.Insert(0, "PARAM REMOVED: " + item.Key);
-                    superChangeList[0].Insert(0, "PARAM REMOVED: " + item.Key);
-                    paramList_old.Remove(item.Key);
+                    //Couldn't find matching param in other list. Whatever caused this is logged elsewhere.
                     return;
                 }
-
+                
                 PARAM param_old = paramList_old[item.Key];
                 PARAM param_new = paramList_new[item.Key];
 
@@ -574,7 +570,7 @@ namespace BoreParamCompare
                 }
                 else
                 {
-                    changeList.Add($": Could not apply ParamDef for (old) {param_old.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
+                    changeList.Add($"Could not apply ParamDef for (old) {param_old.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
                     //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                 }
 
@@ -584,7 +580,7 @@ namespace BoreParamCompare
                 }
                 else
                 {
-                    changeList.Add($": Could not apply ParamDef for (new) {param_new.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
+                    changeList.Add($"Could not apply ParamDef for (new) {param_new.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
                     //throw new Exception("Could not apply paramDef for new ! You probably selected the wrong game");
                 }
 
@@ -609,18 +605,41 @@ namespace BoreParamCompare
 
                 ApplyParamDefs(paramdefs, fileList_old, paramList_old, changeList, true);
                 ApplyParamDefs(paramdefs, fileList_new, paramList_new, changeList, false);
+
+                //check for added/removed param types
+                foreach(var file in fileList_old.ToList())
+                {
+                    var otherFile = fileList_new.Find(e => file.Name == e.Name);
+                    if (otherFile == null)
+                    {
+                        //can't find a match.
+                        var filename = Path.GetFileNameWithoutExtension(file.Name);
+                        changeList.Add($"PARAM TYPE REMOVED: {filename}");
+                        paramList_old.Remove(filename);
+                    }
+                }
+                foreach (var file in fileList_new)
+                {
+                    var otherFile = fileList_old.Find(e => file.Name == e.Name);
+                    if (otherFile == null)
+                    {
+                        //can't find a match.
+                        var filename = Path.GetFileNameWithoutExtension(file.Name);
+                        changeList.Add($"PARAM TYPE ADDED: {filename}");
+                        paramList_new.Remove(filename);
+                    }
+                }
             }
             #endregion
 
             #region Read Params
 
-            //scan for added params
-            foreach (KeyValuePair<string, PARAM> item in paramList_new)
+            //scan for params that can't be checked
+            foreach (var item in paramList_new)
             {
                 if (paramList_old.ContainsKey(item.Key) == false)
                 {
-                    //param was added
-                    changeList.Insert(0,"PARAM TYPE ADDED OR MODIFIED: " + item.Key);
+                    //Couldn't find matching param in other list. Whatever caused this is logged elsewhere.
                     paramList_new.Remove(item.Key);
                     continue;
                 }
@@ -628,7 +647,7 @@ namespace BoreParamCompare
 
             //Check for changes
             UpdateConsole("Checking param changes");
-
+            
             var superChangeList = CheckParamChanges(paramList_old, paramList_new); //check param changes, return list of lists
             #endregion
 
