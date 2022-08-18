@@ -514,14 +514,21 @@ namespace BoreParamCompare
                 string name = Path.GetFileNameWithoutExtension(file.Name);
                 var param = PARAM.Read(file.Bytes);
 
-                if (param.ApplyParamdefCarefully(paramdefs))
+                try
                 {
-                    paramList[name] = param;
+                    if (param.ApplyParamdefCarefully(paramdefs))
+                    {
+                        paramList[name] = param;
+                    }
+                    else
+                    {
+                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+                        //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                    }
                 }
-                else
+                catch (InvalidDataException)
                 {
-                    changeList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
-                    //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
+                    changeList.Add($"InvalidDataException: Could not apply ParamDef for {param.ParamType} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
                 }
             });
         }
@@ -609,7 +616,7 @@ namespace BoreParamCompare
                 //check for added/removed param types
                 foreach(var file in fileList_old.ToList())
                 {
-                    var otherFile = fileList_new.Find(e => file.Name == e.Name);
+                    var otherFile = fileList_new.Find(e => file.ID == e.ID);
                     if (otherFile == null)
                     {
                         //can't find a match.
@@ -620,7 +627,7 @@ namespace BoreParamCompare
                 }
                 foreach (var file in fileList_new)
                 {
-                    var otherFile = fileList_old.Find(e => file.Name == e.Name);
+                    var otherFile = fileList_old.Find(e => file.ID == e.ID);
                     if (otherFile == null)
                     {
                         //can't find a match.
