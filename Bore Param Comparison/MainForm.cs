@@ -33,6 +33,8 @@ namespace BoreParamCompare
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            combo_logNameExclusive.SelectedIndex = 0;
+
             toggle_buttons_dupe();
             toggle_buttons_logNames();
 
@@ -79,26 +81,43 @@ namespace BoreParamCompare
 
             if (cb_LogRowNames.Checked == true)
             {
-                if (row_old.Name != row_new.Name)
+                if (combo_logNameExclusive.SelectedIndex == 0)
                 {
-                    //Name was changed
-                    nameChangeStr = $"\"{row_old.Name}\" -> \"{row_new.Name}\"";
-                    if (cb_fields_share_row.Checked)
+                    if (row_old.Name != row_new.Name)
                     {
-                        combinedStr += "[" + nameChangeStr + "]";
-                        if (cb_LogNamesOnlyIf_FieldChange.Enabled == false)
-                            changed = true; //Mandate inclusion in changelog since name is different
+                        //Name was changed
+                        nameChangeStr = $"\"{row_old.Name}\" -> \"{row_new.Name}\"";
+                        if (cb_fields_share_row.Checked)
+                        {
+                            combinedStr += "[" + nameChangeStr + "]";
+                            if (cb_LogNamesOnlyIf_FieldChange.Enabled == false)
+                                changed = true; //Mandate inclusion in changelog since name is different
+                        }
+                        else
+                        {
+                            //Prepare row name change for multi-line changelog
+                            oneLineNameDiffstr = ID_str + " ROW NAME: " + nameChangeStr;
+                        }
                     }
-                    else
+                    else if (cb_log_name_changes_only.Checked == false)
                     {
-                        //Prepare row name change for multi-line changelog
-                        oneLineNameDiffstr = ID_str + " ROW NAME: " + nameChangeStr;
+                        //Name unchanged, include the name in the string anyway
+                        var rowname = GetPreferredRowName(row_old, row_new);
+                        ID_str += "[" + rowname + "]";
+                        combinedStr += "[" + rowname + "]";
                     }
                 }
-                else if (cb_log_name_changes_only.Checked == false)
+                else if (combo_logNameExclusive.SelectedIndex == 1)
                 {
-                    //Name unchanged, include the name in the string anyway
-                    var rowname = GetPreferredRowName(row_old, row_new);
+                    // Only log new name
+                    var rowname = row_new.Name;
+                    ID_str += "[" + rowname + "]";
+                    combinedStr += "[" + rowname + "]";
+                }
+                else if (combo_logNameExclusive.SelectedIndex == 2)
+                {
+                    // Only log old name
+                    var rowname = row_old.Name;
                     ID_str += "[" + rowname + "]";
                     combinedStr += "[" + rowname + "]";
                 }
@@ -197,7 +216,18 @@ namespace BoreParamCompare
             return changed;
         }
 
-        private static string MakeIDString(string paramNameStr, PARAM.Row row, bool addName)
+        private string ExclusiveLogName(PARAM.Row row)
+        {
+            if (cb_LogRowNames.Checked == true)
+            {
+                // Only log new name
+                var rowname = row.Name;
+                return "[" + rowname + "]";
+            }
+            return "";
+        }
+
+        private static string MakeIDString(string paramNameStr, PARAM.Row row, bool unused = false)
         {
             string str = paramNameStr + "[ID " + row.ID.ToString() + "]";
             /*
@@ -305,7 +335,6 @@ namespace BoreParamCompare
             List<List<string>> superChangeList = new();
 
             Parallel.ForEach(Partitioner.Create(paramList_old), item =>
-            //foreach (KeyValuePair<string, PARAM> item in paramList_old)
             {
                 //
                 //UpdateConsole($"Scanning Param: {item.Key}");
@@ -406,6 +435,7 @@ namespace BoreParamCompare
                     if (param_old[row_new.ID] == null)
                     {
                         string ID_new_str = MakeIDString(paramNameStr, row_new, true);
+                        ID_new_str += ExclusiveLogName(row_new);
                         changeList.Add(ID_new_str + " ROW ADDED");
                         paramChanges++;
 
@@ -422,6 +452,7 @@ namespace BoreParamCompare
                     if (param_new[row_old.ID] == null)
                     {
                         string ID_old_str = MakeIDString(paramNameStr, row_old, true);
+                        ID_old_str += ExclusiveLogName(row_old);
                         changeList.Add(ID_old_str + " ROW REMOVED");
                         paramChanges++;
 
@@ -523,7 +554,6 @@ namespace BoreParamCompare
                     else
                     {
                         changeList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
-                        //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                     }
                 }
                 catch (InvalidDataException)
@@ -784,11 +814,13 @@ namespace BoreParamCompare
             {
                 cb_log_name_changes_only.Enabled = true;
                 cb_LogNamesOnlyIf_FieldChange.Enabled = true;
+                combo_logNameExclusive.Enabled = true;
             }
             else
             {
                 cb_log_name_changes_only.Enabled = false;
                 cb_LogNamesOnlyIf_FieldChange.Enabled = false;
+                combo_logNameExclusive.Enabled = false;
             }
         }
 
@@ -805,6 +837,21 @@ namespace BoreParamCompare
         private void cb_LogRowNames_CheckedChanged(object sender, EventArgs e)
         {
             toggle_buttons_logNames();
+        }
+
+        private void combo_logNameExclusive_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            toggle_buttons_logNames();
+            if (combo_logNameExclusive.SelectedIndex == 0)
+            {
+                cb_log_name_changes_only.Enabled = true;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = true;
+            }
+            else
+            {
+                cb_log_name_changes_only.Enabled = false;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
+            }
         }
     }
 }

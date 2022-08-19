@@ -48,6 +48,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.combo_logNameExclusive = new System.Windows.Forms.ComboBox();
             this.cb_LogRowNames = new System.Windows.Forms.CheckBox();
             this.cb_LogNamesOnlyIf_FieldChange = new System.Windows.Forms.CheckBox();
             this.cb_log_name_changes_only = new System.Windows.Forms.CheckBox();
@@ -272,6 +273,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.combo_logNameExclusive);
             this.tabPage2.Controls.Add(this.cb_LogRowNames);
             this.tabPage2.Controls.Add(this.cb_LogNamesOnlyIf_FieldChange);
             this.tabPage2.Controls.Add(this.cb_log_name_changes_only);
@@ -290,6 +292,20 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Options";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // combo_logNameExclusive
+            // 
+            this.combo_logNameExclusive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combo_logNameExclusive.FormattingEnabled = true;
+            this.combo_logNameExclusive.Items.AddRange(new object[] {
+            "Log Differences",
+            "Only log New names",
+            "Only log Old names"});
+            this.combo_logNameExclusive.Location = new System.Drawing.Point(182, 100);
+            this.combo_logNameExclusive.Name = "combo_logNameExclusive";
+            this.combo_logNameExclusive.Size = new System.Drawing.Size(177, 23);
+            this.combo_logNameExclusive.TabIndex = 87;
+            this.combo_logNameExclusive.SelectedIndexChanged += new System.EventHandler(this.combo_logNameExclusive_SelectedIndexChanged);
             // 
             // cb_LogRowNames
             // 
@@ -407,5 +423,6 @@
         private CheckBox cb_log_name_changes_only;
         private CheckBox cb_LogNamesOnlyIf_FieldChange;
         private CheckBox cb_LogRowNames;
+        private ComboBox combo_logNameExclusive;
     }
 }
