@@ -49,5 +49,11 @@
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<TargetPath>Paramdex\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
 	</ContentWithTargetPath>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Paramdex ALT\ER\Defs\EquipParamWeapon v1.0.0.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>	
 </Project>

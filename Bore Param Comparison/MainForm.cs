@@ -46,8 +46,6 @@ namespace BoreParamCompare
             menu_GameType.Items.Clear();
             menu_GameType.Items.AddRange(gameTypes.ToArray());
 
-            //menu_log_row_name_behavior.SelectedIndex = (int)RowNameBehaviorEnum.NoLog;
-
             Directory.CreateDirectory("Output");
         }
         /*
@@ -72,6 +70,11 @@ namespace BoreParamCompare
             return rowname;
         }
 
+        // Dumb solution to handle accessing combo_logNameExclusive index without running into thread issues.
+        private bool logNameExclusive_Index_0 = true;
+        private bool logNameExclusive_Index_1 = false;
+        private bool logNameExclusive_Index_2 = false;
+
         public bool compareCells(List<string> changeList, PARAM.Row row_old, PARAM.Row row_new, string ID_str)
         {
             var changed = false;
@@ -81,7 +84,7 @@ namespace BoreParamCompare
 
             if (cb_LogRowNames.Checked == true)
             {
-                if (combo_logNameExclusive.SelectedIndex == 0)
+                if (logNameExclusive_Index_0)
                 {
                     if (row_old.Name != row_new.Name)
                     {
@@ -107,14 +110,14 @@ namespace BoreParamCompare
                         combinedStr += "[" + rowname + "]";
                     }
                 }
-                else if (combo_logNameExclusive.SelectedIndex == 1)
+                else if (logNameExclusive_Index_1)
                 {
                     // Only log new name
                     var rowname = row_new.Name;
                     ID_str += "[" + rowname + "]";
                     combinedStr += "[" + rowname + "]";
                 }
-                else if (combo_logNameExclusive.SelectedIndex == 2)
+                else if (logNameExclusive_Index_2)
                 {
                     // Only log old name
                     var rowname = row_old.Name;
@@ -126,18 +129,38 @@ namespace BoreParamCompare
             for (var iField = 0; iField < row_old.Cells.Count; iField++)
             {
                 var log = false;
-                object? oldField = row_old.Cells[iField].Value;
-                object? newField = row_new.Cells[iField].Value;
+                var oldCell = row_old.Cells[iField];
+                var newCell = row_new.Cells[iField];
+
+                if (oldCell.Def != newCell.Def)
+                {
+                    // Fields don't match, this is a mixed-def check. Try to find correct field to compare (if it exists)
+                    var newCell2 = row_new.Cells.FirstOrDefault(c => c.Def.InternalName == oldCell.Def.InternalName);
+                    if (newCell2 == null)
+                    {
+                        var oldCell2 = row_old.Cells.FirstOrDefault(c => c.Def.InternalName == newCell.Def.InternalName);
+                        if (oldCell2 == null)
+                        {
+                            // Couldn't find field.
+                            continue;
+                        }
+                        else
+                        {
+                            oldCell = oldCell2;
+                        }
+                    }
+                    else
+                    {
+                        newCell = newCell2;
+                    }
+                }
+
+                var oldField = oldCell.Value;
+                var newField = newCell.Value;
 
                 var oldField_str = oldField.ToString();
                 var newField_str = newField.ToString();
 
-                /*
-                if (oldField == null || newField == null)
-                {
-                    throw new Exception("Field was null!");
-                }
-                */
                 string fieldName = row_old.Cells[iField].Def.InternalName;
 
                 //check for field differences
@@ -490,12 +513,8 @@ namespace BoreParamCompare
                         throw new Exception("Old row is null!");
                     }
 
-                    //go through row IDs and find new/missing rows
-                    if (row_old.Cells.Count != row_new.Cells.Count)
-                    {
-                        throw new Exception("Field cell count mismatch! Was a new field introduced?");
-                    }
-                    else if (row_old.ID != row_new.ID)
+                    // Go through row IDs and find new/missing
+                    if (row_old.ID != row_new.ID)
                     {
                         //row was moved
                         row_new = param_new[row_old.ID]; //find the corresponding row at its new address
@@ -532,7 +551,7 @@ namespace BoreParamCompare
             return superChangeList;
         }
 
-        private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
+        private static void ApplyParamDefs(List<PARAMDEF> paramdefs,List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
         {
             string oldNew = "NEW";
             if (is_old == true)
@@ -548,6 +567,10 @@ namespace BoreParamCompare
                 try
                 {
                     if (param.ApplyParamdefCarefully(paramdefs))
+                    {
+                        paramList[name] = param;
+                    }
+                    else if (param.ApplyParamdefCarefully(paramdefs_alt))
                     {
                         paramList[name] = param;
                     }
@@ -586,6 +609,12 @@ namespace BoreParamCompare
                 paramdefs.Add(paramdef);
             }
 
+            List<PARAMDEF> paramdefs_alt = new();
+            foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType + "\\Defs", "*.xml"))
+            {
+                var paramdef = PARAMDEF.XmlDeserialize(path);
+                paramdefs_alt.Add(paramdef);
+            }
 
             UpdateConsole("Loading Params");
 
@@ -605,20 +634,26 @@ namespace BoreParamCompare
                 {
                     paramList_old[nameOld] = param_old;
                 }
+                else if (param_old.ApplyParamdefCarefully(paramdefs_alt))
+                {
+                    paramList_old[nameOld] = param_old;
+                }
                 else
                 {
                     changeList.Add($"Could not apply ParamDef for (old) {param_old.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
-                    //throw new Exception("Could not apply paramDef! You probably selected the wrong game");
                 }
 
                 if (param_new.ApplyParamdefCarefully(paramdefs))
                 {
                     paramList_new[nameNew] = param_new;
                 }
+                else if (param_new.ApplyParamdefCarefully(paramdefs_alt))
+                {
+                    paramList_new[nameNew] = param_new;
+                }
                 else
                 {
                     changeList.Add($"Could not apply ParamDef for (new) {param_new.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
-                    //throw new Exception("Could not apply paramDef for new ! You probably selected the wrong game");
                 }
 
             }
@@ -640,8 +675,8 @@ namespace BoreParamCompare
 
                 UpdateConsole("Applying Defs");
 
-                ApplyParamDefs(paramdefs, fileList_old, paramList_old, changeList, true);
-                ApplyParamDefs(paramdefs, fileList_new, paramList_new, changeList, false);
+                ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, true);
+                ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, false);
 
                 //check for added/removed param types
                 foreach(var file in fileList_old.ToList())
@@ -842,15 +877,26 @@ namespace BoreParamCompare
         private void combo_logNameExclusive_SelectedIndexChanged(object sender, EventArgs e)
         {
             toggle_buttons_logNames();
+            logNameExclusive_Index_0 = false;
+            logNameExclusive_Index_1 = false;
+            logNameExclusive_Index_2 = false;
             if (combo_logNameExclusive.SelectedIndex == 0)
             {
                 cb_log_name_changes_only.Enabled = true;
                 cb_LogNamesOnlyIf_FieldChange.Enabled = true;
+                logNameExclusive_Index_0 = true;
             }
-            else
+            else if (combo_logNameExclusive.SelectedIndex == 1)
             {
                 cb_log_name_changes_only.Enabled = false;
                 cb_LogNamesOnlyIf_FieldChange.Enabled = false;
+                logNameExclusive_Index_1 = true;
+            }
+            else if (combo_logNameExclusive.SelectedIndex == 2)
+            {
+                cb_log_name_changes_only.Enabled = false;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
+                logNameExclusive_Index_2 = true;
             }
         }
     }
