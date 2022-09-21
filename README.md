@@ -3,6 +3,11 @@ Compares params for FromSoft games.
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
 
 ## Changes
+### v1.1.4
+* Support multiple loading ParamDefs for cross-def comparisons
+  * To use alternative ParamDefs, place them into the Paramdex ALT folder (you will need to create folders for most games).
+  * If you have an alternative ParamDef that should be included with the program, let me know and I'll put it in.
+* Fixed a threading crash when trying to log names.
 ### v1.1.3
 * Catch InvalidDataException when applying ParamDefs
 * Identify Params by ID instead of name
