@@ -1,5 +1,7 @@
 using SoulsFormats;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace BoreParamCompare
 {
@@ -353,7 +355,7 @@ namespace BoreParamCompare
             return list;
         }
 
-        private List<List<string>> CheckParamChanges(Dictionary<string, PARAM> paramList_old, Dictionary<string, PARAM> paramList_new)
+        private List<List<string>> CheckParamChanges(ConcurrentDictionary<string, PARAM> paramList_old, ConcurrentDictionary<string, PARAM> paramList_new)
         {
             List<List<string>> superChangeList = new();
 
@@ -551,7 +553,7 @@ namespace BoreParamCompare
             return superChangeList;
         }
 
-        private static void ApplyParamDefs(List<PARAMDEF> paramdefs,List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, Dictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
+        private static void ApplyParamDefs(List<PARAMDEF> paramdefs,List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
         {
             string oldNew = "NEW";
             if (is_old == true)
@@ -590,8 +592,8 @@ namespace BoreParamCompare
         {
 
             #region Load Params
-            Dictionary<string, PARAM> paramList_old = new();
-            Dictionary<string, PARAM> paramList_new = new();
+            ConcurrentDictionary<string, PARAM> paramList_old = new();
+            ConcurrentDictionary<string, PARAM> paramList_new = new();
             List<string> changeList = new(); //
 
             string regPath_old = openFileDialog_old.FileName;
@@ -687,7 +689,7 @@ namespace BoreParamCompare
                         //can't find a match.
                         var filename = Path.GetFileNameWithoutExtension(file.Name);
                         changeList.Add($"PARAM TYPE REMOVED: {filename}");
-                        paramList_old.Remove(filename);
+                        paramList_old.Remove(filename, out _);
                     }
                 }
                 foreach (var file in fileList_new)
@@ -698,7 +700,7 @@ namespace BoreParamCompare
                         //can't find a match.
                         var filename = Path.GetFileNameWithoutExtension(file.Name);
                         changeList.Add($"PARAM TYPE ADDED: {filename}");
-                        paramList_new.Remove(filename);
+                        paramList_new.Remove(filename, out _);
                     }
                 }
             }
@@ -712,7 +714,7 @@ namespace BoreParamCompare
                 if (paramList_old.ContainsKey(item.Key) == false)
                 {
                     //Couldn't find matching param in other list. Whatever caused this is logged elsewhere.
-                    paramList_new.Remove(item.Key);
+                    paramList_new.Remove(item.Key, out _);
                     continue;
                 }
             }
