@@ -3,6 +3,9 @@ Compares params for FromSoft games.
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
 
 ## Changes
+### v1.1.5
+* Add additional ParamDefs to handle Elden Ring v1.07 changes.
+* Increase program stability by using ConcurrentDictionary.
 ### v1.1.4
 * Support multiple loading ParamDefs for cross-def comparisons
   * To use alternative ParamDefs, place them into the Paramdex ALT folder (you will need to create folders for most games).
