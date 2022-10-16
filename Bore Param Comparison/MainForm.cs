@@ -553,37 +553,29 @@ namespace BoreParamCompare
             return superChangeList;
         }
 
-        private static void ApplyParamDefs(List<PARAMDEF> paramdefs,List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, bool is_old)
+        private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, List<string> presentParamList, string oldNew)
         {
-            string oldNew = "NEW";
-            if (is_old == true)
-                oldNew = "OLD";
-
             Parallel.ForEach(Partitioner.Create(fileList), file =>
             {
                 if (file.Name.Contains(".param") == false)
                     return; //not a param.
                 string name = Path.GetFileNameWithoutExtension(file.Name);
                 var param = PARAM.Read(file.Bytes);
-
                 try
                 {
-                    if (param.ApplyParamdefCarefully(paramdefs))
-                    {
-                        paramList[name] = param;
-                    }
-                    else if (param.ApplyParamdefCarefully(paramdefs_alt))
-                    {
-                        paramList[name] = param;
-                    }
-                    else
-                    {
-                        changeList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
-                    }
+                    presentParamList.Add(param.ParamType);
+                    param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, changeList, oldNew);
+                    if (param != null)
+                        paramList.TryAdd(name, param);
                 }
                 catch (InvalidDataException)
                 {
-                    changeList.Add($"InvalidDataException: Could not apply ParamDef for {param.ParamType} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+                    string labelText;
+                    if (param != null)
+                        labelText = param.ParamType;
+                    else
+                        labelText = file.Name;
+                    changeList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
                 }
             });
         }
@@ -623,8 +615,8 @@ namespace BoreParamCompare
             if (regPath_old.EndsWith(".param"))
             {
                 //single .param
-                PARAM param_old = PARAM.Read(regPath_old);
-                PARAM param_new = PARAM.Read(regPath_new);
+                PARAM? param_old = PARAM.Read(regPath_old);
+                PARAM? param_new = PARAM.Read(regPath_new);
 
                 t_VersionOld.Text = "Invalid";
                 t_VersionNew.Text = "Invalid";
@@ -632,31 +624,12 @@ namespace BoreParamCompare
                 var nameOld = Path.GetFileNameWithoutExtension(regPath_old);
                 var nameNew = Path.GetFileNameWithoutExtension(regPath_new);
 
-                if (param_old.ApplyParamdefCarefully(paramdefs))
-                {
-                    paramList_old[nameOld] = param_old;
-                }
-                else if (param_old.ApplyParamdefCarefully(paramdefs_alt))
-                {
-                    paramList_old[nameOld] = param_old;
-                }
-                else
-                {
-                    changeList.Add($"Could not apply ParamDef for (old) {param_old.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
-                }
-
-                if (param_new.ApplyParamdefCarefully(paramdefs))
-                {
-                    paramList_new[nameNew] = param_new;
-                }
-                else if (param_new.ApplyParamdefCarefully(paramdefs_alt))
-                {
-                    paramList_new[nameNew] = param_new;
-                }
-                else
-                {
-                    changeList.Add($"Could not apply ParamDef for (new) {param_new.ParamType}. If correct game was selected, param is incompatible with up-to-date ParamDef");
-                }
+                param_old = Util.ApplyDefWithWarnings(param_old, paramdefs, paramdefs_alt, changeList, "OLD");
+                param_new = Util.ApplyDefWithWarnings(param_new, paramdefs, paramdefs_alt, changeList, "NEW");
+                if (param_old != null)
+                    paramList_old.TryAdd(nameOld, param_old);
+                if (param_new != null)
+                    paramList_new.TryAdd(nameNew, param_new);
 
             }
             else
@@ -677,30 +650,36 @@ namespace BoreParamCompare
 
                 UpdateConsole("Applying Defs");
 
-                ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, true);
-                ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, false);
+                List<string> paramTypeList_old = new(); // List of all param types. Is not modified by valid defs.
+                List<string> paramTypeList_new = new(); // List of all param types. Is not modified by valid defs.
+                ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, paramTypeList_old, "OLD");
+                ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW");
 
-                //check for added/removed param types
-                foreach(var file in fileList_old.ToList())
+                //Check for added/removed param types
+                foreach(var paramType in paramTypeList_old.ToList())
                 {
-                    var otherFile = fileList_new.Find(e => file.ID == e.ID);
+                    var otherFile = paramTypeList_new.Find(e => paramType == e);
                     if (otherFile == null)
                     {
-                        //can't find a match.
-                        var filename = Path.GetFileNameWithoutExtension(file.Name);
-                        changeList.Add($"PARAM TYPE REMOVED: {filename}");
-                        paramList_old.Remove(filename, out _);
+                        // Can't find a match.
+                        var defString = changeList.Find(e => e.Contains(paramType));
+                        if (defString != null)
+                            changeList.Remove(defString); // Remove entry for "Def could not be applied", if it exists.
+                        changeList.Add($"PARAM TYPE REMOVED: {paramType}");
+                        paramList_old.Remove(paramType, out _);
                     }
                 }
-                foreach (var file in fileList_new)
+                foreach (var paramType in paramTypeList_new.ToList())
                 {
-                    var otherFile = fileList_old.Find(e => file.ID == e.ID);
+                    var otherFile = paramTypeList_old.Find(e => paramType == e);
                     if (otherFile == null)
                     {
-                        //can't find a match.
-                        var filename = Path.GetFileNameWithoutExtension(file.Name);
-                        changeList.Add($"PARAM TYPE ADDED: {filename}");
-                        paramList_new.Remove(filename, out _);
+                        // Can't find a match.
+                        var defString = changeList.Find(e => e.Contains(paramType));
+                        if (defString != null)
+                            changeList.Remove(defString); // Remove entry for "Def could not be applied", if it exists.
+                        changeList.Add($"PARAM TYPE ADDED: {paramType}");
+                        paramList_new.Remove(paramType, out _);
                     }
                 }
             }
