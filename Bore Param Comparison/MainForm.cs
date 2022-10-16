@@ -2,6 +2,7 @@ using SoulsFormats;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Reflection;
 
 namespace BoreParamCompare
 {
@@ -12,6 +13,8 @@ namespace BoreParamCompare
      */
     public partial class MainForm : Form
     {
+        public static string Version = Application.ProductVersion;
+        public static string ProgramTitle = $"Bore Param Comparison v{Version}";
 
         private string gameType = "";
 
@@ -31,6 +34,7 @@ namespace BoreParamCompare
         public MainForm()
         {
             InitializeComponent();
+            this.Text = ProgramTitle;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -586,7 +590,7 @@ namespace BoreParamCompare
             #region Load Params
             ConcurrentDictionary<string, PARAM> paramList_old = new();
             ConcurrentDictionary<string, PARAM> paramList_new = new();
-            List<string> changeList = new(); //
+            List<string> changeList = new();
 
             string regPath_old = openFileDialog_old.FileName;
             string regPath_new = openFileDialog_new.FileName;
@@ -710,8 +714,9 @@ namespace BoreParamCompare
                 changeList.AddRange(list);
             }
 
-            changeList.Insert(0, $"Game: {gameType}");
-            changeList.Insert(1, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
+            changeList.Insert(0, $"{ProgramTitle}");
+            changeList.Insert(1, $"Game: {gameType}");
+            changeList.Insert(2, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
 
             File.WriteAllLines(outputFileName, changeList);
 

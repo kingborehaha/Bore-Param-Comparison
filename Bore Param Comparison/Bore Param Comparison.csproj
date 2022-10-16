@@ -9,6 +9,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon></ApplicationIcon>
     <PackageIcon></PackageIcon>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
+    <FileVersion>1.2.0</FileVersion>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -50,13 +53,23 @@
 		<TargetPath>Paramdex\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
 	</ContentWithTargetPath>
   </ItemGroup>
-
+	
   <ItemGroup>
-    <None Update="Paramdex ALT\ER\Defs\AssetGeometryParam v1.06.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Paramdex ALT\ER\Defs\EquipParamWeapon v1.0.0.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>	
+	<ContentWithTargetPath Include="Paramdex ALT\**">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<TargetPath>Paramdex\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
+	</ContentWithTargetPath>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ContentWithTargetPath Remove="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <None Remove="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Content Include="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
+  </ItemGroup>
 </Project>
