@@ -361,7 +361,7 @@ namespace BoreParamCompare
 
         private List<List<string>> CheckParamChanges(ConcurrentDictionary<string, PARAM> paramList_old, ConcurrentDictionary<string, PARAM> paramList_new)
         {
-            List<List<string>> superChangeList = new();
+            ConcurrentBag<List<string>> superChangeList = new();
 
             Parallel.ForEach(Partitioner.Create(paramList_old), item =>
             {
@@ -553,8 +553,8 @@ namespace BoreParamCompare
             });
 
             //sort super list
-            superChangeList = superChangeList.OrderBy(list => list[0]).ToList();
-            return superChangeList;
+            var orderedSuperChangeList = superChangeList.OrderBy(list => list[0]).ToList();
+            return orderedSuperChangeList;
         }
 
         private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, List<string> presentParamList, string oldNew)
