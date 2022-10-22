@@ -9,9 +9,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon></ApplicationIcon>
     <PackageIcon></PackageIcon>
-    <AssemblyVersion>1.2.0</AssemblyVersion>
-    <FileVersion>1.2.0</FileVersion>
-    <Version>1.2.0</Version>
+    <AssemblyVersion>1.2.1</AssemblyVersion>
+    <FileVersion>1.2.1</FileVersion>
+    <Version>1.2.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -62,14 +62,18 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <ContentWithTargetPath Remove="Paramdex ALT\ER\Defs\ChrModelParam v1.05.xml" />
+    <ContentWithTargetPath Remove="Paramdex\ER\Defs\ChrModelParam.xml" />
     <ContentWithTargetPath Remove="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
   </ItemGroup>
 	
   <ItemGroup>
+    <None Remove="Paramdex\ER\Defs\ChrModelParam.xml" />
     <None Remove="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
   </ItemGroup>
 	
   <ItemGroup>
+    <Content Include="Paramdex\ER\Defs\ChrModelParam.xml" />
     <Content Include="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
   </ItemGroup>
 </Project>
