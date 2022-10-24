@@ -48,6 +48,8 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cb_LogAddedRemovedRowCells = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.combo_logNameExclusive = new System.Windows.Forms.ComboBox();
             this.cb_LogRowNames = new System.Windows.Forms.CheckBox();
             this.cb_LogNamesOnlyIf_FieldChange = new System.Windows.Forms.CheckBox();
@@ -68,9 +70,8 @@
             // 
             // b_browse_old
             // 
-            this.b_browse_old.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_browse_old.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_browse_old.Location = new System.Drawing.Point(10, 120);
+            this.b_browse_old.Location = new System.Drawing.Point(10, 151);
             this.b_browse_old.Name = "b_browse_old";
             this.b_browse_old.Size = new System.Drawing.Size(74, 24);
             this.b_browse_old.TabIndex = 60;
@@ -80,10 +81,9 @@
             // 
             // b_activate
             // 
-            this.b_activate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b_activate.Enabled = false;
             this.b_activate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_activate.Location = new System.Drawing.Point(283, 121);
+            this.b_activate.Location = new System.Drawing.Point(283, 152);
             this.b_activate.Name = "b_activate";
             this.b_activate.Size = new System.Drawing.Size(74, 24);
             this.b_activate.TabIndex = 61;
@@ -94,7 +94,7 @@
             // b_browse_new
             // 
             this.b_browse_new.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.b_browse_new.Location = new System.Drawing.Point(147, 121);
+            this.b_browse_new.Location = new System.Drawing.Point(147, 152);
             this.b_browse_new.Name = "b_browse_new";
             this.b_browse_new.Size = new System.Drawing.Size(74, 24);
             this.b_browse_new.TabIndex = 63;
@@ -104,8 +104,7 @@
             // 
             // t_console
             // 
-            this.t_console.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.t_console.Location = new System.Drawing.Point(10, 226);
+            this.t_console.Location = new System.Drawing.Point(8, 294);
             this.t_console.Name = "t_console";
             this.t_console.ReadOnly = true;
             this.t_console.Size = new System.Drawing.Size(349, 23);
@@ -119,7 +118,6 @@
             // 
             // cb_dupe
             // 
-            this.cb_dupe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cb_dupe.AutoSize = true;
             this.cb_dupe.Checked = true;
             this.cb_dupe.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -133,7 +131,6 @@
             // 
             // cb_dupe_no_old
             // 
-            this.cb_dupe_no_old.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cb_dupe_no_old.AutoSize = true;
             this.cb_dupe_no_old.Location = new System.Drawing.Point(6, 225);
             this.cb_dupe_no_old.Name = "cb_dupe_no_old";
@@ -145,7 +142,6 @@
             // 
             // cb_dupe_no_both
             // 
-            this.cb_dupe_no_both.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cb_dupe_no_both.AutoSize = true;
             this.cb_dupe_no_both.Checked = true;
             this.cb_dupe_no_both.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -158,7 +154,6 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(6, 176);
@@ -169,7 +164,7 @@
             // 
             // t_VersionNew
             // 
-            this.t_VersionNew.Location = new System.Drawing.Point(147, 86);
+            this.t_VersionNew.Location = new System.Drawing.Point(147, 117);
             this.t_VersionNew.Name = "t_VersionNew";
             this.t_VersionNew.ReadOnly = true;
             this.t_VersionNew.Size = new System.Drawing.Size(74, 23);
@@ -179,8 +174,7 @@
             // 
             // t_VersionOld
             // 
-            this.t_VersionOld.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.t_VersionOld.Location = new System.Drawing.Point(10, 86);
+            this.t_VersionOld.Location = new System.Drawing.Point(10, 117);
             this.t_VersionOld.Name = "t_VersionOld";
             this.t_VersionOld.ReadOnly = true;
             this.t_VersionOld.Size = new System.Drawing.Size(74, 23);
@@ -190,9 +184,8 @@
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 68);
+            this.label2.Location = new System.Drawing.Point(10, 99);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 15);
             this.label2.TabIndex = 74;
@@ -201,7 +194,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(145, 68);
+            this.label3.Location = new System.Drawing.Point(145, 99);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 75;
@@ -213,7 +206,7 @@
             this.menu_GameType.FormattingEnabled = true;
             this.menu_GameType.Items.AddRange(new object[] {
             "[overwritten]"});
-            this.menu_GameType.Location = new System.Drawing.Point(283, 86);
+            this.menu_GameType.Location = new System.Drawing.Point(283, 117);
             this.menu_GameType.Name = "menu_GameType";
             this.menu_GameType.Size = new System.Drawing.Size(74, 23);
             this.menu_GameType.TabIndex = 76;
@@ -222,7 +215,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(300, 68);
+            this.label4.Location = new System.Drawing.Point(300, 99);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 15);
             this.label4.TabIndex = 77;
@@ -248,7 +241,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(373, 301);
+            this.tabControl1.Size = new System.Drawing.Size(373, 353);
             this.tabControl1.TabIndex = 82;
             // 
             // tabPage1
@@ -266,13 +259,15 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(365, 273);
+            this.tabPage1.Size = new System.Drawing.Size(365, 325);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.cb_LogAddedRemovedRowCells);
+            this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Controls.Add(this.combo_logNameExclusive);
             this.tabPage2.Controls.Add(this.cb_LogRowNames);
             this.tabPage2.Controls.Add(this.cb_LogNamesOnlyIf_FieldChange);
@@ -288,10 +283,30 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(365, 273);
+            this.tabPage2.Size = new System.Drawing.Size(365, 325);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Options";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // cb_LogAddedRemovedRowCells
+            // 
+            this.cb_LogAddedRemovedRowCells.AutoSize = true;
+            this.cb_LogAddedRemovedRowCells.Location = new System.Drawing.Point(6, 302);
+            this.cb_LogAddedRemovedRowCells.Name = "cb_LogAddedRemovedRowCells";
+            this.cb_LogAddedRemovedRowCells.Size = new System.Drawing.Size(245, 19);
+            this.cb_LogAddedRemovedRowCells.TabIndex = 89;
+            this.cb_LogAddedRemovedRowCells.Text = "Log all field info for added/removed rows";
+            this.cb_LogAddedRemovedRowCells.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label7.Location = new System.Drawing.Point(8, 278);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(44, 21);
+            this.label7.TabIndex = 88;
+            this.label7.Text = "Misc";
             // 
             // combo_logNameExclusive
             // 
@@ -371,16 +386,16 @@
             this.cb_fields_share_row.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_fields_share_row.Location = new System.Drawing.Point(6, 52);
             this.cb_fields_share_row.Name = "cb_fields_share_row";
-            this.cb_fields_share_row.Size = new System.Drawing.Size(210, 19);
+            this.cb_fields_share_row.Size = new System.Drawing.Size(230, 19);
             this.cb_fields_share_row.TabIndex = 70;
-            this.cb_fields_share_row.Text = "Changes share the same line per ID";
+            this.cb_fields_share_row.Text = "Logged row data shares one line per ID";
             this.cb_fields_share_row.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(373, 301);
+            this.ClientSize = new System.Drawing.Size(373, 353);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -424,5 +439,7 @@
         private CheckBox cb_LogNamesOnlyIf_FieldChange;
         private CheckBox cb_LogRowNames;
         private ComboBox combo_logNameExclusive;
+        private CheckBox cb_LogAddedRemovedRowCells;
+        private Label label7;
     }
 }

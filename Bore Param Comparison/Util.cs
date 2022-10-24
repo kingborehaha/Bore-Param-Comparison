@@ -10,6 +10,17 @@ namespace BoreParamCompare
 {
     public static class Util
     {
+        public static string GetByteArrayString(byte[] field)
+        {
+            string bytestr = "";
+            for (var i = 0; i < field.Length; i++)
+            {
+                bytestr += field[i];
+            }
+            bytestr = bytestr[..^1];
+            return bytestr + "]";
+        }
+
         /// <summary>
         /// Apply param defs for list of BinderFiles
         /// </summary>

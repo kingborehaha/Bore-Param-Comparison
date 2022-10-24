@@ -190,7 +190,6 @@ namespace BoreParamCompare
                             break;
                         }
                     }
-
                 }
                 else if (oldField_str != newField_str) //check fields normally
                 {
@@ -465,7 +464,29 @@ namespace BoreParamCompare
                     {
                         string ID_new_str = MakeIDString(paramNameStr, row_new, true);
                         ID_new_str += ExclusiveLogName(row_new);
-                        changeList.Add(ID_new_str + " ROW ADDED");
+                        if (!cb_LogAddedRemovedRowCells.Checked)
+                        {
+                            changeList.Add(ID_new_str + " ROW ADDED");
+                        }
+                        else if (cb_log_field_specifics.Checked)
+                        {
+                            // Log all info for added row
+                            string rowInfo = "";
+                            string delimiter = ", ";
+                            if (!cb_fields_share_row.Checked)
+                                delimiter = "\r\n\t";
+                            // Generate row data
+                            foreach (var cell in row_new.Cells)
+                            {
+                                var value = cell.Value;
+                                if (cell.Value.GetType() == typeof(byte[]))
+                                    value = Convert.ToHexString((byte[])cell.Value);
+                                rowInfo += $"{cell.Def.InternalName}: {value}{delimiter}";
+                            }
+                            rowInfo = rowInfo[..^delimiter.Length];
+                            changeList.Add($"{ID_new_str} ROW ADDED: {rowInfo}");
+                        }
+                        //
                         paramChanges++;
 
                         param_new.Rows.Remove(row_new);
@@ -482,7 +503,28 @@ namespace BoreParamCompare
                     {
                         string ID_old_str = MakeIDString(paramNameStr, row_old, true);
                         ID_old_str += ExclusiveLogName(row_old);
-                        changeList.Add(ID_old_str + " ROW REMOVED");
+                        if (!cb_LogAddedRemovedRowCells.Checked)
+                        {
+                            changeList.Add(ID_old_str + " ROW REMOVED");
+                        }
+                        else if (cb_log_field_specifics.Checked)
+                        {
+                            // Log all info for removed row
+                            string rowInfo = "";
+                            string delimiter = ", ";
+                            if (!cb_fields_share_row.Checked)
+                                delimiter = "\r\n\t";
+                            // Generate row data
+                            foreach (var cell in row_old.Cells)
+                            {
+                                var value = cell.Value;
+                                if (cell.Value.GetType() == typeof(byte[]))
+                                    value = Convert.ToHexString((byte[])cell.Value);
+                                rowInfo += $"{cell.Def.InternalName}: {value}{delimiter}";
+                            }
+                            rowInfo = rowInfo[..^delimiter.Length];
+                            changeList.Add($"{ID_old_str} ROW REMOVED: {rowInfo}");
+                        }
                         paramChanges++;
 
                         param_old.Rows.Remove(row_old);
