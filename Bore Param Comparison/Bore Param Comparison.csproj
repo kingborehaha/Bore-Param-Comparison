@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SoulsFormats\SoulsFormats\SoulsFormats.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -75,5 +71,9 @@
   <ItemGroup>
     <Content Include="Paramdex\ER\Defs\ChrModelParam.xml" />
     <Content Include="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\SoulsFormats\SoulsFormats\SoulsFormats.csproj" />
   </ItemGroup>
 </Project>
