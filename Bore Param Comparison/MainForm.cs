@@ -132,6 +132,11 @@ namespace BoreParamCompare
                 }
             }
 
+            if (!cb_fields_share_row.Checked)
+            {
+                changeList.Add($"{ID_str} ROW MODIFIED:");
+            }
+
             for (var iField = 0; iField < row_old.Cells.Count; iField++)
             {
                 var log = false;
@@ -209,7 +214,8 @@ namespace BoreParamCompare
                         }
                         else
                         {
-                            changeList.Add(ID_str + " " + fieldName + ": " + oldField_str + " -> " + newField_str);
+                            //changeList.Add(ID_str + " " + fieldName + ": " + oldField_str + " -> " + newField_str);
+                            changeList.Add("\t" + fieldName + ": " + oldField_str + " -> " + newField_str);
                         }
                     }
                     else
@@ -219,6 +225,11 @@ namespace BoreParamCompare
                         return true;
                     }
                 }
+            }
+
+            if (!cb_fields_share_row.Checked && !changed)
+            {
+                changeList.Remove($"{ID_str} ROW MODIFIED:");
             }
 
             if (changed)
