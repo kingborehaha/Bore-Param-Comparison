@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,57 @@ namespace BoreParamCompare
 {
     public static class Util
     {
+        /// <summary>
+        /// Apply param defs for list of BinderFiles
+        /// </summary>
+        public static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, List<string> presentParamList, string oldNew)
+        {
+            Parallel.ForEach(Partitioner.Create(fileList), file =>
+            {
+                if (file.Name.Contains(".param") == false)
+                    return; //not a param.
+                string name = Path.GetFileNameWithoutExtension(file.Name);
+                var param = PARAM.Read(file.Bytes);
+                try
+                {
+                    presentParamList.Add(param.ParamType);
+                    param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, changeList, oldNew);
+                    if (param != null)
+                        paramList.TryAdd(name, param);
+                }
+                catch (InvalidDataException)
+                {
+                    string labelText;
+                    if (param != null)
+                        labelText = param.ParamType;
+                    else
+                        labelText = file.Name;
+                    changeList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+                }
+            });
+        }
+
+        /// <summary>
+        /// Apply param def for a single file path.
+        /// </summary>
+        public static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, string filePath, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, List<string> presentParamList, string oldNew)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            try
+            {
+                var param = PARAM.Read(filePath);
+                presentParamList.Add(param.ParamType);
+                param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, changeList, oldNew);
+                if (param != null)
+                    paramList.TryAdd(param.ParamType, param);
+            }
+            catch (InvalidDataException)
+            {
+                string labelText = fileName;
+                changeList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+            }
+        }
+
         public static PARAM? ApplyDefWithWarnings(PARAM param, List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, List<string> changeList, string oldnew)
         {
             bool matchType = false;

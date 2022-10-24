@@ -557,39 +557,16 @@ namespace BoreParamCompare
             return orderedSuperChangeList;
         }
 
-        private static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, List<string> presentParamList, string oldNew)
-        {
-            Parallel.ForEach(Partitioner.Create(fileList), file =>
-            {
-                if (file.Name.Contains(".param") == false)
-                    return; //not a param.
-                string name = Path.GetFileNameWithoutExtension(file.Name);
-                var param = PARAM.Read(file.Bytes);
-                try
-                {
-                    presentParamList.Add(param.ParamType);
-                    param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, changeList, oldNew);
-                    if (param != null)
-                        paramList.TryAdd(name, param);
-                }
-                catch (InvalidDataException)
-                {
-                    string labelText;
-                    if (param != null)
-                        labelText = param.ParamType;
-                    else
-                        labelText = file.Name;
-                    changeList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
-                }
-            });
-        }
-
         private string? CompareFiles()
         {
 
             #region Load Params
             ConcurrentDictionary<string, PARAM> paramList_old = new();
             ConcurrentDictionary<string, PARAM> paramList_new = new();
+
+            List<string> paramTypeList_old = new(); // List of all param types. Is not modified by valid defs.
+            List<string> paramTypeList_new = new(); // List of all param types. Is not modified by valid defs.
+
             List<string> changeList = new();
 
             string regPath_old = openFileDialog_old.FileName;
@@ -621,7 +598,8 @@ namespace BoreParamCompare
 
             if (regPath_old.EndsWith(".param"))
             {
-                //single .param
+                // Compare individual param files
+
                 PARAM? param_old = PARAM.Read(regPath_old);
                 PARAM? param_new = PARAM.Read(regPath_new);
 
@@ -633,15 +611,14 @@ namespace BoreParamCompare
 
                 param_old = Util.ApplyDefWithWarnings(param_old, paramdefs, paramdefs_alt, changeList, "OLD");
                 param_new = Util.ApplyDefWithWarnings(param_new, paramdefs, paramdefs_alt, changeList, "NEW");
-                if (param_old != null)
-                    paramList_old.TryAdd(nameOld, param_old);
-                if (param_new != null)
-                    paramList_new.TryAdd(nameNew, param_new);
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_old, paramList_old, changeList, paramTypeList_old, "OLD");
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_new, paramList_new, changeList, paramTypeList_new, "NEW");
 
             }
             else
             {
-                //multiple params
+                // Compare paramBNDs
+
                 List<BinderFile>? fileList_old = GetBNDFiles(regPath_old, true);
                 if (fileList_old == null)
                 {
@@ -657,10 +634,8 @@ namespace BoreParamCompare
 
                 UpdateConsole("Applying Defs");
 
-                List<string> paramTypeList_old = new(); // List of all param types. Is not modified by valid defs.
-                List<string> paramTypeList_new = new(); // List of all param types. Is not modified by valid defs.
-                ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, paramTypeList_old, "OLD");
-                ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW");
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, paramTypeList_old, "OLD");
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW");
 
                 //Check for added/removed param types
                 foreach(var paramType in paramTypeList_old.ToList())
@@ -694,7 +669,7 @@ namespace BoreParamCompare
 
             #region Read Params
 
-            //scan for params that can't be checked
+            // Scan for params that can't be checked
             foreach (var item in paramList_new)
             {
                 if (paramList_old.ContainsKey(item.Key) == false)
