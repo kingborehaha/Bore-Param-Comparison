@@ -608,10 +608,13 @@ namespace BoreParamCompare
             }
 
             List<PARAMDEF> paramdefs_alt = new();
-            foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType + "\\Defs", "*.xml"))
+            if (Directory.Exists("Paramdex ALT\\" + gameType + "\\Defs"))
             {
-                var paramdef = PARAMDEF.XmlDeserialize(path);
-                paramdefs_alt.Add(paramdef);
+                foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType + "\\Defs", "*.xml"))
+                {
+                    var paramdef = PARAMDEF.XmlDeserialize(path);
+                    paramdefs_alt.Add(paramdef);
+                }
             }
 
             UpdateConsole("Loading Params");
