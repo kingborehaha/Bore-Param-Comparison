@@ -3,6 +3,13 @@ Compares params for FromSoft games.
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
 
 ## Changes
+### v1.2.1
+* Fix crash when trying to compare games other than ER and DS1.
+* Fix individual param comparisons when files had different names. Also updated def checks to match multi-param comparisons.
+* Added option to log every field for added & removed rows.
+* Added up to date Elden Ring ChrModelParam paramdef.
+* Improved formatting for multi-line row logging.
+* Slightly improved program stability.
 ### v1.2.0
 * Log specifics when ParamDefs cannot be applied.
 * Added ParamDefs to handle Elden Ring v1.07 changes.
