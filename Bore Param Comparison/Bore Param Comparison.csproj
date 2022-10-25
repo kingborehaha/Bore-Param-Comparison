@@ -42,35 +42,16 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>
-	<ContentWithTargetPath Include="Paramdex\**">
-		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		<TargetPath>Paramdex\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
-	</ContentWithTargetPath>
-  </ItemGroup>
 	
-  <ItemGroup>
-	<ContentWithTargetPath Include="Paramdex ALT\**">
-		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		<TargetPath>Paramdex\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
-	</ContentWithTargetPath>
+   <ItemGroup>
+    <None Include="Paramdex\**">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-	
   <ItemGroup>
-    <ContentWithTargetPath Remove="Paramdex ALT\ER\Defs\ChrModelParam v1.05.xml" />
-    <ContentWithTargetPath Remove="Paramdex\ER\Defs\ChrModelParam.xml" />
-    <ContentWithTargetPath Remove="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <None Remove="Paramdex\ER\Defs\ChrModelParam.xml" />
-    <None Remove="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <Content Include="Paramdex\ER\Defs\ChrModelParam.xml" />
-    <Content Include="Paramdex\ER\Defs\FinalDamageRateParam.xml" />
+	<None Include="Paramdex ALT\**">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
   </ItemGroup>
 	
   <ItemGroup>
