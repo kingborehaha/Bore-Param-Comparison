@@ -617,8 +617,8 @@ namespace BoreParamCompare
             ConcurrentDictionary<string, PARAM> paramList_old = new();
             ConcurrentDictionary<string, PARAM> paramList_new = new();
 
-            List<string> paramTypeList_old = new(); // List of all param types. Is not modified by valid defs.
-            List<string> paramTypeList_new = new(); // List of all param types. Is not modified by valid defs.
+            ConcurrentBag<string> paramTypeList_old = new(); // List of all param types. Is not modified by valid defs.
+            ConcurrentBag<string> paramTypeList_new = new(); // List of all param types. Is not modified by valid defs.
 
             List<string> changeList = new();
 
@@ -630,14 +630,14 @@ namespace BoreParamCompare
 
             UpdateConsole("Loading ParamDefs");
 
-            List<PARAMDEF> paramdefs = new();
+            ConcurrentBag<PARAMDEF> paramdefs = new();
             foreach (string path in Directory.GetFiles("Paramdex\\" + gameType + "\\Defs", "*.xml"))
             {
                 var paramdef = PARAMDEF.XmlDeserialize(path);
                 paramdefs.Add(paramdef);
             }
 
-            List<PARAMDEF> paramdefs_alt = new();
+            ConcurrentBag<PARAMDEF> paramdefs_alt = new();
             if (Directory.Exists("Paramdex ALT\\" + gameType + "\\Defs"))
             {
                 foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType + "\\Defs", "*.xml"))
@@ -685,7 +685,7 @@ namespace BoreParamCompare
                 //Check for added/removed param types
                 foreach(var paramType in paramTypeList_old.ToList())
                 {
-                    var otherFile = paramTypeList_new.Find(e => paramType == e);
+                    var otherFile = paramTypeList_new.FirstOrDefault(e => paramType == e);
                     if (otherFile == null)
                     {
                         // Can't find a match.
@@ -698,7 +698,7 @@ namespace BoreParamCompare
                 }
                 foreach (var paramType in paramTypeList_new.ToList())
                 {
-                    var otherFile = paramTypeList_old.Find(e => paramType == e);
+                    var otherFile = paramTypeList_old.FirstOrDefault(e => paramType == e);
                     if (otherFile == null)
                     {
                         // Can't find a match.

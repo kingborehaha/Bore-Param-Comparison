@@ -24,8 +24,9 @@ namespace BoreParamCompare
         /// <summary>
         /// Apply param defs for list of BinderFiles
         /// </summary>
-        public static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, List<string> presentParamList, string oldNew)
+        public static void ApplyParamDefs(ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, ConcurrentBag<string> presentParamList, string oldNew)
         {
+            ConcurrentBag<string> warningList = new();
             Parallel.ForEach(Partitioner.Create(fileList), file =>
             {
                 if (file.Name.Contains(".param") == false)
@@ -35,7 +36,7 @@ namespace BoreParamCompare
                 try
                 {
                     presentParamList.Add(param.ParamType);
-                    param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, changeList, oldNew);
+                    param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
                     if (param != null)
                         paramList.TryAdd(name, param);
                 }
@@ -46,33 +47,36 @@ namespace BoreParamCompare
                         labelText = param.ParamType;
                     else
                         labelText = file.Name;
-                    changeList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+                    warningList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
                 }
             });
+            changeList.AddRange(warningList.OrderBy(e => e));
         }
 
         /// <summary>
         /// Apply param def for a single file path.
         /// </summary>
-        public static void ApplyParamDefs(List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, string filePath, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, List<string> presentParamList, string oldNew)
+        public static void ApplyParamDefs(ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, string filePath, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, ConcurrentBag<string> presentParamList, string oldNew)
         {
+            ConcurrentBag<string> warningList = new();
             string fileName = Path.GetFileNameWithoutExtension(filePath);
             try
             {
                 var param = PARAM.Read(filePath);
                 presentParamList.Add(param.ParamType);
-                param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, changeList, oldNew);
+                param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
                 if (param != null)
                     paramList.TryAdd(param.ParamType, param);
             }
             catch (InvalidDataException)
             {
                 string labelText = fileName;
-                changeList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+                warningList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
             }
+            changeList.AddRange(warningList.OrderBy(e => e));
         }
 
-        public static PARAM? ApplyDefWithWarnings(PARAM param, List<PARAMDEF> paramdefs, List<PARAMDEF> paramdefs_alt, List<string> changeList, string oldnew)
+        public static PARAM? ApplyDefWithWarnings(PARAM param, ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, ConcurrentBag<string> warningList, string oldnew)
         {
             bool matchType = false;
             bool matchDefVersion = false;
@@ -123,11 +127,11 @@ namespace BoreParamCompare
             // Def could not be applied.
 
             if (!matchType && !matchDefVersion)
-                changeList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Valid ParamDef could not be found.");
+                warningList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Valid ParamDef could not be found.");
             else if (matchType && !matchDefVersion)
-                changeList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Cannot find ParamDef version {param.ParamdefDataVersion}.");
+                warningList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Cannot find ParamDef version {param.ParamdefDataVersion}.");
             else if (matchType && matchDefVersion)
-                changeList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Row sizes do not match. Param: {bestRowsize}, Def: {bestDefRowSize}.");
+                warningList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Row sizes do not match. Param: {bestRowsize}, Def: {bestDefRowSize}.");
             else
                 throw new Exception("Unhandled Apply ParamDef error.");
 
