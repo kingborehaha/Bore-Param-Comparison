@@ -653,14 +653,8 @@ namespace BoreParamCompare
             {
                 // Compare individual param files
 
-                PARAM? param_old = PARAM.Read(regPath_old);
-                PARAM? param_new = PARAM.Read(regPath_new);
-
                 t_VersionOld.Text = "Invalid";
                 t_VersionNew.Text = "Invalid";
-
-                var nameOld = Path.GetFileNameWithoutExtension(regPath_old);
-                var nameNew = Path.GetFileNameWithoutExtension(regPath_new);
 
                 Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_old, paramList_old, changeList, paramTypeList_old, "OLD");
                 Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_new, paramList_new, changeList, paramTypeList_new, "NEW");
