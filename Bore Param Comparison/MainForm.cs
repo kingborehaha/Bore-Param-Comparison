@@ -662,8 +662,6 @@ namespace BoreParamCompare
                 var nameOld = Path.GetFileNameWithoutExtension(regPath_old);
                 var nameNew = Path.GetFileNameWithoutExtension(regPath_new);
 
-                param_old = Util.ApplyDefWithWarnings(param_old, paramdefs, paramdefs_alt, changeList, "OLD");
-                param_new = Util.ApplyDefWithWarnings(param_new, paramdefs, paramdefs_alt, changeList, "NEW");
                 Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_old, paramList_old, changeList, paramTypeList_old, "OLD");
                 Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_new, paramList_new, changeList, paramTypeList_new, "NEW");
 
