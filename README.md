@@ -3,6 +3,10 @@ Compares params for FromSoft games.
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
 
 ## Changes
+### v1.2.2
+* Improved program stability (it should be very stable now).
+* Fixed individual param comparison applying param defs twice.
+* Fixed FinalDamageRateParam def.
 ### v1.2.1
 * Fix crash when trying to compare games other than ER and DS1.
 * Fix individual param comparisons when files had different names. Also updated def checks to match multi-param comparisons.
