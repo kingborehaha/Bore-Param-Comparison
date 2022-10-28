@@ -7,9 +7,7 @@ using System.Reflection;
 namespace BoreParamCompare
 {
     /* TODO
-     * Figure out a way to compile byte array changes that apply to most rows in a param so the log is less crowded
-        * add menu options accordingly
-     * test remaining games
+     * Click and drag to load param paths
      */
     public partial class MainForm : Form
     {
@@ -485,7 +483,10 @@ namespace BoreParamCompare
                             string rowInfo = "";
                             string delimiter = ", ";
                             if (!cb_fields_share_row.Checked)
+                            {
                                 delimiter = "\r\n\t";
+                                rowInfo = delimiter;
+                            }
                             // Generate row data
                             foreach (var cell in row_new.Cells)
                             {
@@ -524,7 +525,10 @@ namespace BoreParamCompare
                             string rowInfo = "";
                             string delimiter = ", ";
                             if (!cb_fields_share_row.Checked)
+                            {
                                 delimiter = "\r\n\t";
+                                rowInfo = delimiter;
+                            }
                             // Generate row data
                             foreach (var cell in row_old.Cells)
                             {
