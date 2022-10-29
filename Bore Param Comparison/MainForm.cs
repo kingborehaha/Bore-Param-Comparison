@@ -742,6 +742,9 @@ namespace BoreParamCompare
                 changeList.AddRange(list);
             }
 
+            if (changeList.Count == 0)
+                changeList.Add("No changes have been found.");
+
             changeList.Insert(0, $"{ProgramTitle}");
             changeList.Insert(1, $"Game: {gameType}");
             changeList.Insert(2, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
