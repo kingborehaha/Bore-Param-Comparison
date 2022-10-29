@@ -70,6 +70,7 @@
             // 
             // b_browse_old
             // 
+            this.b_browse_old.AllowDrop = true;
             this.b_browse_old.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.b_browse_old.Location = new System.Drawing.Point(10, 151);
             this.b_browse_old.Name = "b_browse_old";
@@ -78,6 +79,8 @@
             this.b_browse_old.Text = "Open Old";
             this.b_browse_old.UseVisualStyleBackColor = true;
             this.b_browse_old.Click += new System.EventHandler(this.b_browse_old_Click);
+            this.b_browse_old.DragDrop += new System.Windows.Forms.DragEventHandler(this.t_VersionOld_DragDrop);
+            this.b_browse_old.DragOver += new System.Windows.Forms.DragEventHandler(this.t_VersionOld_DragOver);
             // 
             // b_activate
             // 
@@ -93,6 +96,7 @@
             // 
             // b_browse_new
             // 
+            this.b_browse_new.AllowDrop = true;
             this.b_browse_new.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.b_browse_new.Location = new System.Drawing.Point(147, 152);
             this.b_browse_new.Name = "b_browse_new";
@@ -101,6 +105,8 @@
             this.b_browse_new.Text = "Open New";
             this.b_browse_new.UseVisualStyleBackColor = true;
             this.b_browse_new.Click += new System.EventHandler(this.b_browse_new_Click);
+            this.b_browse_new.DragDrop += new System.Windows.Forms.DragEventHandler(this.t_VersionNew_DragDrop);
+            this.b_browse_new.DragOver += new System.Windows.Forms.DragEventHandler(this.t_VersionNew_DragOver);
             // 
             // t_console
             // 
@@ -164,6 +170,7 @@
             // 
             // t_VersionNew
             // 
+            this.t_VersionNew.AllowDrop = true;
             this.t_VersionNew.Location = new System.Drawing.Point(147, 117);
             this.t_VersionNew.Name = "t_VersionNew";
             this.t_VersionNew.ReadOnly = true;
@@ -171,9 +178,12 @@
             this.t_VersionNew.TabIndex = 72;
             this.t_VersionNew.Text = "Unloaded";
             this.t_VersionNew.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.t_VersionNew.DragDrop += new System.Windows.Forms.DragEventHandler(this.t_VersionNew_DragDrop);
+            this.t_VersionNew.DragOver += new System.Windows.Forms.DragEventHandler(this.t_VersionNew_DragOver);
             // 
             // t_VersionOld
             // 
+            this.t_VersionOld.AllowDrop = true;
             this.t_VersionOld.Location = new System.Drawing.Point(10, 117);
             this.t_VersionOld.Name = "t_VersionOld";
             this.t_VersionOld.ReadOnly = true;
@@ -181,6 +191,8 @@
             this.t_VersionOld.TabIndex = 73;
             this.t_VersionOld.Text = "Unloaded";
             this.t_VersionOld.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.t_VersionOld.DragDrop += new System.Windows.Forms.DragEventHandler(this.t_VersionOld_DragDrop);
+            this.t_VersionOld.DragOver += new System.Windows.Forms.DragEventHandler(this.t_VersionOld_DragOver);
             // 
             // label2
             // 

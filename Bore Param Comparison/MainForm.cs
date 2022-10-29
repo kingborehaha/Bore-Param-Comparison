@@ -2,12 +2,13 @@ using SoulsFormats;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace BoreParamCompare
 {
     /* TODO
-     * Click and drag to load param paths
+     * 
      */
     public partial class MainForm : Form
     {
@@ -657,8 +658,8 @@ namespace BoreParamCompare
             {
                 // Compare individual param files
 
-                t_VersionOld.Text = "Invalid";
-                t_VersionNew.Text = "Invalid";
+                t_VersionOld.Text = "No Version";
+                t_VersionNew.Text = "No Version";
 
                 Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_old, paramList_old, changeList, paramTypeList_old, "OLD");
                 Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_new, paramList_new, changeList, paramTypeList_new, "NEW");
@@ -911,6 +912,35 @@ namespace BoreParamCompare
                 cb_LogNamesOnlyIf_FieldChange.Enabled = false;
                 logNameExclusive_Index_2 = true;
             }
+        }
+
+        private void t_VersionOld_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            openFileDialog_old.FileName = files[0];
+            t_VersionOld.Text = "Loaded";
+            CheckEnableActivateButton();
+        }
+        private void t_VersionNew_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            openFileDialog_new.FileName = files[0];
+            t_VersionNew.Text = "Loaded";
+            CheckEnableActivateButton();
+        }
+        private void t_VersionOld_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+        private void t_VersionNew_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
+            else
+                e.Effect = DragDropEffects.None;
         }
     }
 }
