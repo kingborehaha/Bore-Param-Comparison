@@ -51,7 +51,12 @@ namespace BoreParamCompare
             menu_GameType.Items.Clear();
             menu_GameType.Items.AddRange(gameTypes.ToArray());
 
+            // Create empty directories
             Directory.CreateDirectory("Output");
+            foreach (var typ in gameTypes)
+            {
+                Directory.CreateDirectory($"Paramdex ALT\\{typ}");
+            }
         }
         /*
         private static string GetTime()
@@ -630,7 +635,7 @@ namespace BoreParamCompare
             string regPath_old = openFileDialog_old.FileName;
             string regPath_new = openFileDialog_new.FileName;
 
-            string outputFileName = $"Output\\{openFileDialog_old.SafeFileName} to {openFileDialog_new.SafeFileName}.txt";
+            string outputFileName = $"{openFileDialog_old.SafeFileName} to {openFileDialog_new.SafeFileName}.txt";
 
 
             UpdateConsole("Loading ParamDefs");
@@ -749,10 +754,12 @@ namespace BoreParamCompare
             changeList.Insert(1, $"Game: {gameType}");
             changeList.Insert(2, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
 
-            File.WriteAllLines(outputFileName, changeList);
+            Directory.CreateDirectory($"Output\\{gameType}");
+            var outputPath = $"Output\\{gameType}\\{outputFileName}";
+
+            File.WriteAllLines(outputPath, changeList);
 
             return outputFileName;
-
         }
 
         private void loadFile(FileDialog fileDialog)
