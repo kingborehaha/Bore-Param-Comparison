@@ -952,5 +952,15 @@ namespace BoreParamCompare
             else
                 e.Effect = DragDropEffects.None;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Bore Pararm Comparison - Made by kingborehaha/george"
+                + "\n\nThis tool is for logging differences between param files, which includes regulation.bin, GameParam.parambnd, and individual .param files."
+                + "\n\nYou can drag & drop param files onto UI elements to automatically select them, or just click the two \"Open\" buttons to browse."
+                + "\n\nThis tool can compare parameters with differing paramdefs. To include addtional paramdefs, place them into the \"Paramdex ALT\" folder, then within in the right game folder."
+                , "Info" 
+                );
+        }
     }
 }

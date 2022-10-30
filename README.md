@@ -9,6 +9,7 @@ Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods
 * When no changes have been found, put "No changes have been found" in the log.
 * Output path now includes extra folder with targeted game name.
 * Generate empty Paramdex ALT folders on startup.
+* Added "Info" menu that mentions obscure functionality.
 ### v1.2.2
 * Improved program stability (it should be very stable now).
 * Fixed individual param comparison applying param defs twice.
