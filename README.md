@@ -3,6 +3,12 @@ Compares params for FromSoft games.
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
 
 ## Changes
+### v1.2.3
+* Added function to drag & drop files over old/new param UI elements to load them.
+* Fixed multi-line logging not putting 1st change on a new line.
+* When no changes have been found, put "No changes have been found" in the log.
+* Output path now includes extra folder with targeted game name.
+* Generate empty Paramdex ALT folders on startup.
 ### v1.2.2
 * Improved program stability (it should be very stable now).
 * Fixed individual param comparison applying param defs twice.
