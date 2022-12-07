@@ -30,6 +30,8 @@ namespace BoreParamCompare
             "ER",
         };
 
+        private readonly string outputFolder = "Output";
+
         public MainForm()
         {
             InitializeComponent();
@@ -52,7 +54,7 @@ namespace BoreParamCompare
             menu_GameType.Items.AddRange(gameTypes.ToArray());
 
             // Create empty directories
-            Directory.CreateDirectory("Output");
+            Directory.CreateDirectory(outputFolder);
             foreach (var typ in gameTypes)
             {
                 Directory.CreateDirectory($"Paramdex ALT\\{typ}");
@@ -754,12 +756,12 @@ namespace BoreParamCompare
             changeList.Insert(1, $"Game: {gameType}");
             changeList.Insert(2, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
 
-            Directory.CreateDirectory($"Output\\{gameType}");
-            var outputPath = $"Output\\{gameType}\\{outputFileName}";
+            Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{gameType}");
+            var outputPath = $"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{gameType}\\{outputFileName}";
 
             File.WriteAllLines(outputPath, changeList);
 
-            return outputFileName;
+            return outputPath;
         }
 
         private void loadFile(FileDialog fileDialog)
@@ -798,11 +800,11 @@ namespace BoreParamCompare
 
         private void b_activate_Click(object sender, EventArgs e)
         {
-            string? outputFileName = CompareFiles(); //do all the stuff
+            string? outputPath = CompareFiles(); //do all the stuff
 
             GC.Collect(); //clear memory
 
-            if (outputFileName != null)
+            if (outputPath != null)
             {
                 UpdateConsole("Finished!");
 
@@ -810,10 +812,8 @@ namespace BoreParamCompare
 
                 var result = MessageBox.Show("All done! Open the output file?", "Comparison Finished", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
-                    System.Diagnostics.Process.Start(@"explorer.exe", AppDomain.CurrentDomain.BaseDirectory + outputFileName); //open up the output file
+                    System.Diagnostics.Process.Start(@"explorer.exe", outputPath); // Open up the output file
             }
-
-
         }
 
         private void toggle_buttons_dupe()
