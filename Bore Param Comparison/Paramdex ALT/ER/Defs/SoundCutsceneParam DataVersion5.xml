@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PARAMDEF XmlVersion="2">
   <ParamType>SOUND_CUTSCENE_PARAM_ST</ParamType>
-  <DataVersion>6</DataVersion>
+  <DataVersion>5</DataVersion>
   <BigEndian>False</BigEndian>
   <Unicode>True</Unicode>
   <FormatVersion>203</FormatVersion>
@@ -77,7 +77,7 @@
       <Increment>0.1</Increment>
       <SortID>14</SortID>
     </Field>
-    <Field Def="dummy8 reserved[12]">
+    <Field Def="dummy8 reserved[8]">
       <DisplayName>リザーブ</DisplayName>
       <Description>リザーブ</Description>
       <SortID>10002</SortID>
