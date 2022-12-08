@@ -3,6 +3,7 @@
 101 Impaling Thrust
 102 Piercing Fang
 103 Spinning Slash
+104 %null%
 105 Charge Forth
 106 Stamp (Upward Cut)
 107 Stamp (Sweep)
@@ -19,6 +20,7 @@
 118 Loretta's Slash
 119 Poison Moth Flight
 120 Spinning Weapon
+121 %null%
 122 Storm Assault
 123 Stormcaller
 124 Sword Dance
@@ -64,6 +66,7 @@
 404 Enchanted Shot
 405 Sky Shot
 406 Rain of Arrows
+407 %null%
 501 Hoarfrost Stomp
 502 Storm Stomp
 503 Kick
@@ -123,7 +126,7 @@
 1027 Cursed-Blood Slice
 1028 Waterfowl Dance
 1029 Gold Breaker
-1030 I Command Thee, Kneel!
+1030 I Command Thee Kneel!
 1031 Regal Roar
 1032 Starcaller Cry
 1033 Wave of Destruction
@@ -162,6 +165,8 @@
 1177 Corpse Piler
 1178 Transient Moonlight
 1179 Bloodblade Dance
+1180 %null%
+1181 %null%
 1182 Knowledge Above All
 1183 Devourer of Worlds
 1184 Familal Rancor

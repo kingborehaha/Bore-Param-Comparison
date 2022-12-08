@@ -7,11 +7,6 @@ using System.Reflection;
 
 namespace BoreParamCompare
 {
-    /* TODO
-     * * name import stuff
-     * * * Get it working
-     * * * Figure out where to store names. I should probably make a new collection and refer to them instead of appending param rows (which would be faster)
-     */
     public partial class MainForm : Form
     {
         public static string Version = Application.ProductVersion;
@@ -737,6 +732,8 @@ namespace BoreParamCompare
                     {
                         rowNames[file.Split("\\").Last()] = File.ReadAllLines(file);
                     }
+
+                    // Not terribly efficient, but we're talking +1 second overall.
                     Util.ApplyRowNames(rowNames, paramList_old);
                     Util.ApplyRowNames(rowNames, paramList_new);
                 }

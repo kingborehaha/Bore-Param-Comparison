@@ -76,10 +76,7 @@ namespace BoreParamCompare
             changeList.AddRange(warningList.OrderBy(e => e));
         }
 
-
-        /// <summary>
-        /// Apply param def for a single file path.
-        /// </summary>
+  
         public static void ApplyRowNames(ConcurrentDictionary<string, string[]> rowNames, ConcurrentDictionary<string, PARAM> paramList)
         {
             Parallel.ForEach(Partitioner.Create(rowNames), file =>
@@ -104,6 +101,7 @@ namespace BoreParamCompare
                 }
             });
         }
+
         public static PARAM? ApplyDefWithWarnings(PARAM param, ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, ConcurrentBag<string> warningList, string oldnew)
         {
             bool matchType = false;

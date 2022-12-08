@@ -3,6 +3,10 @@ Compares params for FromSoft games.
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
 
 ## Changes
+### v1.2.4
+* Added option to import row names from paramdex.
+* Added ParamDefs to handle Elden Ring v1.08 changes.
+* Fixed output file not being opened in windows explorer properly.
 ### v1.2.3
 * Added function to drag & drop files over old/new param UI elements to load them.
 * Fixed multi-line logging not putting 1st change on a new line.
