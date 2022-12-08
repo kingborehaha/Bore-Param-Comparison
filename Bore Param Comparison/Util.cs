@@ -76,6 +76,34 @@ namespace BoreParamCompare
             changeList.AddRange(warningList.OrderBy(e => e));
         }
 
+
+        /// <summary>
+        /// Apply param def for a single file path.
+        /// </summary>
+        public static void ApplyRowNames(ConcurrentDictionary<string, string[]> rowNames, ConcurrentDictionary<string, PARAM> paramList)
+        {
+            Parallel.ForEach(Partitioner.Create(rowNames), file =>
+            {
+                if (paramList.TryGetValue(file.Key.Replace(".txt", ""), out PARAM param))
+                {
+                    foreach (string line in file.Value)
+                    {
+                        if (string.IsNullOrWhiteSpace(line))
+                            continue;
+
+                        string[] split = line.Split(' ');
+                        int id = int.Parse(split[0]);
+                        string name = string.Join(' ', split[1..]);
+
+                        PARAM.Row? row = param[id];
+                        if (row != null)
+                        {
+                            row.Name = name;
+                        }
+                    }
+                }
+            });
+        }
         public static PARAM? ApplyDefWithWarnings(PARAM param, ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, ConcurrentBag<string> warningList, string oldnew)
         {
             bool matchType = false;

@@ -8,7 +8,9 @@ using System.Reflection;
 namespace BoreParamCompare
 {
     /* TODO
-     * 
+     * * name import stuff
+     * * * Get it working
+     * * * Figure out where to store names. I should probably make a new collection and refer to them instead of appending param rows (which would be faster)
      */
     public partial class MainForm : Form
     {
@@ -86,6 +88,7 @@ namespace BoreParamCompare
         private bool logNameExclusive_Index_0 = true;
         private bool logNameExclusive_Index_1 = false;
         private bool logNameExclusive_Index_2 = false;
+        private bool logNameExclusive_Index_3 = false;
 
         public bool compareCells(List<string> changeList, PARAM.Row row_old, PARAM.Row row_new, string ID_str)
         {
@@ -96,7 +99,7 @@ namespace BoreParamCompare
 
             if (cb_LogRowNames.Checked == true)
             {
-                if (logNameExclusive_Index_0)
+                if (logNameExclusive_Index_0 || logNameExclusive_Index_1)
                 {
                     if (row_old.Name != row_new.Name)
                     {
@@ -122,14 +125,14 @@ namespace BoreParamCompare
                         combinedStr += "[" + rowname + "]";
                     }
                 }
-                else if (logNameExclusive_Index_1)
+                else if (logNameExclusive_Index_2)
                 {
                     // Only log new name
                     var rowname = row_new.Name;
                     ID_str += "[" + rowname + "]";
                     combinedStr += "[" + rowname + "]";
                 }
-                else if (logNameExclusive_Index_2)
+                else if (logNameExclusive_Index_3)
                 {
                     // Only log old name
                     var rowname = row_old.Name;
@@ -722,6 +725,22 @@ namespace BoreParamCompare
                     }
                 }
             }
+
+            if (cb_LogRowNames.Checked && logNameExclusive_Index_0)
+            {
+                ConcurrentDictionary<string, string[]> rowNames = new();
+                if (Directory.Exists($@"Paramdex\{gameType}\Names"))
+                {
+                    UpdateConsole("Importing Row Names");
+
+                    foreach (var file in Directory.GetFiles($@"Paramdex\{gameType}\Names"))
+                    {
+                        rowNames[file.Split("\\").Last()] = File.ReadAllLines(file);
+                    }
+                    Util.ApplyRowNames(rowNames, paramList_old);
+                    Util.ApplyRowNames(rowNames, paramList_new);
+                }
+            }
             #endregion
 
             #region Read Params
@@ -881,6 +900,35 @@ namespace BoreParamCompare
                 cb_LogNamesOnlyIf_FieldChange.Enabled = false;
                 combo_logNameExclusive.Enabled = false;
             }
+
+            logNameExclusive_Index_0 = false;
+            logNameExclusive_Index_1 = false;
+            logNameExclusive_Index_2 = false;
+            logNameExclusive_Index_3 = false;
+            if (combo_logNameExclusive.SelectedIndex == 0)
+            {
+                cb_log_name_changes_only.Enabled = true;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
+                logNameExclusive_Index_0 = true;
+            }
+            else if (combo_logNameExclusive.SelectedIndex == 1)
+            {
+                cb_log_name_changes_only.Enabled = true;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = true;
+                logNameExclusive_Index_1 = true;
+            }
+            else if (combo_logNameExclusive.SelectedIndex == 2)
+            {
+                cb_log_name_changes_only.Enabled = false;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
+                logNameExclusive_Index_2 = true;
+            }
+            else if (combo_logNameExclusive.SelectedIndex == 3)
+            {
+                cb_log_name_changes_only.Enabled = false;
+                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
+                logNameExclusive_Index_3 = true;
+            }
         }
 
         private void openFileDialog_old_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
@@ -901,27 +949,6 @@ namespace BoreParamCompare
         private void combo_logNameExclusive_SelectedIndexChanged(object sender, EventArgs e)
         {
             toggle_buttons_logNames();
-            logNameExclusive_Index_0 = false;
-            logNameExclusive_Index_1 = false;
-            logNameExclusive_Index_2 = false;
-            if (combo_logNameExclusive.SelectedIndex == 0)
-            {
-                cb_log_name_changes_only.Enabled = true;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = true;
-                logNameExclusive_Index_0 = true;
-            }
-            else if (combo_logNameExclusive.SelectedIndex == 1)
-            {
-                cb_log_name_changes_only.Enabled = false;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
-                logNameExclusive_Index_1 = true;
-            }
-            else if (combo_logNameExclusive.SelectedIndex == 2)
-            {
-                cb_log_name_changes_only.Enabled = false;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
-                logNameExclusive_Index_2 = true;
-            }
         }
 
         private void t_VersionOld_DragDrop(object sender, DragEventArgs e)

@@ -337,6 +337,7 @@
             this.combo_logNameExclusive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combo_logNameExclusive.FormattingEnabled = true;
             this.combo_logNameExclusive.Items.AddRange(new object[] {
+            "Import row names",
             "Log Differences",
             "Only log New names",
             "Only log Old names"});
