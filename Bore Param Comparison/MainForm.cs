@@ -94,7 +94,13 @@ namespace BoreParamCompare
 
             if (cb_LogRowNames.Checked == true)
             {
-                if (logNameExclusive_Index_0 || logNameExclusive_Index_1)
+                if (logNameExclusive_Index_0)
+                {
+                    var rowname = GetPreferredRowName(row_old, row_new);
+                    ID_str += "[" + rowname + "]";
+                    combinedStr += "[" + rowname + "]";
+                }
+                else if (logNameExclusive_Index_1)
                 {
                     if (row_old.Name != row_new.Name)
                     {
@@ -901,7 +907,7 @@ namespace BoreParamCompare
             logNameExclusive_Index_3 = false;
             if (combo_logNameExclusive.SelectedIndex == 0)
             {
-                cb_log_name_changes_only.Enabled = true;
+                cb_log_name_changes_only.Enabled = false;
                 logNameExclusive_Index_0 = true;
             }
             else if (combo_logNameExclusive.SelectedIndex == 1)

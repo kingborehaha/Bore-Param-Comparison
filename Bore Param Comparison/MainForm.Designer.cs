@@ -335,13 +335,13 @@
             this.combo_logNameExclusive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combo_logNameExclusive.FormattingEnabled = true;
             this.combo_logNameExclusive.Items.AddRange(new object[] {
-            "Import row names",
-            "Log Differences",
-            "Only log New names",
-            "Only log Old names"});
-            this.combo_logNameExclusive.Location = new System.Drawing.Point(182, 100);
+            "Import row names from Paramdex",
+            "Log Old vs New differences",
+            "Use names from New",
+            "Use names from Old"});
+            this.combo_logNameExclusive.Location = new System.Drawing.Point(113, 100);
             this.combo_logNameExclusive.Name = "combo_logNameExclusive";
-            this.combo_logNameExclusive.Size = new System.Drawing.Size(177, 23);
+            this.combo_logNameExclusive.Size = new System.Drawing.Size(183, 23);
             this.combo_logNameExclusive.TabIndex = 87;
             this.combo_logNameExclusive.SelectedIndexChanged += new System.EventHandler(this.combo_logNameExclusive_SelectedIndexChanged);
             // 
@@ -350,9 +350,9 @@
             this.cb_LogRowNames.AutoSize = true;
             this.cb_LogRowNames.Location = new System.Drawing.Point(6, 102);
             this.cb_LogRowNames.Name = "cb_LogRowNames";
-            this.cb_LogRowNames.Size = new System.Drawing.Size(170, 19);
+            this.cb_LogRowNames.Size = new System.Drawing.Size(107, 19);
             this.cb_LogRowNames.TabIndex = 86;
-            this.cb_LogRowNames.Text = "Log non-empty row names";
+            this.cb_LogRowNames.Text = "Log row names";
             this.cb_LogRowNames.UseVisualStyleBackColor = true;
             this.cb_LogRowNames.CheckedChanged += new System.EventHandler(this.cb_LogRowNames_CheckedChanged);
             // 
