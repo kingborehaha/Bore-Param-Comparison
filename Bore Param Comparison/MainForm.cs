@@ -103,8 +103,7 @@ namespace BoreParamCompare
                         if (cb_fields_share_row.Checked)
                         {
                             combinedStr += "[" + nameChangeStr + "]";
-                            if (cb_LogNamesOnlyIf_FieldChange.Enabled == false)
-                                changed = true; //Mandate inclusion in changelog since name is different
+                            changed = true; //Mandate inclusion in changelog since name is different
                         }
                         else
                         {
@@ -250,7 +249,7 @@ namespace BoreParamCompare
                     changeList.Add(oneLineNameDiffstr);
                 }
             }
-            else if (cb_LogNamesOnlyIf_FieldChange.Checked == false && oneLineNameDiffstr != "")
+            else if (oneLineNameDiffstr != "")
             {
                 //no field changes, but name was changed. log it.
                 changeList.Add(oneLineNameDiffstr);
@@ -888,13 +887,11 @@ namespace BoreParamCompare
             if (cb_LogRowNames.Checked == true)
             {
                 cb_log_name_changes_only.Enabled = true;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = true;
                 combo_logNameExclusive.Enabled = true;
             }
             else
             {
                 cb_log_name_changes_only.Enabled = false;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
                 combo_logNameExclusive.Enabled = false;
             }
 
@@ -905,25 +902,21 @@ namespace BoreParamCompare
             if (combo_logNameExclusive.SelectedIndex == 0)
             {
                 cb_log_name_changes_only.Enabled = true;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
                 logNameExclusive_Index_0 = true;
             }
             else if (combo_logNameExclusive.SelectedIndex == 1)
             {
                 cb_log_name_changes_only.Enabled = true;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = true;
                 logNameExclusive_Index_1 = true;
             }
             else if (combo_logNameExclusive.SelectedIndex == 2)
             {
                 cb_log_name_changes_only.Enabled = false;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
                 logNameExclusive_Index_2 = true;
             }
             else if (combo_logNameExclusive.SelectedIndex == 3)
             {
                 cb_log_name_changes_only.Enabled = false;
-                cb_LogNamesOnlyIf_FieldChange.Enabled = false;
                 logNameExclusive_Index_3 = true;
             }
         }

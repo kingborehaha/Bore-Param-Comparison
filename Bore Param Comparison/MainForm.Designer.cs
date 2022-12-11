@@ -53,7 +53,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.combo_logNameExclusive = new System.Windows.Forms.ComboBox();
             this.cb_LogRowNames = new System.Windows.Forms.CheckBox();
-            this.cb_LogNamesOnlyIf_FieldChange = new System.Windows.Forms.CheckBox();
             this.cb_log_name_changes_only = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cb_log_field_specifics = new System.Windows.Forms.CheckBox();
@@ -128,7 +127,7 @@
             this.cb_dupe.AutoSize = true;
             this.cb_dupe.Checked = true;
             this.cb_dupe.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_dupe.Location = new System.Drawing.Point(6, 200);
+            this.cb_dupe.Location = new System.Drawing.Point(8, 173);
             this.cb_dupe.Name = "cb_dupe";
             this.cb_dupe.Size = new System.Drawing.Size(95, 19);
             this.cb_dupe.TabIndex = 65;
@@ -139,7 +138,7 @@
             // cb_dupe_no_old
             // 
             this.cb_dupe_no_old.AutoSize = true;
-            this.cb_dupe_no_old.Location = new System.Drawing.Point(6, 225);
+            this.cb_dupe_no_old.Location = new System.Drawing.Point(8, 198);
             this.cb_dupe_no_old.Name = "cb_dupe_no_old";
             this.cb_dupe_no_old.Size = new System.Drawing.Size(279, 19);
             this.cb_dupe_no_old.TabIndex = 67;
@@ -152,7 +151,7 @@
             this.cb_dupe_no_both.AutoSize = true;
             this.cb_dupe_no_both.Checked = true;
             this.cb_dupe_no_both.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_dupe_no_both.Location = new System.Drawing.Point(6, 250);
+            this.cb_dupe_no_both.Location = new System.Drawing.Point(8, 223);
             this.cb_dupe_no_both.Name = "cb_dupe_no_both";
             this.cb_dupe_no_both.Size = new System.Drawing.Size(326, 19);
             this.cb_dupe_no_both.TabIndex = 66;
@@ -163,7 +162,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(6, 176);
+            this.label1.Location = new System.Drawing.Point(8, 149);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 21);
             this.label1.TabIndex = 71;
@@ -294,7 +293,6 @@
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Controls.Add(this.combo_logNameExclusive);
             this.tabPage2.Controls.Add(this.cb_LogRowNames);
-            this.tabPage2.Controls.Add(this.cb_LogNamesOnlyIf_FieldChange);
             this.tabPage2.Controls.Add(this.cb_log_name_changes_only);
             this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.cb_log_field_specifics);
@@ -315,7 +313,7 @@
             // cb_LogAddedRemovedRowCells
             // 
             this.cb_LogAddedRemovedRowCells.AutoSize = true;
-            this.cb_LogAddedRemovedRowCells.Location = new System.Drawing.Point(6, 302);
+            this.cb_LogAddedRemovedRowCells.Location = new System.Drawing.Point(8, 275);
             this.cb_LogAddedRemovedRowCells.Name = "cb_LogAddedRemovedRowCells";
             this.cb_LogAddedRemovedRowCells.Size = new System.Drawing.Size(245, 19);
             this.cb_LogAddedRemovedRowCells.TabIndex = 89;
@@ -326,7 +324,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label7.Location = new System.Drawing.Point(8, 278);
+            this.label7.Location = new System.Drawing.Point(10, 251);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(44, 21);
             this.label7.TabIndex = 88;
@@ -357,18 +355,6 @@
             this.cb_LogRowNames.Text = "Log non-empty row names";
             this.cb_LogRowNames.UseVisualStyleBackColor = true;
             this.cb_LogRowNames.CheckedChanged += new System.EventHandler(this.cb_LogRowNames_CheckedChanged);
-            // 
-            // cb_LogNamesOnlyIf_FieldChange
-            // 
-            this.cb_LogNamesOnlyIf_FieldChange.AutoSize = true;
-            this.cb_LogNamesOnlyIf_FieldChange.Checked = true;
-            this.cb_LogNamesOnlyIf_FieldChange.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_LogNamesOnlyIf_FieldChange.Location = new System.Drawing.Point(6, 152);
-            this.cb_LogNamesOnlyIf_FieldChange.Name = "cb_LogNamesOnlyIf_FieldChange";
-            this.cb_LogNamesOnlyIf_FieldChange.Size = new System.Drawing.Size(336, 19);
-            this.cb_LogNamesOnlyIf_FieldChange.TabIndex = 85;
-            this.cb_LogNamesOnlyIf_FieldChange.Text = "Only log changed row names when fields are also changed\r\n";
-            this.cb_LogNamesOnlyIf_FieldChange.UseVisualStyleBackColor = true;
             // 
             // cb_log_name_changes_only
             // 
@@ -461,7 +447,6 @@
         private CheckBox cb_fields_share_row;
         private Label label6;
         private CheckBox cb_log_name_changes_only;
-        private CheckBox cb_LogNamesOnlyIf_FieldChange;
         private CheckBox cb_LogRowNames;
         private ComboBox combo_logNameExclusive;
         private CheckBox cb_LogAddedRemovedRowCells;
