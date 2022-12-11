@@ -341,13 +341,15 @@
             "Use names from Old"});
             this.combo_logNameExclusive.Location = new System.Drawing.Point(113, 100);
             this.combo_logNameExclusive.Name = "combo_logNameExclusive";
-            this.combo_logNameExclusive.Size = new System.Drawing.Size(183, 23);
+            this.combo_logNameExclusive.Size = new System.Drawing.Size(221, 23);
             this.combo_logNameExclusive.TabIndex = 87;
             this.combo_logNameExclusive.SelectedIndexChanged += new System.EventHandler(this.combo_logNameExclusive_SelectedIndexChanged);
             // 
             // cb_LogRowNames
             // 
             this.cb_LogRowNames.AutoSize = true;
+            this.cb_LogRowNames.Checked = true;
+            this.cb_LogRowNames.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_LogRowNames.Location = new System.Drawing.Point(6, 102);
             this.cb_LogRowNames.Name = "cb_LogRowNames";
             this.cb_LogRowNames.Size = new System.Drawing.Size(107, 19);
@@ -397,9 +399,9 @@
             this.cb_fields_share_row.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_fields_share_row.Location = new System.Drawing.Point(6, 52);
             this.cb_fields_share_row.Name = "cb_fields_share_row";
-            this.cb_fields_share_row.Size = new System.Drawing.Size(230, 19);
+            this.cb_fields_share_row.Size = new System.Drawing.Size(198, 19);
             this.cb_fields_share_row.TabIndex = 70;
-            this.cb_fields_share_row.Text = "Logged row data shares one line per ID";
+            this.cb_fields_share_row.Text = "Log row changes in 1 shared line";
             this.cb_fields_share_row.UseVisualStyleBackColor = true;
             // 
             // MainForm

@@ -251,7 +251,7 @@ namespace BoreParamCompare
                 }
                 else if (oneLineNameDiffstr != "")
                 {
-                    //multi row and name wa schanged, add it
+                    //multi row and name was changed, add it
                     changeList.Add(oneLineNameDiffstr);
                 }
             }
