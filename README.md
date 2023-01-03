@@ -7,7 +7,7 @@ Uses updated versions of SoulsFormats and Paramdex from https://github.com/souls
 ### v1.3.0
 * Updated DS2 Paramdefs and row names.
 * Removed DS2S Paramdex folder and placed everything into DS2 folder.
-* Added Support DS2 params from "enc_regulation.bnd.dcx".
+* Support DS2 params from "enc_regulation.bnd.dcx".
 * Fixed crash when SoulsFormats failed to read a param file.
 * Error logging is now more detailed.
 * Single-line logging is now off by default.
