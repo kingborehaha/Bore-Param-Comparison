@@ -53,7 +53,7 @@ namespace BoreParamCompare
                         labelText = param.ParamType;
                     else
                         labelText = file.Name;
-                    warningList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+                    warningList.Add($"InvalidDataException: Could not read param {labelText} in {oldNew} file.");
                 }
             });
             changeList.AddRange(warningList.OrderBy(e => e));
@@ -77,7 +77,7 @@ namespace BoreParamCompare
             catch (InvalidDataException)
             {
                 string labelText = fileName;
-                warningList.Add($"InvalidDataException: Could not apply ParamDef for {labelText} in {oldNew} file. If correct game was selected, Param is incompatible with current ParamDef");
+                warningList.Add($"InvalidDataException: Could not read param {labelText} in {oldNew} file.");
             }
             changeList.AddRange(warningList.OrderBy(e => e));
         }
@@ -108,7 +108,21 @@ namespace BoreParamCompare
             });
         }
 
-        public static PARAM? ApplyDefWithWarnings(PARAM param, ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, ConcurrentBag<string> warningList, string oldnew)
+        public static PARAM? ApplyDef(PARAM param, PARAMDEF paramdef, ConcurrentBag<string> warningList, string oldNew)
+        {
+            try
+            {
+                param.ApplyParamdef(paramdef);
+                return param;
+            }
+            catch(InvalidDataException e)
+            {
+                warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. {e.Message}");
+                return null;
+            }
+        }
+
+        public static PARAM? ApplyDefWithWarnings(PARAM param, ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, ConcurrentBag<string> warningList, string oldNew)
         {
             bool matchType = false;
             bool matchDefVersion = false;
@@ -129,8 +143,7 @@ namespace BoreParamCompare
                         bestDefRowSize = paramdef.GetRowSize();
                         if (param.DetectedSize == -1 || param.DetectedSize == bestDefRowSize)
                         {
-                            param.ApplyParamdef(paramdef);
-                            return param;
+                            return ApplyDef(param, paramdef, warningList, oldNew);
                         }
                     }
                 }
@@ -149,8 +162,7 @@ namespace BoreParamCompare
                         bestDefRowSize = paramdef.GetRowSize();
                         if (param.DetectedSize == -1 || param.DetectedSize == bestDefRowSize)
                         {
-                            param.ApplyParamdef(paramdef);
-                            return param;
+                            return ApplyDef(param, paramdef, warningList, oldNew);
                         }
                     }
                 }
@@ -159,11 +171,11 @@ namespace BoreParamCompare
             // Def could not be applied.
 
             if (!matchType && !matchDefVersion)
-                warningList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Valid ParamDef could not be found.");
+                warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. Valid ParamDef could not be found.");
             else if (matchType && !matchDefVersion)
-                warningList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Cannot find ParamDef version {param.ParamdefDataVersion}.");
+                warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. Cannot find ParamDef version {param.ParamdefDataVersion}.");
             else if (matchType && matchDefVersion)
-                warningList.Add($"Could not apply ParamDef for ({oldnew}) {param.ParamType}. Row sizes do not match. Param: {bestRowsize}, Def: {bestDefRowSize}.");
+                warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. Row sizes do not match. Param: {bestRowsize}, Def: {bestDefRowSize}.");
             else
                 throw new Exception("Unhandled Apply ParamDef error.");
 
