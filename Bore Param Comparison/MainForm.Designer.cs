@@ -395,8 +395,6 @@
             // cb_fields_share_row
             // 
             this.cb_fields_share_row.AutoSize = true;
-            this.cb_fields_share_row.Checked = true;
-            this.cb_fields_share_row.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_fields_share_row.Location = new System.Drawing.Point(6, 52);
             this.cb_fields_share_row.Name = "cb_fields_share_row";
             this.cb_fields_share_row.Size = new System.Drawing.Size(198, 19);
