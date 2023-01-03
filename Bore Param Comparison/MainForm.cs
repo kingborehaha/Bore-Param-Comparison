@@ -20,7 +20,7 @@ namespace BoreParamCompare
             "DS1",
             "DS1R",
             "DS2",
-            "DS2S",
+            //"DS2S", // Uses DS2
             "DS3",
             "BB",
             "SDT",
