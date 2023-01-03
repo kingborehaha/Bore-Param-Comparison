@@ -29,12 +29,19 @@ namespace BoreParamCompare
             ConcurrentBag<string> warningList = new();
             Parallel.ForEach(Partitioner.Create(fileList), file =>
             {
-                if (file.Name.Contains(".param") == false)
-                    return; //not a param.
-                string name = Path.GetFileNameWithoutExtension(file.Name);
-                var param = PARAM.Read(file.Bytes);
+
+                PARAM? param = null;
                 try
                 {
+                    if (!PARAM.Is(file.Bytes))
+                    {
+                        // Not a param
+                        warningList.Add($"{file.Name} cannot be interpreted as a param. If this is a valid param, SoulsFormats is not equipped to recognize it");
+                        return;
+                    }
+
+                    string name = Path.GetFileNameWithoutExtension(file.Name);
+                    param = PARAM.Read(file.Bytes);
                     presentParamList.Add(param.ParamType);
                     param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
                     if (param != null)
