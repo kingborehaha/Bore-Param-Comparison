@@ -295,8 +295,8 @@ namespace BoreParamCompare
                 do
                 {
                     result = MessageBox.Show(
-                       $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {gameType} directory." +
-                       $"\n\nPlease copy and paste \"oo2core_6_win64.dll\" from your {gameType} directory to \"{Directory.GetCurrentDirectory()}\".",
+                       $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {gameType} game directory." +
+                       $"\n\nPlease copy and paste \"oo2core_6_win64.dll\" to \"{Directory.GetCurrentDirectory()}\".",
                        $"Could not find oo2core_6_win64.dll", MessageBoxButtons.RetryCancel);
 
                     if (result == DialogResult.Cancel)
