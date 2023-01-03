@@ -33,10 +33,9 @@ namespace BoreParamCompare
                 PARAM? param = null;
                 try
                 {
-                    if (!PARAM.Is(file.Bytes))
+                    if (!file.Name.Contains(".param"))
                     {
                         // Not a param
-                        warningList.Add($"{file.Name} cannot be interpreted as a param. If this is a valid param, SoulsFormats is not equipped to recognize it");
                         return;
                     }
 
