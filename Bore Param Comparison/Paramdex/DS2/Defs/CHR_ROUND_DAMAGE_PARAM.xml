@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PARAMDEF XmlVersion="0">
+  <ParamType>CHR_ROUND_DAMAGE_PARAM</ParamType>
+  <Unk06>0</Unk06>
+  <BigEndian>False</BigEndian>
+  <Unicode>True</Unicode>
+  <Version>201</Version>
+  <Fields>
+    <Field Def="u16 NG+0 % Damage" />
+    <Field Def="u16 NG+0 % Stamina Damage" />
+    <Field Def="u16 NG+0 % Posture Damage" />
+    <Field Def="u16 NG+1 % Damage" />
+    <Field Def="u16 NG+1 % Stamina Damage" />
+    <Field Def="u16 NG+1 % Posture Damage" />
+    <Field Def="u16 NG+2 % Damage" />
+    <Field Def="u16 NG+2 % Stamina Damage" />
+    <Field Def="u16 NG+2 % Posture Damage" />
+    <Field Def="u16 NG+3 % Damage" />
+    <Field Def="u16 NG+3 % Stamina Damage" />
+    <Field Def="u16 NG+3 % Posture Damage" />
+    <Field Def="u16 NG+4 % Damage" />
+    <Field Def="u16 NG+4 % Stamina Damage" />
+    <Field Def="u16 NG+4 % Posture Damage" />
+    <Field Def="u16 NG+5 % Damage" />
+    <Field Def="u16 NG+5 % Stamina Damage" />
+    <Field Def="u16 NG+5 % Posture Damage" />
+    <Field Def="u16 NG+6 % Damage" />
+    <Field Def="u16 NG+6 % Stamina Damage" />
+    <Field Def="u16 NG+6 % Posture Damage" />
+    <Field Def="u16 NG+7 % Damage" />
+    <Field Def="u16 NG+7 % Stamina Damage" />
+    <Field Def="u16 NG+7 % Posture Damage" />
+    <Field Def="u16 NG+0 % Incoming Stamina Damage" />
+    <Field Def="u16 NG+0 % Incoming Posture Damage" />
+    <Field Def="u16 NG+1 % Incoming Stamina Damage" />
+    <Field Def="u16 NG+1 % Incoming Posture Damage" />
+    <Field Def="u16 NG+2 % Incoming Stamina Damage" />
+    <Field Def="u16 NG+2 % Incoming Posture Damage" />
+    <Field Def="u16 NG+3 % Incoming Stamina Damage" />
+    <Field Def="u16 NG+3 % Incoming Posture Damage" />
+    <Field Def="u16 NG+4 % Incoming Stamina Damage" />
+    <Field Def="u16 NG+4 % Incoming Posture Damage" />
+    <Field Def="u16 NG+5 % Incoming Stamina Damage" />
+    <Field Def="u16 NG+5 % Incoming Posture Damage" />
+    <Field Def="u16 NG+6 % Incoming Stamina Damage" />
+    <Field Def="u16 NG+6 % Incoming Posture Damage" />
+    <Field Def="u16 NG+7 % Incoming Stamina Damage" />
+    <Field Def="u16 NG+7 % Incoming Posture Damage" />
+  </Fields>
+</PARAMDEF>

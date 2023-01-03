@@ -1,8 +1,17 @@
 Compares params for FromSoft games.
 
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
+Uses updated versions of SoulsFormats and Paramdex from https://github.com/soulsmods/DSMapStudio
 
 ## Changes
+### v1.3.0
+* Updated DS2 Paramdefs and row names.
+* Removed DS2S Paramdex folder and placed everything into DS2 folder.
+* Added Support DS2 params from "enc_regulation.bnd.dcx".
+* Fixed crash when SoulsFormats failed to read a param file.
+* Error logging is now more detailed.
+* Single-line logging is now off by default.
+* Misc text tweaks.
 ### v1.2.4
 * Added option to import row names from Paramdex.
 * Added ParamDefs to handle Elden Ring v1.08 changes.

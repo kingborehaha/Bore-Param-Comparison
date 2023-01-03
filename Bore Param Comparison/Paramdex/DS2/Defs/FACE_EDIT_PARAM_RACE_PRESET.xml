@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PARAMDEF XmlVersion="0">
+  <ParamType>FACE_EDIT_PARAM_RACE_PRESET</ParamType>
+  <Unk06>0</Unk06>
+  <BigEndian>False</BigEndian>
+  <Unicode>True</Unicode>
+  <Version>201</Version>
+  <Fields>
+    <Field Def="f32 Age" />
+    <Field Def="f32 Hormones" />
+    <Field Def="f32 Form emphasis" />
+    <Field Def="f32 Color emphasis" />
+    <Field Def="f32 Relative nose size" />
+    <Field Def="f32 Ratio of nose to forehead" />
+    <Field Def="f32 Facial width" />
+    <Field Def="f32 Facial roundness" />
+    <Field Def="f32 Vertical sparcing" />
+    <Field Def="f32 Placement" />
+    <Field Def="f32 Horizontal sparcing" />
+    <Field Def="f32 Skin color 1" />
+    <Field Def="f32 Skin color 2" />
+    <Field Def="f32 Skin color 3" />
+    <Field Def="f32 Skin color 4" />
+    <Field Def="f32 Skin color 5" />
+    <Field Def="f32 Nose ridge color" />
+    <Field Def="f32 Cheek color" />
+    <Field Def="f32 Glabella width" />
+    <Field Def="f32 Glabella depth" />
+    <Field Def="f32 Glabella proturation" />
+    <Field Def="f32 Glabella height" />
+    <Field Def="f32 Nose ridge protrusion 1" />
+    <Field Def="f32 Nose ridge protrusion 2" />
+    <Field Def="f32 Glabella width - Eyebrows" />
+    <Field Def="f32 Brow height" />
+    <Field Def="f32 Inner Brow" />
+    <Field Def="f32 Outter Brow" />
+    <Field Def="f32 Eye Position" />
+    <Field Def="f32 Eye Size" />
+    <Field Def="f32 Eye Angle" />
+    <Field Def="f32 Eye Spacing" />
+    <Field Def="f32 Eye Socket Color 1" />
+    <Field Def="f32 Eye Socket Color 2" />
+    <Field Def="f32 Eye Brightness" />
+    <Field Def="f32 Eyelid Color" />
+    <Field Def="f32 Eye Liner" />
+    <Field Def="f32 Eye Shadow" />
+    <Field Def="f32 Nose Ridge Depth" />
+    <Field Def="f32 Nose Ridge Lenght" />
+    <Field Def="f32 Nose Position" />
+    <Field Def="f32 Nose Height" />
+    <Field Def="f32 Nose Protrusion" />
+    <Field Def="f32 Nose tip Height" />
+    <Field Def="f32 UnkB0" />
+    <Field Def="f32 Nostril Angle" />
+    <Field Def="f32 Nostrill Size" />
+    <Field Def="f32 Nostril Width" />
+    <Field Def="f32 UnkC0" />
+    <Field Def="f32 Checkbone Height" />
+    <Field Def="f32 Cheekbone Depth" />
+    <Field Def="f32 Cheekbone spread" />
+    <Field Def="f32 Cheeck Fullness" />
+    <Field Def="f32 Cheeks" />
+    <Field Def="f32 Laught Lines" />
+    <Field Def="f32 Lip Shape" />
+    <Field Def="f32 Mouth Expression" />
+    <Field Def="f32 Fullness" />
+    <Field Def="f32 Lip Size" />
+    <Field Def="f32 Lip Protrusion" />
+    <Field Def="f32 Lip Thickness" />
+    <Field Def="f32 Mouth protrusion" />
+    <Field Def="f32 Mouth Slant" />
+    <Field Def="f32 Occlusion" />
+    <Field Def="f32 Position" />
+    <Field Def="f32 Width" />
+    <Field Def="f32 Distance from mouth to chin" />
+    <Field Def="f32 Cheeck Fullness" />
+    <Field Def="f32 Lipstick 1" />
+    <Field Def="f32 Lipstick 2" />
+    <Field Def="f32 Jaw Position" />
+    <Field Def="f32 Lenght" />
+    <Field Def="f32 Jaw Protrusion" />
+    <Field Def="f32 Chin Tip Death" />
+    <Field Def="f32 Size" />
+    <Field Def="f32 Height" />
+    <Field Def="f32 Jaw Spread" />
+    <Field Def="f32 unknown" />
+    <Field Def="f32 Jaw Breadth" />
+    <Field Def="f32 Chin" />
+    <Field Def="f32 Jaw Outline" />
+  </Fields>
+</PARAMDEF>

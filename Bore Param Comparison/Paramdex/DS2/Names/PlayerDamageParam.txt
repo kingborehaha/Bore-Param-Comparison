@@ -33,7 +33,7 @@
 941 General Purpose - Vibration - Vertical Shaking - Medium (Assault Spear) -- 汎用-振動-縦揺れ-中（突撃槍）
 950 General-purpose -Vibration-Vertical Shaking-Large -- 汎用-振動-縦揺れ-大
 951 General Purpose - Vibration - Vertical Shaking - Large (Assault Spear) -- 汎用-振動-縦揺れ-大（突撃槍）
-960 General-purpose -Vibration- Up, Bottom, Left, Right - Large -- 汎用-振動-上下左右-大
+960 General-purpose -Vibration- Up- Bottom- Left- Right - Large -- 汎用-振動-上下左右-大
 1000 General-purpose-guard break -- 汎用-ガードブレイク
 1400 General-purpose - Tossing - Guard Break Stub - Minimal - Hit on target -- 汎用-投げつかみ-ガードブレイクスタブ-極小-対象にＨＩＴ
 1420 General-purpose - Tossing - Guard Break Stub - Medium - Hit on target -- 汎用-投げつかみ-ガードブレイクスタブ-中-対象にＨＩＴ
@@ -1728,7 +1728,6 @@
 20085400 Beam Sword_Two-Sword Style Both Hand Proximity_Strong 1 -- ビームソード_二刀流両手近接_強1
 20085500 Beam Sword_Both-Handed Guard -- ビームソード_両手ガード
 20085600 Beam Sword for Stamina Consumption -- ビームソード_スタミナ消費用
-20085601 Beam Sword_Durable Shaving -- ビームソード_耐久削り用
 20085700 Ice Crystal Sting Sword_One Hand Proximity_Strong 1 -- 氷結晶の刺剣_片手近接_強１
 20085710 Ice Crystal Sting Sword_ One Hand Proximity_ Strong 1 (Weapon Damage) -- 氷結晶の刺剣_片手近接_強１（武器ダメージ）
 20085800 Ice Crystal Sting Sword_One Hand Proximity_Strong 2 -- 氷結晶の刺剣_片手近接_強２
@@ -1742,7 +1741,6 @@
 20086200 Left Hand Sword_One Hand Proximity_Strong 2 -- レフトハンドソード_片手近接_強２
 20086300 Left Hand Sword_Both-Handed Proximity_Strong 1 (per Airborne Body) -- レフトハンドソード_両手近接_強１（空中体当たり）
 20086301 Left Hand Sword_Both-Handed Proximity_Strong 1 (Slap) -- レフトハンドソード_両手近接_強１（叩き付け）
-20086400 Left Hand Sword_Two-Handed Proximity_Strong 2 -- レフトハンドソード_両手近接_強２
 20086500 Left Hand Sword_Two-Sword Style Two-Handed Two-Handed Proximity_Strong 1 (Horizontal Rotation) -- レフトハンドソード_二刀流両手近接_強１（横回転）
 20086501 Left Hand Sword_Two-Sword Style Two-Handed Two-Handed Proximity_Strong 1 (Vertical Rotation) -- レフトハンドソード_二刀流両手近接_強１（縦回転）
 20086600 martial artist glove_one-handed proximity_weak one -- 格闘家グローブ_片手近接_弱１
@@ -1771,8 +1769,7 @@
 20088700 Martial Artist Grove_Two-Sword Style Two-Handed Two-Handed Proximity_Strong 1 -- 格闘家グローブ_二刀流両手近接_強1
 20088710 Martial Artist Glove_Two-Sword Style Two-Handed Two-Handed Proximity_Strong 1 (Weapon Damage) -- 格闘家グローブ_二刀流両手近接_強1（武器ダメージ）
 20088800 Martial Artist Glove_Hands Guard -- 格闘家グローブ_両手ガード
-20088900 Incut a sword_two-handed proximity_strong 1 -- 切腹刀_両手近接_強１
-20088910 Incut sword_both-handed proximity_strong 1 (self-blade) -- 切腹刀_両手近接_強１（自刃）
+20088900 Bewitched Alonne Sword - Seppuku (L2)
 20088920 Incut sword_both-handed proximity_strong 1 (pull out) -- 切腹刀_両手近接_強１（引き抜く）
 20089000 Recovery Song Sword _One Hand Proximity_Strong 1 -- 回復曲剣_片手近接_強１
 20089001 Recovery Song Sword_One Hand Proximity_Strong 1 (Charge) -- 回復曲剣_片手近接_強１（チャージ）
@@ -1801,7 +1798,6 @@
 20090010 Crossbow_One Hand Proximity_Strong 1 (Weapon) -- クロスボウ_片手近接_強１（武器）
 20090100 Crossbow_Both-Handed Proximity_Strong 1 -- クロスボウ_両手近接_強１
 20090101 Crossbow_Both-Handed Proximity_Strong 1 (Charge) -- クロスボウ_両手近接_強１（チャージ）
-20090102 Crossbow_Both-Handed Proximity_Strong 1 (Weapon) -- クロスボウ_両手近接_強１（武器）
 20090200 Two-handed hammer assault spear_one-handed proximity_weak one -- 両手槌突撃槍_片手近接_弱１
 20090300 Two-handed hammer assault spear_ one-handed proximity_ weak 1 (two-sword style) -- 両手槌突撃槍_片手近接_弱１（二刀流）
 20090400 Two-handed hammer assault spear_one hand proximity_weak 2 -- 両手槌突撃槍_片手近接_弱２
@@ -2037,21 +2033,16 @@
 31310030 DLC: Laser beam one hand (bullet) -- DLC：レーザービーム片手（弾）
 31310032 DLC: Laser beam both hands (bullet) -- DLC：レーザービーム両手（弾）
 32010000 Miracle: Recovery (Muzzle Flash) -- 奇蹟：回復（マズルフラッシュ）
-32010001 Miracle: Recovery -- 奇蹟：回復
 32020000 Miracle: Medium Recovery (Muzzle Flash) -- 奇蹟：中回復（マズルフラッシュ）
-32020001 Miracle: Medium Recovery -- 奇蹟：中回復
 32030000 Miracles: Limited Great Recovery (Muzzle Flash) -- 奇蹟：限られた大回復（マズルフラッシュ）
 32030001 Miracles: Limited Great Recovery -- 奇蹟：限られた大回復
 32040000 Miracle: The Great Recovery (Muzzle Flash) -- 奇蹟：大回復（マズルフラッシュ）
-32040001 Miracle: Great Recovery -- 奇蹟：大回復
 32050000 Miracle: The Healing of the Sun's Light (Muzzle Flash) -- 奇蹟：太陽の光の癒し（マズルフラッシュ）
-32050001 Miracles: The Healing of the Sun's Rays -- 奇蹟：太陽の光の癒し
 32060000 Miracle: Life Springing (Muzzle Flash) -- 奇蹟：生命湧き（マズルフラッシュ）
 32060001 Miracles: Springing of Life -- 奇蹟：生命湧き
 32070000 Miracle: Automatic Medium Recovery (Muzzle Flash) -- 奇蹟：自動中回復（マズルフラッシュ）
 32070001 Miracles: Automatic Medium Recovery -- 奇蹟：自動中回復
 32080000 Miracle: The Grace of Sunshine (Muzzle Flash) -- 奇蹟：太陽の光の恵み（マズルフラッシュ）
-32080001 Miracle: The Grace of the Sun's Light -- 奇蹟：太陽の光の恵み
 32090000 Miracle: Poison Recovery (Muzzle Flash) -- 奇蹟：毒回復（マズルフラッシュ）
 32090001 Miracle: Poison Recovery -- 奇蹟：毒回復
 32100000 Miracle: Force (for timing delay) -- 奇蹟：フォース（タイミング遅延用）
@@ -2097,14 +2088,12 @@
 32180030 Miracle: Source of Lightning (Water Propagation Damage) -- 奇蹟：雷の源（水面伝播ダメージ）
 32180031 Miracle: Source of Lightning (Water Propagation Damage) -- 奇蹟：雷の源（水面伝播ダメージ）
 32190000 Miracles: Magic Protection (Muzzle Flash) -- 奇蹟：魔法防護（マズルフラッシュ）
-32190001 Miracles: Magic Protection (Bullet) -- 奇蹟：魔法防護（弾）
 32200000 Miracle: Great Magic Protection (Muzzle Flash) -- 奇蹟：大魔法防護（マズルフラッシュ）
 32200001 Miracle: Great Magic Protection (Bullet) -- 奇蹟：大魔法防護（弾）
 32210000 Miracle: Home Journey -- 奇蹟：家路
 32220000 Miracle: Seeking Advice (Muzzle Flash) -- 奇蹟：助言求め（マズルフラッシュ）
 32220001 Miracle: Seeking Advice (Bullet) -- 奇蹟：助言求め（弾）
 32230000 Miracle: Jihad (Muzzle Flash) -- 奇蹟：ジハド（マズルフラッシュ）
-32230001 Miracle: Jihad -- 奇蹟：ジハド（弾）
 32240000 Miracle: Dark Spirit Detection (Muzzle Flash) -- 奇蹟：闇霊探知（マズルフラッシュ）
 32250000 Miracle: Increased resistance (muzzle flash) -- 奇蹟：抵抗力増加（マズルフラッシュ）
 32250001 Miracle: Increased resistance (bullet) -- 奇蹟：抵抗力増加（弾）
@@ -2114,7 +2103,6 @@
 32310000 DLC: Lightning of defense neglect (muzzle flash) -- DLC：防御力無視の雷（マズルフラッシュ）
 32310010 DLC: Lightning in defense neglect (position search) -- DLC：防御力無視の雷（位置検索）
 32310020 DLC: Lightning for ignoring defense (omen) -- DLC：防御力無視の雷（予兆）
-32310030 DLC: Lightning to ignore defense (bullet) -- DLC：防御力無視の雷（弾）
 33010000 Magic: Fireball -- 呪術：火球
 33010001 Magic: Fireball (landing) -- 呪術：火球（着弾）
 33010010 Magic: Fireball (Friendfire) -- 呪術：火球（フレンドファイア）
@@ -2311,22 +2299,13 @@
 35080041 Dark Art - Bizarre: The Hole of Soul (First Bullet): Tiny -- 闇術-奇：ソウルの穴（最初の弾）：極小
 35080042 Dark Art - Bizarre: The Hole of Soul (First Bullet): Tiny (Small) -- 闇術-奇：ソウルの穴（最初の弾）：極小（小）
 35090000 Dark Art - Bizarre: Multi-Target Spell Seal (Muzzle Flash) -- 闇術-奇：マルチターゲットスペル封印（マズルフラッシュ）
-35090001 Dark Art - Bizarre: Multi-Target Spell Seal (Effect Range) -- 闇術-奇：マルチターゲットスペル封印（効果範囲）
 35300000 DLC: The Walk of Gentle Peace: Lv.5 (Muzzle Flash) -- DLC：緩やかな平和の歩み：Lv.5（マズルフラッシュ）
-35300001 DLC: The Walk of Gentle Peace: Lv.4 (Muzzle Flash) -- DLC：緩やかな平和の歩み：Lv.4（マズルフラッシュ）
-35300002 DLC: The Walk of Gentle Peace: Lv.3 (Muzzle Flash) -- DLC：緩やかな平和の歩み：Lv.3（マズルフラッシュ）
-35300003 DLC: The Walk of Gentle Peace: Lv.2 (Muzzle Flash) -- DLC：緩やかな平和の歩み：Lv.2（マズルフラッシュ）
-35300004 DLC: The Walk of Gentle Peace: Lv.1 (Muzzle Flash) -- DLC：緩やかな平和の歩み：Lv.1（マズルフラッシュ）
 35300010 DLC: The Walk of Gradual Peace: Lv.5 -- DLC：緩やかな平和の歩み：Lv.5
 35300011 DLC: The Walk of Gradual Peace: Lv.4 -- DLC：緩やかな平和の歩み：Lv.4
 35300012 DLC: The Walk of Gradual Peace: Lv.3 -- DLC：緩やかな平和の歩み：Lv.3
 35300013 DLC: The Walk of Gradual Peace: Lv.2 -- DLC：緩やかな平和の歩み：Lv.2
 35300014 DLC: The Walk of Gradual Peace: Lv.1 -- DLC：緩やかな平和の歩み：Lv.1
 35310000 DLC: CurrentHP 1/4 Damage Bullet: Lv.5 -- DLC：現在HPの1/4ダメージ弾：Lv.5
-35310001 DLC: CurrentHP 1/4 Damage Bullet: Lv.4 -- DLC：現在HPの1/4ダメージ弾：Lv.4
-35310002 DLC: CurrentHP 1/4 Damage Bullet: Lv.3 -- DLC：現在HPの1/4ダメージ弾：Lv.3
-35310003 DLC: CurrentHP 1/4 Damage Bullet: Lv.2 -- DLC：現在HPの1/4ダメージ弾：Lv.2
-35310004 DLC: CurrentHP 1/4 Damage Bullet: Lv.1 -- DLC：現在HPの1/4ダメージ弾：Lv.1
 40000010 Spear _ one hand pole part -- 槍_片手ポール部分
 40000011 Spear _ One-handed pole part (root) -- 槍_片手ポール部分（根元）
 40000015 Spear _ one-handed pole part (non-bounced) -- 槍_片手ポール部分（非弾かれ）

@@ -20,7 +20,7 @@ namespace BoreParamCompare
             "DS1",
             "DS1R",
             "DS2",
-            "DS2S",
+            //"DS2S", // Uses DS2
             "DS3",
             "BB",
             "SDT",
@@ -295,8 +295,8 @@ namespace BoreParamCompare
                 do
                 {
                     result = MessageBox.Show(
-                       $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {gameType} directory." +
-                       $"\n\nPlease copy and paste \"oo2core_6_win64.dll\" from your {gameType} directory to \"{Directory.GetCurrentDirectory()}\".",
+                       $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {gameType} game directory." +
+                       $"\n\nPlease copy and paste \"oo2core_6_win64.dll\" to \"{Directory.GetCurrentDirectory()}\".",
                        $"Could not find oo2core_6_win64.dll", MessageBoxButtons.RetryCancel);
 
                     if (result == DialogResult.Cancel)
@@ -342,8 +342,15 @@ namespace BoreParamCompare
                     list = bnd3.Files;
                     version = bnd3.Version;
                     break;
-                case "DS2": //untested
+                case "DS2":
                 case "DS2S":
+                    if (isRegulation)
+                        bnd4 = SFUtil.DecryptDS2Regulation(path);
+                    else
+                        bnd4 = BND4.Read(path);
+                    list = bnd4.Files;
+                    version = bnd4.Version;
+                    break;
                 case "BB": //untested
                 case "SDT":
                     bnd4 = BND4.Read(path);

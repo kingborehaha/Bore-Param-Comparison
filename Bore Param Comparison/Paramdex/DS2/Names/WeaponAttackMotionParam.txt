@@ -249,7 +249,6 @@
 10021250 Spear_Two-sword style two-handed two-handed proximity_strong 1 (evangelist) -- 槍_二刀流両手近接_強1（伝道師）
 10021300 Spear_Both Hands Guard -- 槍_両手ガード
 10021400 Assault Spear _One Hand Proximity_ Weak 1 -- 突撃槍_片手近接_弱1
-10021410 Assault Spear_One Hand Proximity_Weak 1_02 -- 突撃槍_片手近接_弱1_０２
 10021510 Assault Spear_One Hand Proximity_Weak 1_ Shield Chik Weak 1 -- 突撃槍_片手近接_弱1_盾チク弱１
 10021520 Assault Spear_One Hand Proximity_Weak 1_ Shield Chik Weak 2 -- 突撃槍_片手近接_弱1_盾チク弱２
 10021600 Assault Spear _One Hand Proximity_ Weak 2 -- 突撃槍_片手近接_弱２
@@ -264,7 +263,6 @@
 10022600 Assault Spear _ One Hand Jump Fall -- 突撃槍_片手ジャンプ落下
 10022700 Assault Spear_One Hand Proximity_Weak 1 (Two-Sword Style) -- 突撃槍_片手近接_弱1（二刀流）
 10022900 Assault Spear _Both Hands Proximity_ Weak 1 -- 突撃槍_両手近接_弱1
-10022910 Assault Spear_Both Hands Proximity_Weak 1_02 -- 突撃槍_両手近接_弱1_０２
 10023100 Assault Spear _Both Hands Proximity_ Weak 2 -- 突撃槍_両手近接_弱２
 10023110 Assault Spear_Both Hands Proximity_Weak 2_02 -- 突撃槍_両手近接_弱２_０２
 10023300 Assault Spear _Both Hands Proximity_Strong 1 -- 突撃槍_両手近接_強1
@@ -605,7 +603,6 @@
 10055510 One Hand Axe_Two-Handed Proximity_Strong_02 -- 片手斧_両手近接_強1_０２
 10055520 One Hand Axe_Two-Handed Proximity_Strong_03 -- 片手斧_両手近接_強1_０３
 10055600 One Hand Axe_ Two-Handed Dash -- 片手斧_両手ダッシュ
-10055610 One Hand Axe_Hand Dash_02 -- 片手斧_両手ダッシュ_０２
 10055700 One Hand Axe_ Rolling Hands -- 片手斧_両手ローリング
 10055800 One-handed axe_two-handed guard breaking -- 片手斧_両手ガード崩し
 10056400 One-handed axe_two-sword-style two-handed two-handed proximity_weak one -- 片手斧_二刀流両手近接_弱1
@@ -662,7 +659,6 @@
 10060720 Two-handed long axe_one-handed proximity_weak 1_barier 01_03 -- 両手長斧_片手近接_弱1_バリエ01_０３
 10060730 Two-handed long axe_one-handed proximity_weak 1_barier 01_04 -- 両手長斧_片手近接_弱1_バリエ01_０４
 10060740 Two-handed long axe_one-handed proximity_weak 1_barier 01_05 -- 両手長斧_片手近接_弱1_バリエ01_０５
-10060800 Two-handed ax_one-handed proximity_weak 2 -- 両手長斧_片手近接_弱２
 10060900 Two-handed long axe_one-handed proximity_weak 2_barier 01 -- 両手長斧_片手近接_弱２_バリエ01
 10060910 Two-handed long axe_one-handed proximity_weak_02 -- 両手長斧_片手近接_弱２_０２
 10061000 Two-handed ax_one-handed proximity_strong one -- 両手長斧_片手近接_強1

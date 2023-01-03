@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PARAMDEF XmlVersion="0">
+  <ParamType>WEAPON_ATTACK_MOTION_PARAM</ParamType>
+  <Unk06>0</Unk06>
+  <BigEndian>False</BigEndian>
+  <Unicode>True</Unicode>
+  <Version>201</Version>
+  <Fields>
+    <Field Def="s32 AnimationID" />
+    <Field Def="s32 Attack Type" />
+    <Field Def="f32 Startup Speed" />
+    <Field Def="f32 Recovery Speed" />
+    <Field Def="f32 Tracking Start" />
+    <Field Def="f32 Tracking Mid" />
+    <Field Def="f32 Tracking End" />
+    <Field Def="f32 Weapon Orientation - Y" />
+    <Field Def="s32 Unk20" />
+    <Field Def="s32 Unk24" />
+    <Field Def="u8 Unk28" />
+    <Field Def="u8 Unk28" />
+    <Field Def="u8 Self Pushback 1" />
+    <Field Def="u8 Self Pushback 2" />
+    <Field Def="s32 Damage ID 1" />
+    <Field Def="s32 Damage ID 2" />
+    <Field Def="s32 Damage ID 3" />
+    <Field Def="s32 Swing 1 - Bullet on Swing End 1" />
+    <Field Def="s32 Swing 1 - Bullet on Swing End 2" />
+    <Field Def="s32 Swing 2 - Bullet on Swing End 1" />
+    <Field Def="s32 Swing 2 - Bullet on Swing End 2" />
+    <Field Def="s32 Swing 3 - Bullet on Swing End 1" />
+    <Field Def="s32 Swing 3 - Bullet on Swing End 2" />
+  </Fields>
+</PARAMDEF>
