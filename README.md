@@ -4,7 +4,7 @@ Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods
 Uses updated versions of SoulsFormats and Paramdex from https://github.com/soulsmods/DSMapStudio
 
 ## Changes
-### v1.2.5
+### v1.3.0
 * Updated DS2 Paramdefs and row names.
 * Removed DS2S Paramdex folder and placed everything into DS2 folder.
 * Added Support DS2 params from "enc_regulation.bnd.dcx".
