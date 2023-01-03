@@ -1,13 +1,15 @@
 Compares params for FromSoft games.
 
 Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods/Paramdex
+Uses updated versions of SoulsFormats and Paramdex from https://github.com/soulsmods/DSMapStudio
 
 ## Changes
 ### v1.2.5
+* Updated DS2 Paramdefs and row names.
+* Removed DS2S Paramdex folder and placed everything into DS2 folder.
 * Support DS2 params from "enc_regulation.bnd.dcx".
 * Fix crash SoulsFormats fails to interpret a param file as param.
 * Error logging is now more detailed.
-* Consolidated DS2S defs into DS2 folder since they seem to mostly compatible.
 * Misc text tweaks.
 ### v1.2.4
 * Added option to import row names from Paramdex.

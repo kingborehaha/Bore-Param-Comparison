@@ -1,13 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<PARAMDEF XmlVersion="1">
+<?xml version="1.0" encoding="utf-8"?>
+<PARAMDEF XmlVersion="0">
   <ParamType>MAP_OBJECT_PARAM</ParamType>
-  <DataVersion>5</DataVersion>
+  <Unk06>0</Unk06>
   <BigEndian>False</BigEndian>
   <Unicode>True</Unicode>
-  <FormatVersion>201</FormatVersion>
+  <Version>201</Version>
   <Fields>
-    <Field Def="f32 Unk00" />
-    <Field Def="f32 Unk04" />
+    <Field Def="f32 Interact Animation Speed 1" />
+    <Field Def="f32 Interact Animation Speed 2" />
     <Field Def="f32 Unk08" />
     <Field Def="s32 Unk0C" />
     <Field Def="s32 Unk10" />

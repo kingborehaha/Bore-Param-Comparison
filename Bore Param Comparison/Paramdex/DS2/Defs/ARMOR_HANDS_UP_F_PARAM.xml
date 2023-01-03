@@ -1,12 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<PARAMDEF XmlVersion="1">
+<?xml version="1.0" encoding="utf-8"?>
+<PARAMDEF XmlVersion="0">
   <ParamType>ARMOR_HANDS_UP_F_PARAM</ParamType>
-  <DataVersion>1</DataVersion>
+  <Unk06>0</Unk06>
   <BigEndian>False</BigEndian>
   <Unicode>True</Unicode>
-  <FormatVersion>201</FormatVersion>
+  <Version>201</Version>
   <Fields>
-    <Field Def="s32 Unk00" />
+    <Field Def="s8 Unk00" />
+    <Field Def="s8 Unk00" />
+    <Field Def="s8 Unk00" />
+    <Field Def="s8 Unk00" />
     <Field Def="s32 Unk04" />
     <Field Def="s32 Unk08" />
   </Fields>

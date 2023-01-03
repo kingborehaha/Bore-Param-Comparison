@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<PARAMDEF XmlVersion="1">
+<?xml version="1.0" encoding="utf-8"?>
+<PARAMDEF XmlVersion="0">
   <ParamType>CHR_EQUIP_WEAPON_PARAM</ParamType>
-  <DataVersion>3</DataVersion>
+  <Unk06>0</Unk06>
   <BigEndian>False</BigEndian>
   <Unicode>True</Unicode>
-  <FormatVersion>201</FormatVersion>
+  <Version>201</Version>
   <Fields>
     <Field Def="s32 Chr ID" />
     <Field Def="s32 Unk04" />
@@ -15,8 +15,8 @@
     <Field Def="f32 Unk18" />
     <Field Def="s32 Unk1C" />
     <Field Def="s32 Unk20" />
-    <Field Def="s32 Unk24" />
-    <Field Def="s32 Unk28" />
+    <Field Def="s32 Weapon Visual Effect Related" />
+    <Field Def="s32 Body Visual Effect Related" />
     <Field Def="s32 Unk2C" />
     <Field Def="s32 Unk30" />
     <Field Def="s32 Unk34" />
