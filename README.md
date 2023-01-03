@@ -7,6 +7,7 @@ Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods
 * Support DS2 params from "enc_regulation.bnd.dcx".
 * Fix crash SoulsFormats fails to interpret a param file as param.
 * Error logging is now more detailed.
+* Consolidated DS2S defs into DS2 folder since they seem to mostly compatible.
 * Misc text tweaks.
 ### v1.2.4
 * Added option to import row names from Paramdex.
