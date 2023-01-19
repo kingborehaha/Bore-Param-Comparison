@@ -18,7 +18,7 @@ namespace BoreParamCompare
         {
             "DES",
             "DS1",
-            "DS1R",
+            //"DS1R",
             "DS2",
             //"DS2S", // Uses DS2
             "DS3",
@@ -85,7 +85,7 @@ namespace BoreParamCompare
         private bool logNameExclusive_Index_2 = false;
         private bool logNameExclusive_Index_3 = false;
 
-        public bool compareCells(List<string> changeList, PARAM.Row row_old, PARAM.Row row_new, string ID_str)
+        public bool CompareCells(List<string> changeList, PARAM.Row row_old, PARAM.Row row_new, string ID_str)
         {
             var changed = false;
             var combinedStr = ID_str;
@@ -600,7 +600,7 @@ namespace BoreParamCompare
                         //row was moved
                         row_new = param_new[row_old.ID]; //find the corresponding row at its new address
 
-                        if (compareCells(changeList, row_old, row_new, ID_old_str))
+                        if (CompareCells(changeList, row_old, row_new, ID_old_str))
                             paramChanges++;
 
                         param_old.Rows.Remove(row_old);
@@ -610,7 +610,7 @@ namespace BoreParamCompare
                         continue;
                     }
 
-                    if (compareCells(changeList, row_old, row_new, ID_old_str))
+                    if (CompareCells(changeList, row_old, row_new, ID_old_str))
                     {
                         paramChanges++;
                     }
@@ -653,7 +653,7 @@ namespace BoreParamCompare
             UpdateConsole("Loading ParamDefs");
 
             ConcurrentBag<PARAMDEF> paramdefs = new();
-            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType + "\\Defs", "*.xml"))
+            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType + "\\Defs", "*.xml", SearchOption.AllDirectories))
             {
                 var paramdef = PARAMDEF.XmlDeserialize(path);
                 paramdefs.Add(paramdef);
@@ -662,7 +662,7 @@ namespace BoreParamCompare
             ConcurrentBag<PARAMDEF> paramdefs_alt = new();
             if (Directory.Exists("Paramdex ALT\\" + gameType + "\\Defs"))
             {
-                foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType + "\\Defs", "*.xml"))
+                foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType + "\\Defs", "*.xml", SearchOption.AllDirectories))
                 {
                     var paramdef = PARAMDEF.XmlDeserialize(path);
                     paramdefs_alt.Add(paramdef);

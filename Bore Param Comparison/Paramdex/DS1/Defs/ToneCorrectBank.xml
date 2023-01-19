@@ -70,5 +70,11 @@
       <Increment>1</Increment>
       <SortID>8</SortID>
     </Field>
+    <Field Def="f32 sfxMultiplier = 1">
+      <Enum />
+      <EditFlags>None</EditFlags>
+      <Minimum>0</Minimum>
+      <Maximum>1000</Maximum>
+    </Field>
   </Fields>
 </PARAMDEF>

@@ -335,13 +335,6 @@
       <Maximum>1</Maximum>
       <SortID>2100</SortID>
     </Field>
-    <Field Def="u8 enable_pvp:1">
-      <DisplayName>戦闘</DisplayName>
-      <Enum>EQUIP_BOOL</Enum>
-      <Description>マルチプレイ中に使用可能か？</Description>
-      <Maximum>1</Maximum>
-      <SortID>2150</SortID>
-    </Field>
     <Field Def="u8 disable_offline:1">
       <DisplayName>オフラインで使用不可</DisplayName>
       <Enum>EQUIP_BOOL</Enum>

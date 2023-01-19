@@ -58,7 +58,7 @@
       <Description>光源</Description>
       <EditFlags>None</EditFlags>
       <Minimum>0</Minimum>
-      <Maximum>16000</Maximum>
+      <Maximum>1000</Maximum>
       <SortID>7</SortID>
     </Field>
     <Field Def="dummy8 pad_0[2]">

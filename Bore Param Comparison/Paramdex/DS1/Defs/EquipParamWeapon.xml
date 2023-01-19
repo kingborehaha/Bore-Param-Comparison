@@ -891,7 +891,7 @@
       <EditFlags>Wrap</EditFlags>
       <Maximum>1</Maximum>
       <Increment>1</Increment>
-      <SortID>9241</SortID>
+      <SortID>9878</SortID>
     </Field>
     <Field Def="s16 oldSortId">
       <DisplayName>旧ソートID</DisplayName>
@@ -900,13 +900,20 @@
       <Maximum>9999</Maximum>
       <SortID>2400</SortID>
     </Field>
-    <Field Def="dummy8 pad_1[8] = 1">
+    <Field Def="s16 levelSyncCorrectID">
+      <DisplayName>レベルの同期ID</DisplayName>
+      <Description>レベルの同期ID</Description>
+      <Minimum>-1</Minimum>
+      <Maximum>9999</Maximum>
+      <SortID>9877</SortID>
+    </Field>
+    <Field Def="dummy8 pad_1[6] = 1">
       <DisplayName>パディング</DisplayName>
       <DisplayFormat>%d</DisplayFormat>
       <EditFlags>Wrap</EditFlags>
       <Maximum>1</Maximum>
       <Increment>1</Increment>
-      <SortID>9242</SortID>
+      <SortID>9879</SortID>
     </Field>
   </Fields>
 </PARAMDEF>
