@@ -4,6 +4,10 @@ Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods
 Uses updated versions of SoulsFormats and Paramdex from https://github.com/soulsmods/DSMapStudio
 
 ## Changes
+### v1.4.0
+* Consolidated DS1 defs to allow for cross-game comparisons.
+* * DSR defs take priority due to updated pad info.
+* * PTDE defs are now located in Paramdex ALT.
 ### v1.3.0
 * Updated DS2 Paramdefs and row names.
 * Removed DS2S Paramdex folder and placed everything into DS2 folder.
