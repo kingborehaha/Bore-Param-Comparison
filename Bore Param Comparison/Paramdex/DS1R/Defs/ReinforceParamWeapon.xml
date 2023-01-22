@@ -201,9 +201,10 @@
       <Description>素材パラメータIDの加算補正値</Description>
       <SortID>2700</SortID>
     </Field>
-    <Field Def="dummy8 pad[9]">
-      <DisplayName>pading</DisplayName>
-      <SortID>2701</SortID>
+    <Field Def="u8 reinforcementLevel">
+      <DisplayName>武器強化</DisplayName>
+      <Description>武器強化度</Description>
+      <SortID>2800</SortID>
     </Field>
   </Fields>
 </PARAMDEF>

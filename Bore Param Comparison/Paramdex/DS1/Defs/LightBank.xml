@@ -178,7 +178,7 @@
       <Description>アンビエント上半球</Description>
       <EditFlags>None</EditFlags>
       <Minimum>0</Minimum>
-      <Maximum>10000</Maximum>
+      <Maximum>1000</Maximum>
       <SortID>22</SortID>
     </Field>
     <Field Def="s16 colR_d = 255">
@@ -210,7 +210,7 @@
       <Description>アンビエント下半球</Description>
       <EditFlags>None</EditFlags>
       <Minimum>0</Minimum>
-      <Maximum>10000</Maximum>
+      <Maximum>1000</Maximum>
       <SortID>26</SortID>
     </Field>
     <Field Def="s16 degRotX_s">
@@ -289,7 +289,7 @@
       <Description>環境光源：ディフューズ乗算色</Description>
       <EditFlags>None</EditFlags>
       <Minimum>0</Minimum>
-      <Maximum>10000</Maximum>
+      <Maximum>1000</Maximum>
       <SortID>36</SortID>
     </Field>
     <Field Def="s16 envSpc_colR = 255">
@@ -321,7 +321,7 @@
       <Description>環境光源：スペキュラ乗算色</Description>
       <EditFlags>None</EditFlags>
       <Minimum>0</Minimum>
-      <Maximum>10000</Maximum>
+      <Maximum>1000</Maximum>
       <SortID>40</SortID>
     </Field>
     <Field Def="s16 envDif">

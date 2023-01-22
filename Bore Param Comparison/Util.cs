@@ -29,7 +29,6 @@ namespace BoreParamCompare
             ConcurrentBag<string> warningList = new();
             Parallel.ForEach(Partitioner.Create(fileList), file =>
             {
-
                 PARAM? param = null;
                 try
                 {

@@ -1,4 +1,4 @@
-using SoulsFormats;
+﻿using SoulsFormats;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,13 +12,15 @@ namespace BoreParamCompare
         public static string Version = Application.ProductVersion;
         public static string ProgramTitle = $"Bore Param Comparison v{Version}";
 
-        private string gameType = "";
+        private string _gameType = "";
 
         private readonly List<string> gameTypes = new()
         {
             "DES",
             "DS1",
-            //"DS1R",
+            "DS1R",
+            "DS1_vs_DS1R",
+            "DS1R_vs_DS1",
             "DS2",
             //"DS2S", // Uses DS2
             "DS3",
@@ -189,19 +191,26 @@ namespace BoreParamCompare
                     //is a byte array
                     var oldFieldArray = (byte[])oldField;
                     var newFieldArray = (byte[])newField;
-                    for (var i=0; i < oldFieldArray.Length; i++)
                     {
-                        var old_byte = oldFieldArray[i];
-                        var new_byte = newFieldArray[i];
-
-                        if (old_byte != new_byte)
+                        for (var i = 0; i < oldFieldArray.Length; i++)
                         {
-                            //byte was changed
-                            oldField_str = Convert.ToHexString(oldFieldArray);
-                            newField_str = Convert.ToHexString(newFieldArray);
-                            log = true;
-                            changed = true;
-                            break;
+                            if (i >= newFieldArray.Length)
+                            {
+                                // Old array has different length than new array and no differences were found so far, gotta abort.
+                                break;
+                            }
+                            var old_byte = oldFieldArray[i];
+                            var new_byte = newFieldArray[i];
+
+                            if (old_byte != new_byte)
+                            {
+                                //byte was changed
+                                oldField_str = Convert.ToHexString(oldFieldArray);
+                                newField_str = Convert.ToHexString(newFieldArray);
+                                log = true;
+                                changed = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -295,7 +304,7 @@ namespace BoreParamCompare
                 do
                 {
                     result = MessageBox.Show(
-                       $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {gameType} game directory." +
+                       $"The selected files requires \"oo2core_6_win64.dll\", which can be found in your {_gameType} game directory." +
                        $"\n\nPlease copy and paste \"oo2core_6_win64.dll\" to \"{Directory.GetCurrentDirectory()}\".",
                        $"Could not find oo2core_6_win64.dll", MessageBoxButtons.RetryCancel);
 
@@ -333,11 +342,13 @@ namespace BoreParamCompare
                     isRegulation = false; //file is a BND
             }
 
-            switch (gameType)
+            switch (_gameType)
             {
                 case "DES":
                 case "DS1":
                 case "DS1R":
+                case "DS1_vs_DS1R":
+                case "DS1R_vs_DS1":
                     bnd3 = BND3.Read(path);
                     list = bnd3.Files;
                     version = bnd3.Version;
@@ -374,7 +385,7 @@ namespace BoreParamCompare
                     version = bnd4.Version;
                     break;
                 default:
-                    throw new Exception("Bad game type: " + gameType);
+                    throw new Exception("Bad game type: " + _gameType);
             }
 
             if (is_old)
@@ -653,39 +664,11 @@ namespace BoreParamCompare
             UpdateConsole("Loading ParamDefs");
 
             ConcurrentBag<PARAMDEF> paramdefs = new();
-            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType + "\\Defs", "*.xml", SearchOption.AllDirectories))
-            {
-                var paramdef = PARAMDEF.XmlDeserialize(path);
-                paramdefs.Add(paramdef);
-            }
-
             ConcurrentBag<PARAMDEF> paramdefs_alt = new();
-            if (Directory.Exists("Paramdex ALT\\" + gameType + "\\Defs"))
-            {
-                foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType + "\\Defs", "*.xml", SearchOption.AllDirectories))
-                {
-                    var paramdef = PARAMDEF.XmlDeserialize(path);
-                    paramdefs_alt.Add(paramdef);
-                }
-            }
 
-            UpdateConsole("Loading Params");
-
-            if (regPath_old.EndsWith(".param"))
-            {
-                // Compare individual param files
-
-                t_VersionOld.Text = "No Version";
-                t_VersionNew.Text = "No Version";
-
-                Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_old, paramList_old, changeList, paramTypeList_old, "OLD");
-                Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_new, paramList_new, changeList, paramTypeList_new, "NEW");
-
-            }
-            else
+            if (_gameType == "DS1R_vs_DS1")
             {
                 // Compare paramBNDs
-
                 List<BinderFile>? fileList_old = GetBNDFiles(regPath_old, true);
                 if (fileList_old == null)
                 {
@@ -699,13 +682,138 @@ namespace BoreParamCompare
                     return null;
                 }
 
-                UpdateConsole("Applying Defs");
-
+                foreach (string path in Directory.GetFiles("Paramdex\\" + "DS1R" + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                {
+                    var paramdef = PARAMDEF.XmlDeserialize(path);
+                    paramdefs.Add(paramdef);
+                }
+                if (Directory.Exists("Paramdex ALT\\" + "DS1R" + "\\Defs"))
+                {
+                    foreach (string path in Directory.GetFiles("Paramdex ALT\\" + "DS1R" + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                    {
+                        var paramdef = PARAMDEF.XmlDeserialize(path);
+                        paramdefs_alt.Add(paramdef);
+                    }
+                }
                 Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, paramTypeList_old, "OLD");
-                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW");
 
+                paramdefs.Clear();
+                paramdefs_alt.Clear();
+                foreach (string path in Directory.GetFiles("Paramdex\\" + "DS1" + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                {
+                    var paramdef = PARAMDEF.XmlDeserialize(path);
+                    paramdefs.Add(paramdef);
+                }
+                if (Directory.Exists("Paramdex ALT\\" + "DS1" + "\\Defs"))
+                {
+                    foreach (string path in Directory.GetFiles("Paramdex ALT\\" + "DS1" + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                    {
+                        var paramdef = PARAMDEF.XmlDeserialize(path);
+                        paramdefs_alt.Add(paramdef);
+                    }
+                }
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW");
+            }
+            if (_gameType == "DS1_vs_DS1R")
+            {
+                // Compare paramBNDs
+                List<BinderFile>? fileList_old = GetBNDFiles(regPath_old, true);
+                if (fileList_old == null)
+                {
+                    UpdateConsole("Comparison Cancelled");
+                    return null;
+                }
+                List<BinderFile>? fileList_new = GetBNDFiles(regPath_new, false);
+                if (fileList_new == null)
+                {
+                    UpdateConsole("Comparison Cancelled");
+                    return null;
+                }
+
+                foreach (string path in Directory.GetFiles("Paramdex\\" + "DS1" + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                {
+                    var paramdef = PARAMDEF.XmlDeserialize(path);
+                    paramdefs.Add(paramdef);
+                }
+                if (Directory.Exists("Paramdex ALT\\" + "DS1" + "\\Defs"))
+                {
+                    foreach (string path in Directory.GetFiles("Paramdex ALT\\" + "DS1" + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                    {
+                        var paramdef = PARAMDEF.XmlDeserialize(path);
+                        paramdefs_alt.Add(paramdef);
+                    }
+                }
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, paramTypeList_old, "OLD");
+
+                paramdefs.Clear();
+                paramdefs_alt.Clear();
+                foreach (string path in Directory.GetFiles("Paramdex\\" + "DS1R" + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                {
+                    var paramdef = PARAMDEF.XmlDeserialize(path);
+                    paramdefs.Add(paramdef);
+                }
+                if (Directory.Exists("Paramdex ALT\\" + "DS1R" + "\\Defs"))
+                {
+                    foreach (string path in Directory.GetFiles("Paramdex ALT\\" + "DS1R" + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                    {
+                        var paramdef = PARAMDEF.XmlDeserialize(path);
+                        paramdefs_alt.Add(paramdef);
+                    }
+                }
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW");
+            }
+            else
+            {
+                foreach (string path in Directory.GetFiles("Paramdex\\" + _gameType + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                {
+                    var paramdef = PARAMDEF.XmlDeserialize(path);
+                    paramdefs.Add(paramdef);
+                }
+                if (Directory.Exists("Paramdex ALT\\" + _gameType + "\\Defs"))
+                {
+                    foreach (string path in Directory.GetFiles("Paramdex ALT\\" + _gameType + "\\Defs", "*.xml", SearchOption.AllDirectories))
+                    {
+                        var paramdef = PARAMDEF.XmlDeserialize(path);
+                        paramdefs_alt.Add(paramdef);
+                    }
+                }
+            
+
+                UpdateConsole("Loading Params");
+
+                if (regPath_old.EndsWith(".param"))
+                {
+                    // Compare individual param files
+
+                    t_VersionOld.Text = "No Version";
+                    t_VersionNew.Text = "No Version";
+
+                    Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_old, paramList_old, changeList, paramTypeList_old, "OLD");
+                    Util.ApplyParamDefs(paramdefs, paramdefs_alt, regPath_new, paramList_new, changeList, paramTypeList_new, "NEW");
+                }
+                else
+                {
+                    // Compare paramBNDs
+                    List<BinderFile>? fileList_old = GetBNDFiles(regPath_old, true);
+                    if (fileList_old == null)
+                    {
+                        UpdateConsole("Comparison Cancelled");
+                        return null;
+                    }
+                    List<BinderFile>? fileList_new = GetBNDFiles(regPath_new, false);
+                    if (fileList_new == null)
+                    {
+                        UpdateConsole("Comparison Cancelled");
+                        return null;
+                    }
+
+                    UpdateConsole("Applying Defs");
+
+                    Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, paramTypeList_old, "OLD");
+                    Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW");
+                }
                 //Check for added/removed param types
-                foreach(var paramType in paramTypeList_old.ToList())
+                foreach (var paramType in paramTypeList_old.ToList())
                 {
                     var otherFile = paramTypeList_new.FirstOrDefault(e => paramType == e);
                     if (otherFile == null)
@@ -731,25 +839,26 @@ namespace BoreParamCompare
                         paramList_new.Remove(paramType, out _);
                     }
                 }
-            }
 
-            if (cb_LogRowNames.Checked && logNameExclusive_Index_0)
-            {
-                ConcurrentDictionary<string, string[]> rowNames = new();
-                if (Directory.Exists($@"Paramdex\{gameType}\Names"))
+                if (cb_LogRowNames.Checked && logNameExclusive_Index_0)
                 {
-                    UpdateConsole("Importing Row Names");
-
-                    foreach (var file in Directory.GetFiles($@"Paramdex\{gameType}\Names"))
+                    ConcurrentDictionary<string, string[]> rowNames = new();
+                    if (Directory.Exists($@"Paramdex\{_gameType}\Names"))
                     {
-                        rowNames[file.Split("\\").Last()] = File.ReadAllLines(file);
-                    }
+                        UpdateConsole("Importing Row Names");
 
-                    // Not terribly efficient, but we're talking +1 second overall.
-                    Util.ApplyRowNames(rowNames, paramList_old);
-                    Util.ApplyRowNames(rowNames, paramList_new);
+                        foreach (var file in Directory.GetFiles($@"Paramdex\{_gameType}\Names"))
+                        {
+                            rowNames[file.Split("\\").Last()] = File.ReadAllLines(file);
+                        }
+
+                        // Not terribly efficient, but we're talking +1 second overall.
+                        Util.ApplyRowNames(rowNames, paramList_old);
+                        Util.ApplyRowNames(rowNames, paramList_new);
+                    }
                 }
             }
+
             #endregion
 
             #region Read Params
@@ -781,11 +890,11 @@ namespace BoreParamCompare
                 changeList.Add("No changes have been found.");
 
             changeList.Insert(0, $"{ProgramTitle}");
-            changeList.Insert(1, $"Game: {gameType}");
+            changeList.Insert(1, $"Game: {_gameType}");
             changeList.Insert(2, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
 
-            Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{gameType}");
-            var outputPath = $"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{gameType}\\{outputFileName}";
+            Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{_gameType}");
+            var outputPath = $"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{_gameType}\\{outputFileName}";
 
             File.WriteAllLines(outputPath, changeList);
 
@@ -821,7 +930,7 @@ namespace BoreParamCompare
 
         private void CheckEnableActivateButton()
         {
-            if (openFileDialog_old.FileName != "" && openFileDialog_new.FileName != "" && gameType != "")
+            if (openFileDialog_old.FileName != "" && openFileDialog_new.FileName != "" && _gameType != "")
                 b_activate.Enabled = true;
             return;
         }
@@ -891,7 +1000,7 @@ namespace BoreParamCompare
 
         private void cb_GameType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            gameType = (string)menu_GameType.SelectedItem;
+            _gameType = (string)menu_GameType.SelectedItem;
             CheckEnableActivateButton();
         }
 
