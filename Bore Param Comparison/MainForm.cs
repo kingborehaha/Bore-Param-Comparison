@@ -653,16 +653,16 @@ namespace BoreParamCompare
             UpdateConsole("Loading ParamDefs");
 
             ConcurrentBag<PARAMDEF> paramdefs = new();
-            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType + "\\Defs", "*.xml"))
+            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType, "*.xml", SearchOption.AllDirectories))
             {
                 var paramdef = PARAMDEF.XmlDeserialize(path);
                 paramdefs.Add(paramdef);
             }
 
             ConcurrentBag<PARAMDEF> paramdefs_alt = new();
-            if (Directory.Exists("Paramdex ALT\\" + gameType + "\\Defs"))
+            if (Directory.Exists($@"Paramdex ALT\{gameType}"))
             {
-                foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType + "\\Defs", "*.xml"))
+                foreach (string path in Directory.GetFiles("Paramdex ALT\\" + gameType, "*.xml", SearchOption.AllDirectories))
                 {
                     var paramdef = PARAMDEF.XmlDeserialize(path);
                     paramdefs_alt.Add(paramdef);
