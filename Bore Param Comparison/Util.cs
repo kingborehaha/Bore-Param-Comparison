@@ -42,7 +42,6 @@ namespace BoreParamCompare
                     }
 
                     param = PARAM.Read(file.Bytes);
-                    presentParamList.Add(param.ParamType);
                     param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
                     if (param != null)
                         paramList.TryAdd(fileName, param);
