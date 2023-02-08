@@ -29,8 +29,10 @@ namespace BoreParamCompare
             ConcurrentBag<string> warningList = new();
             Parallel.ForEach(Partitioner.Create(fileList), file =>
             {
-
                 PARAM? param = null;
+                string fileName = Path.GetFileNameWithoutExtension(file.Name);
+                string labelText = fileName;
+                presentParamList.Add(labelText);
                 try
                 {
                     if (!file.Name.Contains(".param"))
@@ -39,21 +41,15 @@ namespace BoreParamCompare
                         return;
                     }
 
-                    string name = Path.GetFileNameWithoutExtension(file.Name);
                     param = PARAM.Read(file.Bytes);
                     presentParamList.Add(param.ParamType);
                     param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
                     if (param != null)
-                        paramList.TryAdd(name, param);
+                        paramList.TryAdd(fileName, param);
                 }
-                catch (InvalidDataException)
+                catch (Exception e)
                 {
-                    string labelText;
-                    if (param != null)
-                        labelText = param.ParamType;
-                    else
-                        labelText = file.Name;
-                    warningList.Add($"InvalidDataException: Could not read param {labelText} in {oldNew} file.");
+                    warningList.Add($"Could not read param data from {labelText} in {oldNew} file. {e.GetType()}: {e.Message}");
                 }
             });
             changeList.AddRange(warningList.OrderBy(e => e));
@@ -66,18 +62,18 @@ namespace BoreParamCompare
         {
             ConcurrentBag<string> warningList = new();
             string fileName = Path.GetFileNameWithoutExtension(filePath);
+            string labelText = fileName;
+            presentParamList.Add(labelText);
             try
             {
                 var param = PARAM.Read(filePath);
-                presentParamList.Add(param.ParamType);
                 param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
                 if (param != null)
                     paramList.TryAdd(param.ParamType, param);
             }
-            catch (InvalidDataException)
+            catch (Exception e)
             {
-                string labelText = fileName;
-                warningList.Add($"InvalidDataException: Could not read param {labelText} in {oldNew} file.");
+                warningList.Add($"Could not read param data from {labelText} in {oldNew} file. {e.GetType()}: {e.Message}");
             }
             changeList.AddRange(warningList.OrderBy(e => e));
         }
