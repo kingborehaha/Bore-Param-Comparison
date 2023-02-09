@@ -200,7 +200,7 @@
       <Minimum>-1</Minimum>
       <Maximum>1E+08</Maximum>
     </Field>
-    <Field Def="dummy8 DesrUnk1[8]">
+    <Field Def="dummy8 RemasteredUnk00[8]">
     </Field>
   </Fields>
 </PARAMDEF>

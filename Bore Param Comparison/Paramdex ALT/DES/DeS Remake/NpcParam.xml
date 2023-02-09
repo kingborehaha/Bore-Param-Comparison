@@ -718,7 +718,7 @@
       <Minimum>-1</Minimum>
       <Maximum>1E+08</Maximum>
     </Field>
-    <Field Def="dummy8 DesrUnk1[4]">
+    <Field Def="dummy8 RemasteredUnk00[4]">
     </Field>
   </Fields>
 </PARAMDEF>

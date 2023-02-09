@@ -87,7 +87,7 @@
     <Field Def="dummy8 pad_4[24]">
       <DisplayName>pad</DisplayName>
     </Field>
-    <Field Def="dummy8 DesrUnk1[8]">
+    <Field Def="dummy8 RemasteredUnk00[8]">
     </Field>
   </Fields>
 </PARAMDEF>

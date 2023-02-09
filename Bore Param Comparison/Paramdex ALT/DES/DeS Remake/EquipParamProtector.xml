@@ -405,33 +405,33 @@
       <Minimum>1</Minimum>
       <Maximum>2</Maximum>
     </Field>
-    <Field Def="dummy8 DesrUnk1[8]">
+    <Field Def="dummy8 RemasteredUnk00[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk2[8]">
+    <Field Def="dummy8 RemasteredUnk08[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk3[8]">
+    <Field Def="dummy8 RemasteredUnk10[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk4[8]">
+    <Field Def="dummy8 RemasteredUnk18[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk5[8]">
+    <Field Def="dummy8 RemasteredUnk20[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk6[8]">
+    <Field Def="dummy8 RemasteredUnk28[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk7[8]">
+    <Field Def="dummy8 RemasteredUnk30[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk8[8]">
+    <Field Def="dummy8 RemasteredUnk38[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk9[8]">
+    <Field Def="dummy8 RemasteredUnk40[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk10[8]">
+    <Field Def="dummy8 RemasteredUnk48[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk11[8]">
+    <Field Def="dummy8 RemasteredUnk50[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk12[8]">
+    <Field Def="dummy8 RemasteredUnk58[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk13[8]">
+    <Field Def="dummy8 RemasteredUnk60[8]">
     </Field>
-    <Field Def="dummy8 DesrUnk14[8]">
+    <Field Def="dummy8 RemasteredUnk68[8]">
     </Field>
   </Fields>
 </PARAMDEF>

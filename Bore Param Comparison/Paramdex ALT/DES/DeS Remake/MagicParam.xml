@@ -123,7 +123,7 @@
       <Minimum>-1</Minimum>
       <Increment>1</Increment>
     </Field>
-    <Field Def="dummy8 DesrUnk1[8]">
+    <Field Def="dummy8 RemasteredUnk00[8]">
     </Field>
   </Fields>
 </PARAMDEF>

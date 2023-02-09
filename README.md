@@ -4,6 +4,9 @@ Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods
 Uses updated versions of SoulsFormats and Paramdex from https://github.com/soulsmods/DSMapStudio
 
 ## Changes
+### v1.4.0
+* Param matching now uses file name instead of param type in case a param cannot be read.
+* Added some base DESR param defs.
 ### v1.3.0
 * Updated DS2 Paramdefs and row names.
 * Removed DS2S Paramdex folder and placed everything into DS2 folder.
