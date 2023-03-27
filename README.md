@@ -6,7 +6,9 @@ Uses updated versions of SoulsFormats and Paramdex from https://github.com/souls
 ## Changes
 ### v1.3.1
 * Param matching now uses file name instead of param type (To fix issues in cases where params cannot be read).
-* Added some rough DESR param defs.
+* Made Paramdex folder structure more loose. You can now freely make any number of subfolders for a game and Paramdefs will be loaded.
+* * Paramdex folder will be tried first, and when unsuccessful Paramdex ALT will be tried next.
+* Added some rough DESR Paramdefs.
 ### v1.3.0
 * Updated DS2 Paramdefs and row names.
 * Removed DS2S Paramdex folder and placed everything into DS2 folder.
