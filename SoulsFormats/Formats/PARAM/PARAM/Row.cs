@@ -106,9 +106,6 @@ namespace SoulsFormats
                 if (DataOffset == 0)
                     return;
 
-                if (br.SemiEndianness)
-                    br.BigEndian = false;
-
                 Def = paramdef;
 
                 br.Position = DataOffset;
