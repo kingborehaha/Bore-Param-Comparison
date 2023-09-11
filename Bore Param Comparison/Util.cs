@@ -77,9 +77,9 @@ namespace BoreParamCompare
 
                     param = PARAM.Read(file.Bytes);
 
-                    ApplyTentativeParamType(Path.GetFileNameWithoutExtension(file.Name), param, tentativeParamTypes);
+                    ApplyTentativeParamType(fileName, param, tentativeParamTypes);
 
-                    param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
+                    param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew, fileName);
                     if (param != null)
                         paramList.TryAdd(fileName, param);
                 }
@@ -103,7 +103,7 @@ namespace BoreParamCompare
             try
             {
                 var param = PARAM.Read(filePath);
-                param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
+                param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew, fileName);
                 if (param != null)
                     paramList.TryAdd(param.ParamType, param);
             }
@@ -154,7 +154,7 @@ namespace BoreParamCompare
             }
         }
 
-        public static PARAM? ApplyDefWithWarnings(PARAM param, ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, ConcurrentBag<string> warningList, string oldNew)
+        public static PARAM? ApplyDefWithWarnings(PARAM param, ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, ConcurrentBag<string> warningList, string oldNew, string paramName)
         {
             bool matchType = false;
             bool matchDefVersion = false;
@@ -203,7 +203,7 @@ namespace BoreParamCompare
             // Def could not be applied.
 
             if (!matchType && !matchDefVersion)
-                warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. Valid ParamDef could not be found.");
+                warningList.Add($"Could not apply ParamDef for {paramName}.param with paramType {param.ParamType} in {oldNew} file. Valid ParamDef could not be found.");
             else if (matchType && !matchDefVersion)
                 warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. Cannot find ParamDef version {param.ParamdefDataVersion}.");
             else if (matchType && matchDefVersion)
