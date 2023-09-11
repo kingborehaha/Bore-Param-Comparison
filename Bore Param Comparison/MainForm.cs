@@ -25,6 +25,7 @@ namespace BoreParamCompare
             "BB",
             "SDT",
             "ER",
+            "AC6",
         };
 
         private readonly string outputFolder = "Output";
@@ -373,6 +374,14 @@ namespace BoreParamCompare
                     list = bnd4.Files;
                     version = bnd4.Version;
                     break;
+                case "AC6":
+                    if (isRegulation)
+                        bnd4 = SFUtil.DecryptAC6Regulation(path);
+                    else
+                        bnd4 = BND4.Read(path);
+                    list = bnd4.Files;
+                    version = bnd4.Version;
+                    break;
                 default:
                     throw new Exception("Bad game type: " + gameType);
             }
@@ -701,8 +710,10 @@ namespace BoreParamCompare
 
                 UpdateConsole("Applying Defs");
 
-                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, paramTypeList_old, "OLD");
-                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW");
+                var tentativeParamTypes = Util.GetTentativeParamTypes(gameType);
+
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_old, paramList_old, changeList, paramTypeList_old, "OLD", tentativeParamTypes);
+                Util.ApplyParamDefs(paramdefs, paramdefs_alt, fileList_new, paramList_new, changeList, paramTypeList_new, "NEW", tentativeParamTypes);
 
                 //Check for added/removed param types
                 foreach(var paramType in paramTypeList_old.ToList())

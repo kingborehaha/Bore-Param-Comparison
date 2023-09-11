@@ -16,6 +16,11 @@ namespace SoulsFormats
         public int Version { get; set; }
 
         /// <summary>
+        /// Indicates size of BTL Light in bytes.
+        /// </summary>
+        public int LightSize { get; set; }
+
+        /// <summary>
         /// Whether offsets are 64-bit; set to false for Dark Souls 2.
         /// </summary>
         public bool LongOffsets { get; set; }
@@ -43,19 +48,19 @@ namespace SoulsFormats
             br.BigEndian = false;
 
             br.AssertInt32(2);
-            Version = br.AssertInt32(1, 2, 5, 6, 16, 18);
+            Version = br.AssertInt32(1, 2, 5, 6, 15, 16, 18);
             int lightCount = br.ReadInt32();
             int namesLength = br.ReadInt32();
             br.AssertInt32(0);
-            int lightSize = br.AssertInt32(0xC0, 0xC8, 0xE8);
+            LightSize = br.AssertInt32(0xC0, 0xC8, 0xE8, 0xF0);
             br.AssertPattern(0x24, 0x00);
-            LongOffsets = br.VarintLong = lightSize != 0xC0;
+            LongOffsets = br.VarintLong = LightSize != 0xC0;
 
             long namesStart = br.Position;
             br.Skip(namesLength);
             Lights = new List<Light>(lightCount);
             for (int i = 0; i < lightCount; i++)
-                Lights.Add(new Light(br, namesStart, Version, LongOffsets));
+                Lights.Add(new Light(br, namesStart, LightSize));
         }
 
         /// <summary>
@@ -71,7 +76,7 @@ namespace SoulsFormats
             bw.WriteInt32(Lights.Count);
             bw.ReserveInt32("NamesLength");
             bw.WriteInt32(0);
-            bw.WriteInt32(Version >= 16 ? 0xE8 : (LongOffsets ? 0xC8 : 0xC0));
+            bw.WriteInt32(LightSize);
             bw.WritePattern(0x24, 0x00);
 
             long namesStart = bw.Position;
@@ -87,7 +92,7 @@ namespace SoulsFormats
 
             bw.FillInt32("NamesLength", (int)(bw.Position - namesStart));
             for (int i = 0; i < Lights.Count; i++)
-                Lights[i].Write(bw, nameOffsets[i], Version, LongOffsets);
+                Lights[i].Write(bw, nameOffsets[i], LightSize);
         }
 
         /// <summary>
@@ -296,9 +301,9 @@ namespace SoulsFormats
             public float Width { get; set; }
 
             /// <summary>
-            /// Unknown.
+            /// Distance from start before light appears.
             /// </summary>
-            public float UnkBC { get; set; }
+            public float LightStartCutoff { get; set; }
 
             /// <summary>
             /// Unknown; 4 bytes.
@@ -324,7 +329,7 @@ namespace SoulsFormats
             /// <summary>
             /// Unknown; not present before Sekiro.
             /// </summary>
-            public float UnkD0 { get; set; }
+            public float VolumeDensity { get; set; }
 
             /// <summary>
             /// Unknown; not present before Sekiro.
@@ -350,6 +355,16 @@ namespace SoulsFormats
             /// Unknown; not present before Sekiro.
             /// </summary>
             public int UnkE4 { get; set; }
+
+            /// <summary>
+            /// Unknown; only present in version 15 BTLs in ER (of which there are only 2).
+            /// </summary>
+            public int UnkE8 { get; set; }
+
+            /// <summary>
+            /// Unknown; only present in version 15 BTLs in ER (of which there are only 2).
+            /// </summary>
+            public int UnkEB { get; set; }
 
             /// <summary>
             /// Creates a Light with default values.
@@ -392,7 +407,7 @@ namespace SoulsFormats
                 return clone;
             }
 
-            internal Light(BinaryReaderEx br, long namesStart, int version, bool longOffsets)
+            internal Light(BinaryReaderEx br, long namesStart, int lightSize)
             {
                 Unk00 = br.ReadBytes(16);
                 Name = br.GetUTF16(namesStart + br.ReadVarint());
@@ -434,24 +449,32 @@ namespace SoulsFormats
                 UnkAC = br.ReadSingle();
                 br.AssertVarint(0);
                 Width = br.ReadSingle();
-                UnkBC = br.ReadSingle();
+                LightStartCutoff = br.ReadSingle();
                 EnableState_UnkC0 = br.ReadBytes(4);
                 EnableDist = br.ReadSingle();
 
-                if (version >= 16)
+                // Variable light sizes start here
+
+                if (lightSize > 0xC8)
                 {
                     UnkC8 = br.ReadSingle();
                     UnkCC = br.ReadSingle();
-                    UnkD0 = br.ReadSingle();
+                    VolumeDensity = br.ReadSingle();
                     UnkD4 = br.ReadSingle();
                     UnkD8 = br.ReadSingle();
                     UnkDC = br.ReadInt32();
                     UnkE0 = br.ReadSingle();
                     UnkE4 = br.ReadInt32();
                 }
+
+                if (lightSize > 0xE8)
+                {
+                    UnkE8 = br.ReadInt32();
+                    UnkEB = br.ReadInt32();
+                }
             }
 
-            internal void Write(BinaryWriterEx bw, long nameOffset, int version, bool longOffsets)
+            internal void Write(BinaryWriterEx bw, long nameOffset, int lightSize)
             {
                 bw.WriteBytes(Unk00);
                 bw.WriteVarint(nameOffset);
@@ -493,21 +516,30 @@ namespace SoulsFormats
                 bw.WriteSingle(UnkAC);
                 bw.WriteVarint(0);
                 bw.WriteSingle(Width);
-                bw.WriteSingle(UnkBC);
+                bw.WriteSingle(LightStartCutoff);
                 bw.WriteBytes(EnableState_UnkC0);
                 bw.WriteSingle(EnableDist);
 
-                if (version >= 16)
+                // Variable light sizes start here
+
+                if (lightSize > 0xC8)
                 {
                     bw.WriteSingle(UnkC8);
                     bw.WriteSingle(UnkCC);
-                    bw.WriteSingle(UnkD0);
+                    bw.WriteSingle(VolumeDensity);
                     bw.WriteSingle(UnkD4);
                     bw.WriteSingle(UnkD8);
                     bw.WriteInt32(UnkDC);
                     bw.WriteSingle(UnkE0);
                     bw.WriteInt32(UnkE4);
                 }
+
+                if (lightSize > 0xE8)
+                {
+                    bw.WriteInt32(UnkE8);
+                    bw.WriteInt32(UnkEB);
+                }
+
             }
 
             /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +22,43 @@ namespace BoreParamCompare
             return bytestr + "]";
         }
 
+        private static void ApplyTentativeParamType(string paramFileName, PARAM param, Dictionary<string, string> tentativeParamTypes)
+        {
+            if (tentativeParamTypes.TryGetValue(paramFileName, out string? tentativeType))
+            {
+                param.ParamType = tentativeType;
+            }
+        }
+
+        /// <summary>
+        /// Used to determine param types for params with missing or garbaled paramTypes.
+        /// </summary>
+        public static Dictionary<string, string> GetTentativeParamTypes(string gameType)
+        {
+            Dictionary<string, string> dict = new();
+
+            var filePath = $@"{Directory.GetCurrentDirectory()}\Paramdex\{gameType}\Defs\TentativeParamType.csv";
+            if (File.Exists(filePath))
+            {
+                // Code copied from thefifthmatt
+                foreach (string line in File.ReadAllLines(filePath).Skip(1))
+                {
+                    string[] split = line.Split(',');
+                    if (split.Length != 2 || string.IsNullOrWhiteSpace(split[0]) || string.IsNullOrWhiteSpace(split[1]))
+                    {
+                        throw new FormatException($"Malformed line in {filePath}: {line}");
+                    }
+                    dict[split[0]] = split[1];
+                }
+            }
+
+            return dict;
+        }
+
         /// <summary>
         /// Apply param defs for list of BinderFiles
         /// </summary>
-        public static void ApplyParamDefs(ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, ConcurrentBag<string> presentParamList, string oldNew)
+        public static void ApplyParamDefs(ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, List<BinderFile> fileList, ConcurrentDictionary<string, PARAM> paramList, List<string> changeList, ConcurrentBag<string> presentParamList, string oldNew, Dictionary<string, string> tentativeParamTypes)
         {
             ConcurrentBag<string> warningList = new();
             Parallel.ForEach(Partitioner.Create(fileList), file =>
@@ -42,6 +76,9 @@ namespace BoreParamCompare
                     }
 
                     param = PARAM.Read(file.Bytes);
+
+                    ApplyTentativeParamType(Path.GetFileNameWithoutExtension(file.Name), param, tentativeParamTypes);
+
                     param = Util.ApplyDefWithWarnings(param, paramdefs, paramdefs_alt, warningList, oldNew);
                     if (param != null)
                         paramList.TryAdd(fileName, param);

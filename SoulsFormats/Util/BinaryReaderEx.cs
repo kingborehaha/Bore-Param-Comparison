@@ -6,16 +6,18 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using DotNext.Buffers;
+using Microsoft.Toolkit.HighPerformance;
 
 namespace SoulsFormats
 {
     /// <summary>
     /// An extended reader for binary data supporting big and little endianness, value assertions, and arrays.
     /// </summary>
-    public class BinaryReaderEx
+    public sealed class BinaryReaderEx
     {
-        private BinaryReader br;
-        private Stack<long> steps;
+        private Stack<long> _steps;
+        private Memory<byte> _memory;
 
         /// <summary>
         /// Interpret values as big-endian if set, or little-endian if not.
@@ -41,38 +43,49 @@ namespace SoulsFormats
         public int VarintSize => VarintLong ? 8 : 4;
 
         /// <summary>
-        /// The underlying stream.
-        /// </summary>
-        public Stream Stream { get; }
-
-        /// <summary>
         /// The current position of the stream.
         /// </summary>
-        public long Position
-        {
-            get => Stream.Position;
-            set => Stream.Position = value;
-        }
+        public long Position { get; set; }
 
         /// <summary>
         /// The length of the stream.
         /// </summary>
-        public long Length => Stream.Length;
+        public long Length => _memory.Length;
 
-        /// <summary>
-        /// Initializes a new BinaryReaderEx reading from the specified byte array.
-        /// </summary>
-        public BinaryReaderEx(bool bigEndian, byte[] input) : this(bigEndian, new MemoryStream(input)) { }
-
-        /// <summary>
-        /// Initializes a new BinaryReaderEx reading from the specified stream.
-        /// </summary>
-        public BinaryReaderEx(bool bigEndian, Stream stream)
+        public BinaryReaderEx(bool bigEndian, Memory<byte> memory)
         {
             BigEndian = bigEndian;
-            steps = new Stack<long>();
-            Stream = stream;
-            br = new BinaryReader(stream);
+            _steps = new Stack<long>();
+            _memory = memory;
+        }
+        
+        public unsafe T Read<T>() where T : unmanaged
+        {
+            var reader = new SpanReader<byte>(_memory.Span[(int)Position..]);
+            var ret = reader.Read<T>();
+            Position += sizeof(T);
+            return ret;
+        }
+
+        public unsafe T[] ReadMulti<T>(int count) where T : unmanaged
+        {
+            var ret = _memory.Span.Slice((int)Position, sizeof(T) * count).Cast<byte, T>().ToArray();
+            Position += sizeof(T) * count;
+            return ret;
+        }
+
+        public unsafe Span<T> ReadSpanView<T>(int count) where T : unmanaged
+        {
+            var ret = _memory.Span.Slice((int)Position, sizeof(T) * count).Cast<byte, T>();
+            Position += sizeof(T) * count;
+            return ret;
+        }
+
+        public Memory<byte> ReadByteMemoryView(int size)
+        {
+            var ret = _memory.Slice((int)Position, size);
+            Position += size;
+            return ret;
         }
 
         /// <summary>
@@ -126,8 +139,8 @@ namespace SoulsFormats
         /// </summary>
         public void StepIn(long offset)
         {
-            steps.Push(Stream.Position);
-            Stream.Position = offset;
+            _steps.Push(Position);
+            Position = offset;
         }
 
         /// <summary>
@@ -135,10 +148,10 @@ namespace SoulsFormats
         /// </summary>
         public void StepOut()
         {
-            if (steps.Count == 0)
+            if (_steps.Count == 0)
                 throw new InvalidOperationException("Reader is already stepped all the way out.");
 
-            Stream.Position = steps.Pop();
+            Position = _steps.Pop();
         }
 
         /// <summary>
@@ -146,8 +159,8 @@ namespace SoulsFormats
         /// </summary>
         public void Pad(int align)
         {
-            if (Stream.Position % align > 0)
-                Stream.Position += align - (Stream.Position % align);
+            if (Position % align > 0)
+                Position += align - (Position % align);
         }
 
         /// <summary>
@@ -155,9 +168,9 @@ namespace SoulsFormats
         /// </summary>
         public void PadRelative(long start, int align)
         {
-            long relPos = Stream.Position - start;
+            long relPos = Position - start;
             if (relPos % align > 0)
-                Stream.Position += align - (relPos % align);
+                Position += align - (relPos % align);
         }
 
         /// <summary>
@@ -165,7 +178,7 @@ namespace SoulsFormats
         /// </summary>
         public void Skip(int count)
         {
-            Stream.Position += count;
+            Position += count;
         }
 
         #region Boolean
@@ -175,7 +188,7 @@ namespace SoulsFormats
         public bool ReadBoolean()
         {
             // BinaryReader.ReadBoolean accepts any non-zero value as true, which I don't want.
-            byte b = br.ReadByte();
+            byte b = ReadByte();
             if (b == 0)
                 return false;
             else if (b == 1)
@@ -226,7 +239,7 @@ namespace SoulsFormats
         /// </summary>
         public sbyte ReadSByte()
         {
-            return br.ReadSByte();
+            return Read<sbyte>();
         }
 
         /// <summary>
@@ -271,7 +284,7 @@ namespace SoulsFormats
         /// </summary>
         public byte ReadByte()
         {
-            return br.ReadByte();
+            return Read<byte>();
         }
 
         /// <summary>
@@ -279,10 +292,7 @@ namespace SoulsFormats
         /// </summary>
         public byte[] ReadBytes(int count)
         {
-            byte[] result = br.ReadBytes(count);
-            if (result.Length != count)
-                throw new EndOfStreamException("Remaining size of stream was smaller than requested number of bytes.");
-            return result;
+            return ReadMulti<byte>(count);
         }
 
         /// <summary>
@@ -290,9 +300,7 @@ namespace SoulsFormats
         /// </summary>
         public void ReadBytes(byte[] buffer, int index, int count)
         {
-            int read = br.Read(buffer, index, count);
-            if (read != count)
-                throw new EndOfStreamException("Remaining size of stream was smaller than requested number of bytes.");
+            _memory.Span.Slice((int)Position, count).CopyTo(new Span<byte>(buffer, index, count));
         }
 
         /// <summary>
@@ -341,10 +349,11 @@ namespace SoulsFormats
         {
             if (BigEndian)
             {
-                short i = br.ReadInt16();
+                short i = Read<short>();
                 return BinaryPrimitives.ReadInt16BigEndian(new ReadOnlySpan<byte>((byte*)&i, 2));
             }
-            return br.ReadInt16();
+
+            return Read<short>();
         }
 
         /// <summary>
@@ -391,10 +400,10 @@ namespace SoulsFormats
         {
             if (BigEndian)
             {
-                ushort i = br.ReadUInt16();
+                ushort i = Read<ushort>();
                 return BinaryPrimitives.ReadUInt16BigEndian(new ReadOnlySpan<byte>((byte*)&i, 2));
             }
-            return br.ReadUInt16();
+            return Read<ushort>();
         }
 
         /// <summary>
@@ -441,10 +450,10 @@ namespace SoulsFormats
         {
             if (BigEndian)
             {
-                int i = br.ReadInt32();
+                int i = Read<int>();
                 return BinaryPrimitives.ReadInt32BigEndian(new ReadOnlySpan<byte>((byte*)&i, 4));
             }
-            return br.ReadInt32();
+            return Read<int>();
         }
 
         /// <summary>
@@ -491,10 +500,10 @@ namespace SoulsFormats
         {
             if (BigEndian)
             {
-                uint i = br.ReadUInt32();
+                uint i = Read<uint>();
                 return BinaryPrimitives.ReadUInt32BigEndian(new ReadOnlySpan<byte>((byte*)&i, 4));
             }
-            return br.ReadUInt32();
+            return Read<uint>();
         }
 
         /// <summary>
@@ -541,10 +550,10 @@ namespace SoulsFormats
         {
             if (BigEndian)
             {
-                long i = br.ReadInt64();
+                long i = Read<long>();
                 return BinaryPrimitives.ReadInt64BigEndian(new ReadOnlySpan<byte>((byte*)&i, 8));
             }
-            return br.ReadInt64();
+            return Read<long>();
         }
 
         /// <summary>
@@ -591,10 +600,10 @@ namespace SoulsFormats
         {
             if (BigEndian)
             {
-                ulong i = br.ReadUInt64();
+                ulong i = Read<ulong>();
                 return BinaryPrimitives.ReadUInt64BigEndian(new ReadOnlySpan<byte>((byte*)&i, 8));
             }
-            return br.ReadUInt64();
+            return Read<ulong>();
         }
 
         /// <summary>
@@ -697,10 +706,10 @@ namespace SoulsFormats
         {
             if (BigEndian)
             {
-                var i = br.ReadUInt32();
+                var i = Read<uint>();
                 return BinaryPrimitives.ReadSingleBigEndian(new ReadOnlySpan<byte>((byte*)&i, 4));
             }
-            return br.ReadSingle();
+            return Read<float>();
         }
 
         /// <summary>
@@ -747,10 +756,10 @@ namespace SoulsFormats
         {
             if (BigEndian)
             {
-                ulong i = br.ReadUInt64();
+                ulong i = Read<ulong>();
                 return BinaryPrimitives.ReadDoubleBigEndian(new ReadOnlySpan<byte>((byte*)&i, 8));
             }
-            return br.ReadDouble();
+            return Read<double>();
         }
 
         /// <summary>
@@ -807,9 +816,13 @@ namespace SoulsFormats
         /// </summary>
         public TEnum ReadEnum8<TEnum>() where TEnum : Enum
         {
-            return ReadEnum<TEnum, byte>(ReadByte, "0x{0:X}");
+            Type typ = Enum.GetUnderlyingType(typeof(TEnum));
+            if (typ == typeof(byte))
+                return ReadEnum<TEnum, byte>(ReadByte, "0x{0:X}");
+            if (typ == typeof(sbyte))
+                return ReadEnum<TEnum, sbyte>(ReadSByte, "0x{0:X}");
+            throw new InvalidDataException($"Enum {typeof(TEnum).Name} has an invalid underlying value type: {typ.Name}");
         }
-
 
         /// <summary>
         /// Reads a one-byte enum from the specified position without advancing the stream.
@@ -827,7 +840,12 @@ namespace SoulsFormats
         /// </summary>
         public TEnum ReadEnum16<TEnum>() where TEnum : Enum
         {
-            return ReadEnum<TEnum, ushort>(ReadUInt16, "0x{0:X}");
+            Type typ = Enum.GetUnderlyingType(typeof(TEnum));
+            if (typ == typeof(short))
+                return ReadEnum<TEnum, short>(ReadInt16, "0x{0:X}");
+            if (typ == typeof(ushort))
+                return ReadEnum<TEnum, ushort>(ReadUInt16, "0x{0:X}");
+            throw new InvalidDataException($"Enum {typeof(TEnum).Name} has an invalid underlying value type: {typ.Name}");
         }
 
         /// <summary>
@@ -846,7 +864,12 @@ namespace SoulsFormats
         /// </summary>
         public TEnum ReadEnum32<TEnum>() where TEnum : Enum
         {
-            return ReadEnum<TEnum, uint>(ReadUInt32, "0x{0:X}");
+            Type typ = Enum.GetUnderlyingType(typeof(TEnum));
+            if (typ == typeof(int))
+                return ReadEnum<TEnum, int>(ReadInt32, "0x{0:X}");
+            if (typ == typeof(uint))
+                return ReadEnum<TEnum, uint>(ReadUInt32, "0x{0:X}");
+            throw new InvalidDataException($"Enum {typeof(TEnum).Name} has an invalid underlying value type: {typ.Name}");
         }
 
         /// <summary>
@@ -865,7 +888,12 @@ namespace SoulsFormats
         /// </summary>
         public TEnum ReadEnum64<TEnum>() where TEnum : Enum
         {
-            return ReadEnum<TEnum, ulong>(ReadUInt64, "0x{0:X}");
+            Type typ = Enum.GetUnderlyingType(typeof(TEnum));
+            if (typ == typeof(long))
+                return ReadEnum<TEnum, long>(ReadInt64, "0x{0:X}");
+            if (typ == typeof(ulong))
+                return ReadEnum<TEnum, ulong>(ReadUInt64, "0x{0:X}");
+            throw new InvalidDataException($"Enum {typeof(TEnum).Name} has an invalid underlying value type: {typ.Name}");
         }
 
         /// <summary>
@@ -1078,6 +1106,8 @@ namespace SoulsFormats
         /// </summary>
         public Vector2 ReadVector2()
         {
+            if (!BigEndian)
+                return Read<Vector2>();
             float x = ReadSingle();
             float y = ReadSingle();
             return new Vector2(x, y);
@@ -1088,6 +1118,8 @@ namespace SoulsFormats
         /// </summary>
         public Vector3 ReadVector3()
         {
+            if (!BigEndian)
+                return Read<Vector3>();
             float x = ReadSingle();
             float y = ReadSingle();
             float z = ReadSingle();
@@ -1099,6 +1131,8 @@ namespace SoulsFormats
         /// </summary>
         public Vector4 ReadVector4()
         {
+            if (!BigEndian)
+                return Read<Vector4>();
             float x = ReadSingle();
             float y = ReadSingle();
             float z = ReadSingle();
@@ -1124,10 +1158,10 @@ namespace SoulsFormats
         /// </summary>
         public Color ReadARGB()
         {
-            byte a = br.ReadByte();
-            byte r = br.ReadByte();
-            byte g = br.ReadByte();
-            byte b = br.ReadByte();
+            byte a = ReadByte();
+            byte r = ReadByte();
+            byte g = ReadByte();
+            byte b = ReadByte();
             return Color.FromArgb(a, r, g, b);
         }
 
@@ -1136,10 +1170,10 @@ namespace SoulsFormats
         /// </summary>
         public Color ReadABGR()
         {
-            byte a = br.ReadByte();
-            byte b = br.ReadByte();
-            byte g = br.ReadByte();
-            byte r = br.ReadByte();
+            byte a = ReadByte();
+            byte b = ReadByte();
+            byte g = ReadByte();
+            byte r = ReadByte();
             return Color.FromArgb(a, r, g, b);
         }
 
@@ -1148,10 +1182,10 @@ namespace SoulsFormats
         /// </summary>
         public Color ReadRGBA()
         {
-            byte r = br.ReadByte();
-            byte g = br.ReadByte();
-            byte b = br.ReadByte();
-            byte a = br.ReadByte();
+            byte r = ReadByte();
+            byte g = ReadByte();
+            byte b = ReadByte();
+            byte a = ReadByte();
             return Color.FromArgb(a, r, g, b);
         }
 
@@ -1160,10 +1194,10 @@ namespace SoulsFormats
         /// </summary>
         public Color ReadBGRA()
         {
-            byte b = br.ReadByte();
-            byte g = br.ReadByte();
-            byte r = br.ReadByte();
-            byte a = br.ReadByte();
+            byte b = ReadByte();
+            byte g = ReadByte();
+            byte r = ReadByte();
+            byte a = ReadByte();
             return Color.FromArgb(a, r, g, b);
         }
         #endregion
