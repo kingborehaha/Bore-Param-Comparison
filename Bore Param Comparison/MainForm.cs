@@ -656,13 +656,10 @@ namespace BoreParamCompare
             string regPath_old = openFileDialog_old.FileName;
             string regPath_new = openFileDialog_new.FileName;
 
-            string outputFileName = $"{openFileDialog_old.SafeFileName} to {openFileDialog_new.SafeFileName}.txt";
-
-
             UpdateConsole("Loading ParamDefs");
 
             ConcurrentBag<PARAMDEF> paramdefs = new();
-            foreach (string path in Directory.GetFiles("Paramdex\\" + gameType, "*.xml", SearchOption.AllDirectories))
+            foreach (string path in Directory.GetFiles($@"Paramdex\{gameType}\Defs", "*.xml", SearchOption.AllDirectories))
             {
                 var paramdef = PARAMDEF.XmlDeserialize(path);
                 paramdefs.Add(paramdef);
@@ -794,6 +791,10 @@ namespace BoreParamCompare
             changeList.Insert(0, $"{ProgramTitle}");
             changeList.Insert(1, $"Game: {gameType}");
             changeList.Insert(2, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
+
+            var oldVersion = t_VersionOld.Text == "No Version" ? "No Version" : Util.ParseRegulationVersion(t_VersionOld.Text);
+            var newVersion = t_VersionNew.Text == "No Version" ? "No Version" : Util.ParseRegulationVersion(t_VersionNew.Text);
+            string outputFileName = $"{openFileDialog_old.SafeFileName} ({oldVersion}) to {openFileDialog_new.SafeFileName} ({newVersion}).txt";
 
             Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{gameType}");
             var outputPath = $"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{gameType}\\{outputFileName}";

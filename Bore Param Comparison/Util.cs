@@ -214,6 +214,19 @@ namespace BoreParamCompare
             return null;
         }
 
+        public static string ParseRegulationVersion(ulong version) => ParseRegulationVersion(version.ToString());
+        public static string ParseRegulationVersion(string versionStr)
+        {
+            if (versionStr.Length != 8)
+                return "Invalid regulation verison";
+
+            versionStr = versionStr.Insert(1, ".");
+            versionStr = versionStr.Insert(4, ".");
+            versionStr = versionStr[..6];
+
+            return versionStr;
+        }
+
     }
 
 }
