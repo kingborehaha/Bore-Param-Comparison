@@ -56,7 +56,4 @@
   <ItemGroup>
     <ProjectReference Include="..\SoulsFormats\SoulsFormats.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Paramdex\AC6\" />
-  </ItemGroup>
 </Project>

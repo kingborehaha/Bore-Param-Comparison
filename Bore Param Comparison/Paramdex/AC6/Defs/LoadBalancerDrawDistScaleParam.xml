@@ -27,16 +27,6 @@
     <Field Def="f32 Lv18"></Field>
     <Field Def="f32 Lv19"></Field>
     <Field Def="f32 Lv20"></Field>
-    <Field Def="s32 Unk0x54"></Field>
-    <Field Def="s32 Unk0x58"></Field>
-    <Field Def="s32 Unk0x5C"></Field>
-    <Field Def="s32 Unk0x60"></Field>
-    <Field Def="s32 Unk0x64"></Field>
-    <Field Def="s32 Unk0x68"></Field>
-    <Field Def="s32 Unk0x6C"></Field>
-    <Field Def="s32 Unk0x70"></Field>
-    <Field Def="s32 Unk0x74"></Field>
-    <Field Def="s32 Unk0x78"></Field>
-    <Field Def="s32 Unk0x7C"></Field>
+    <Field Def="dummy8 reserve[44]"></Field>
   </Fields>
 </PARAMDEF>

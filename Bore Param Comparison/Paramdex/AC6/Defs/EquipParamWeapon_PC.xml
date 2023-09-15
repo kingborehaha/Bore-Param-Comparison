@@ -96,7 +96,7 @@
     <Field Def="u16 defMaterial"></Field>
     <Field Def="u8 correctType"></Field>
     <Field Def="u8 spAttribute"></Field>
-    <Field Def="u16 spAtkCategory"></Field>
+    <Field Def="u16 UnkUshort0xEE"></Field>
     <Field Def="u8 wepmotionOneHandId"></Field>
     <Field Def="u8 wepmotionBothHandId"></Field>
     <Field Def="u8 properStrength"></Field>
@@ -220,10 +220,14 @@
     <Field Def="u8 Unk0x1AC"></Field>
     <Field Def="s8 UnkSbyte0x1AD"></Field>
     <Field Def="s8 UnkSbyte0x1AE"></Field>
-    <Field Def="s16 Unk0x1AF"></Field>
+    <Field Def="s8 Unk0x1AF"></Field>
+    <Field Def="s8 Unk0x1B0"></Field>
     <Field Def="s8 UnkSbyte0x1B1"></Field>
     <Field Def="s8 UnkSbyte0x1B2"></Field>
-    <Field Def="s32 Unk0x1B3"></Field>
+    <Field Def="s8 Unk0x1B3"></Field>
+    <Field Def="u8 Unk0x1B4"></Field>
+    <Field Def="u8 Unk0x1B5"></Field>
+    <Field Def="u8 Unk0x1B6"></Field>
     <Field Def="u8 UnkByte0x1B7"></Field>
     <Field Def="u16 UnkUshort0x1B8"></Field>
     <Field Def="u16 UnkUshort0x1BA"></Field>
@@ -309,7 +313,8 @@
     <Field Def="s32 Unk0x2C0"></Field>
     <Field Def="s32 Unk0x2C4"></Field>
     <Field Def="u8 UnkByte0x2C8"></Field>
-    <Field Def="s16 Unk0x2C9"></Field>
+    <Field Def="u8 Unk0x2C9"></Field>
+    <Field Def="u8 Unk0x2CA"></Field>
     <Field Def="u8 UnkByte0x2CB"></Field>
     <Field Def="s32 energyLoad">
       <Description>EN Load of the part.</Description>
@@ -331,10 +336,13 @@
     <Field Def="s32 Unk0x2FC"></Field>
     <Field Def="s32 Unk0x300"></Field>
     <Field Def="s32 Unk0x304"></Field>
-    <Field Def="s16 UnkShort0x308"></Field>
-    <Field Def="s32 Unk0x30A"></Field>
-    <Field Def="s32 Unk0x30E"></Field>
-    <Field Def="s32 Unk0x312"></Field>
+    <Field Def="s16 unkAnimation"></Field>
+    <Field Def="s16 Unk0x30A"></Field>
+    <Field Def="s16 Unk0x30C"></Field>
+    <Field Def="s16 Unk0x30E"></Field>
+    <Field Def="s16 Unk0x310"></Field>
+    <Field Def="s16 Unk0x312"></Field>
+    <Field Def="s16 Unk0x314"></Field>
     <Field Def="s16 Unk0x316"></Field>
     <Field Def="f32 UnkFloat0x318"></Field>
     <Field Def="f32 UnkFloat0x31C"></Field>
@@ -439,7 +447,7 @@
     <Field Def="s32 UnkInt0x43C"></Field>
     <Field Def="s32 UnkInt0x440"></Field>
     <Field Def="f32 UnkFloat0x444"></Field>
-    <Field Def="u8 UnkByte0x448"></Field>
+    <Field Def="s8 UnkSbyte0x448"></Field>
     <Field Def="u8 Unk0x449"></Field>
     <Field Def="u16 UnkUshort0x44A"></Field>
     <Field Def="u16 UnkUshort0x44C"></Field>
@@ -466,7 +474,7 @@
     <Field Def="s32 Unk0x494"></Field>
     <Field Def="s32 Unk0x498"></Field>
     <Field Def="s32 Unk0x49C"></Field>
-    <Field Def="u16 expansionDecayRate">
+    <Field Def="u16 coreExpansionDecayRate">
       <Description>How much expansion HP is lost per second.</Description>
     </Field>
     <Field Def="u8 Unk0x4A2"></Field>
@@ -475,7 +483,8 @@
       <Description>Ability to mitigate incoming ACS burden while performing a regular guard.</Description>
     </Field>
     <Field Def="u8 UnkByte0x4A8"></Field>
-    <Field Def="s16 Unk0x4A9"></Field>
+    <Field Def="u8 Unk0x4A9"></Field>
+    <Field Def="u8 Unk0x4AA"></Field>
     <Field Def="u8 Unk0x4AB"></Field>
     <Field Def="f32 UnkFloat0x4AC"></Field>
     <Field Def="s32 Unk0x4B0"></Field>
@@ -518,7 +527,8 @@
     <Field Def="s32 UnkInt0x544"></Field>
     <Field Def="s32 Unk0x548"></Field>
     <Field Def="u8 UnkByte0x54C"></Field>
-    <Field Def="s16 Unk0x54D"></Field>
+    <Field Def="u8 Unk0x54D"></Field>
+    <Field Def="u8 Unk0x54E"></Field>
     <Field Def="u8 Unk0x54F"></Field>
     <Field Def="f32 UnkFloat0x550"></Field>
     <Field Def="s32 UnkInt0x554"></Field>
@@ -544,14 +554,15 @@
       <Description>Ability to mitigate incoming Coral damage while performing an Initial Guard.</Description>
     </Field>
     <Field Def="s8 UnkSbyte0x588"></Field>
-    <Field Def="s16 Unk0x589"></Field>
+    <Field Def="u8 Unk0x589"></Field>
+    <Field Def="u8 Unk0x58A"></Field>
     <Field Def="u8 Unk0x58B"></Field>
     <Field Def="f32 weaponCoolingRate">
-      <Description>Speed at which head buildup is reduced when cooling weapon.</Description>
+      <Description>Speed at which heat buildup is reduced.</Description>
     </Field>
-    <Field Def="f32 UnkFloat0x590"></Field>
-    <Field Def="f32 UnkFloat0x594"></Field>
-    <Field Def="f32 UnkFloat0x598"></Field>
+    <Field Def="f32 weaponOverheatedCoolingRate"></Field>
+    <Field Def="f32 weaponCoolingDelay"></Field>
+    <Field Def="f32 weaponOverheatedCoolingDelay"></Field>
     <Field Def="f32 UnkFloat0x59C"></Field>
     <Field Def="s32 UnkInt0x5A0"></Field>
     <Field Def="u16 UnkUshort0x5A4"></Field>
@@ -569,8 +580,9 @@
     <Field Def="u8 UnkByte0x5B0"></Field>
     <Field Def="u8 UnkByte0x5B1"></Field>
     <Field Def="u8 UnkByte0x5B2"></Field>
-    <Field Def="s16 Unk0x5B3"></Field>
-    <Field Def="u8 UnkByte0x5B5"></Field>
+    <Field Def="u8 Unk0x5B3"></Field>
+    <Field Def="u8 Unk0x5B4"></Field>
+    <Field Def="s8 UnkSbyte0x5B5"></Field>
     <Field Def="s16 Unk0x5B6"></Field>
     <Field Def="s8 UnkSbyte0x5B8"></Field>
     <Field Def="u8 UnkByte0x5B9"></Field>
@@ -583,15 +595,16 @@
     <Field Def="u8 Unk0x5C2"></Field>
     <Field Def="u8 UnkByte0x5C3"></Field>
     <Field Def="u8 UnkByte0x5C4"></Field>
-    <Field Def="s16 Unk0x5C5"></Field>
+    <Field Def="u8 Unk0x5C5"></Field>
+    <Field Def="u8 Unk0x5C6"></Field>
     <Field Def="u8 UnkByte0x5C7"></Field>
     <Field Def="s16 Unk0x5C8"></Field>
-    <Field Def="u8 UnkByte0x5CA"></Field>
-    <Field Def="u8 UnkByte0x5CB"></Field>
+    <Field Def="s8 UnkSbyte0x5CA"></Field>
+    <Field Def="s8 UnkSbyte0x5CB"></Field>
     <Field Def="s16 Unk0x5CC"></Field>
     <Field Def="u8 UnkByte0x5CE"></Field>
-    <Field Def="s32 Unk0x5CF"></Field>
-    <Field Def="u8 Unk0x5D3"></Field>
+    <Field Def="u8 Unk0x5CF"></Field>
+    <Field Def="s32 Unk0x5D0"></Field>
     <Field Def="s32 demonstrationVideoBinkId">
       <Description>Refers to the video filename in Game/movie/</Description>
     </Field>
@@ -612,13 +625,13 @@
     <Field Def="u8 UnkByte0x5F2"></Field>
     <Field Def="u8 UnkByte0x5F3"></Field>
     <Field Def="u16 UnkUshort0x5F4"></Field>
-    <Field Def="s32 Unk0x5F6"></Field>
-    <Field Def="s32 Unk0x5FA"></Field>
-    <Field Def="s32 Unk0x5FE"></Field>
-    <Field Def="s32 Unk0x602"></Field>
-    <Field Def="s32 Unk0x606"></Field>
-    <Field Def="s32 Unk0x60A"></Field>
-    <Field Def="s32 Unk0x60E"></Field>
-    <Field Def="s16 Unk0x612"></Field>
+    <Field Def="s16 Unk0x5F6"></Field>
+    <Field Def="s32 Unk0x5F8"></Field>
+    <Field Def="s32 Unk0x5FC"></Field>
+    <Field Def="s32 Unk0x600"></Field>
+    <Field Def="s32 Unk0x604"></Field>
+    <Field Def="s32 Unk0x608"></Field>
+    <Field Def="s32 Unk0x60C"></Field>
+    <Field Def="s32 Unk0x610"></Field>
   </Fields>
 </PARAMDEF>
