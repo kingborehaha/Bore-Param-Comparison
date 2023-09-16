@@ -4,11 +4,14 @@ Uses https://github.com/JKAnderson/SoulsFormats and https://github.com/soulsmods
 Uses updated versions of SoulsFormats and Paramdex from https://github.com/soulsmods/DSMapStudio
 
 ## Changes
-### v1.3.1
+### v1.4.0
+* AC6 support.
+* Rough DESR support.
 * Param matching now uses file name instead of param type (To fix issues in cases where params cannot be read).
 * Made Paramdex folder structure more loose. You can now freely make any number of subfolders for a game and Paramdefs will be loaded.
 * * Paramdex folder will be tried first, and when unsuccessful Paramdex ALT will be tried next.
-* Added some rough DESR Paramdefs.
+* Put regulation version into output file name.
+* Improve error messages.
 ### v1.3.0
 * Updated DS2 Paramdefs and row names.
 * Removed DS2S Paramdex folder and placed everything into DS2 folder.
