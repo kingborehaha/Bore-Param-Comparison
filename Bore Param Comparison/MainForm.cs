@@ -792,9 +792,16 @@ namespace BoreParamCompare
             changeList.Insert(1, $"Game: {gameType}");
             changeList.Insert(2, $"Version: {t_VersionOld.Text} to {t_VersionNew.Text}");
 
-            var oldVersion = t_VersionOld.Text == "No Version" ? "No Version" : Util.ParseRegulationVersion(t_VersionOld.Text);
-            var newVersion = t_VersionNew.Text == "No Version" ? "No Version" : Util.ParseRegulationVersion(t_VersionNew.Text);
-            string outputFileName = $"{openFileDialog_old.SafeFileName} ({oldVersion}) to {openFileDialog_new.SafeFileName} ({newVersion}).txt";
+            var oldVersion = t_VersionOld.Text == "No Version" ? "" : Util.ParseRegulationVersion(t_VersionOld.Text);
+            var oldFileName = openFileDialog_old.SafeFileName;
+            if (oldVersion != "")
+                oldFileName += $" ({oldVersion})";
+            var newVersion = t_VersionNew.Text == "No Version" ? "" : Util.ParseRegulationVersion(t_VersionNew.Text);
+            var newFileName = openFileDialog_new.SafeFileName;
+            if (newVersion != "")
+                newFileName += $" ({newVersion})";
+
+            string outputFileName = $"{oldFileName} to {newFileName}.txt";
 
             Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{gameType}");
             var outputPath = $"{AppDomain.CurrentDomain.BaseDirectory}{outputFolder}\\{gameType}\\{outputFileName}";
