@@ -140,18 +140,10 @@ namespace BoreParamCompare
             });
         }
 
-        public static PARAM? ApplyDef(PARAM param, PARAMDEF paramdef, ConcurrentBag<string> warningList, string oldNew)
+        public static PARAM? ApplyDef(PARAM param, PARAMDEF paramdef)
         {
-            try
-            {
-                param.ApplyParamdef(paramdef);
-                return param;
-            }
-            catch(InvalidDataException e)
-            {
-                warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. {e.Message}");
-                return null;
-            }
+            param.ApplyParamdef(paramdef);
+            return param;
         }
 
         public static PARAM? ApplyDefWithWarnings(PARAM param, ConcurrentBag<PARAMDEF> paramdefs, ConcurrentBag<PARAMDEF> paramdefs_alt, ConcurrentBag<string> warningList, string oldNew, string paramName)
@@ -175,7 +167,22 @@ namespace BoreParamCompare
                         bestDefRowSize = paramdef.GetRowSize();
                         if (param.DetectedSize == -1 || param.DetectedSize == bestDefRowSize)
                         {
-                            return ApplyDef(param, paramdef, warningList, oldNew);
+                            try
+                            {
+                                return ApplyDef(param, paramdef);
+                            }
+                            catch (Exception e)
+                            {
+                                // ApplyDef failed. Check if Paramdex ALT contains this param before giving up.
+                                if (paramdefs_alt.FirstOrDefault(f => f.ParamType == param.ParamType) == null)
+                                {
+                                    warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. {e.Message}");
+                                    return null;
+                                }
+                            }
+
+                            // ApplyDef failed and Paramdex ALT contains this paramdef.
+                            break;
                         }
                     }
                 }
@@ -194,7 +201,16 @@ namespace BoreParamCompare
                         bestDefRowSize = paramdef.GetRowSize();
                         if (param.DetectedSize == -1 || param.DetectedSize == bestDefRowSize)
                         {
-                            return ApplyDef(param, paramdef, warningList, oldNew);
+                            try
+                            {
+                                return ApplyDef(param, paramdef);
+                            }
+                            catch(Exception e)
+                            {
+                                warningList.Add($"Could not apply ParamDef for {param.ParamType} in {oldNew} file. {e.Message}");
+                                return null;
+                            }
+
                         }
                     }
                 }

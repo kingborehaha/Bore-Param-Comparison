@@ -190,7 +190,8 @@ namespace BoreParamCompare
                     //is a byte array
                     var oldFieldArray = (byte[])oldField;
                     var newFieldArray = (byte[])newField;
-                    for (var i=0; i < oldFieldArray.Length; i++)
+
+                    for (var i = 0; i < oldFieldArray.Length; i++)
                     {
                         var old_byte = oldFieldArray[i];
                         var new_byte = newFieldArray[i];
