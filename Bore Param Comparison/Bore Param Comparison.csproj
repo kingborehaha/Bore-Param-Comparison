@@ -56,12 +56,4 @@
   <ItemGroup>
     <ProjectReference Include="..\SoulsFormats\SoulsFormats.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Paramdex ALT\BB\" />
-    <Folder Include="Paramdex ALT\DS1R\" />
-    <Folder Include="Paramdex ALT\DS1\" />
-    <Folder Include="Paramdex ALT\DS2\" />
-    <Folder Include="Paramdex ALT\DS3\" />
-    <Folder Include="Paramdex ALT\SDT\" />
-  </ItemGroup>
 </Project>
