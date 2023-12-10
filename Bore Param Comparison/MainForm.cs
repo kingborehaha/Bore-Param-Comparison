@@ -9,9 +9,10 @@ namespace BoreParamCompare
 {
     public partial class MainForm : Form
     {
-        public static string Version = Application.ProductVersion;
-        public static string ProgramTitle = $"Bore Param Comparison v{Version}";
+        public static readonly string Version = Application.ProductVersion;
+        public static readonly string ProgramTitle = $"Bore Param Comparison v{Version}";
 
+        private readonly string outputFolder = "Output";
         private string gameType = "";
 
         private readonly List<string> gameTypes = new()
@@ -27,8 +28,6 @@ namespace BoreParamCompare
             "ER",
             "AC6",
         };
-
-        private readonly string outputFolder = "Output";
 
         public MainForm()
         {
