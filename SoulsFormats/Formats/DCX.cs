@@ -191,7 +191,7 @@ namespace SoulsFormats
             br.AssertASCII("DCP\0");
             br.AssertASCII("ZSTD");
             br.AssertInt32(0x20);
-            br.AssertByte(0x15);
+            br.ReadByte(); // compression level
             br.AssertByte(0);
             br.AssertByte(0);
             br.AssertByte(0);
