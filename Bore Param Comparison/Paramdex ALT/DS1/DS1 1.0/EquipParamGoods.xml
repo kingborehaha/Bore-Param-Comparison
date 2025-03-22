@@ -440,11 +440,11 @@
       <Maximum>1</Maximum>
       <SortID>3155</SortID>
     </Field>
-    <Field Def="dummy8 pad[1]:2">
+    <Field Def="u8 pad1:2">
       <DisplayName>パディング</DisplayName>
       <SortID>99999</SortID>
     </Field>
-    <Field Def="dummy8 pad[1]:2">
+    <Field Def="u8 pad2:2">
       <DisplayName>パディング</DisplayName>
       <SortID>99999</SortID>
     </Field>
