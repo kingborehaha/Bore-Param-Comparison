@@ -6,14 +6,8 @@
   <Unicode>True</Unicode>
   <Version>201</Version>
   <Fields>
-    <Field Def="u8 Unk00" />
-    <Field Def="u8 Unk00" />
-    <Field Def="u8 Unk00" />
-    <Field Def="u8 Unk00" />
-    <Field Def="u8 Unk00" />
-    <Field Def="u8 Unk00" />
-    <Field Def="u8 Unk00" />
-    <Field Def="u8 Unk00" />
-    <Field Def="s32 Text ID" />
+    <Field Def="f32 start_time" />
+    <Field Def="f32 end_time" />
+    <Field Def="s32 text_id" />
   </Fields>
 </PARAMDEF>
