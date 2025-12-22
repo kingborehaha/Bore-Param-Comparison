@@ -149,30 +149,23 @@ namespace BoreParamCompare
             for (var iField = 0; iField < row_old.Cells.Count; iField++)
             {
                 var log = false;
-                var oldCell = row_old.Cells[iField];
-                var newCell = row_new.Cells[iField];
 
-                if (oldCell.Def != newCell.Def)
+                PARAM.Cell? oldCell = row_old.Cells[iField];
+
+                /*
+                if (iField != row_new.Cells.Count)
                 {
-                    // Fields don't match, this is a mixed-def check. Try to find correct field to compare (if it exists)
-                    var newCell2 = row_new.Cells.FirstOrDefault(c => c.Def.InternalName == oldCell.Def.InternalName);
-                    if (newCell2 == null)
-                    {
-                        var oldCell2 = row_old.Cells.FirstOrDefault(c => c.Def.InternalName == newCell.Def.InternalName);
-                        if (oldCell2 == null)
-                        {
-                            // Couldn't find field.
-                            continue;
-                        }
-                        else
-                        {
-                            oldCell = oldCell2;
-                        }
-                    }
-                    else
-                    {
-                        newCell = newCell2;
-                    }
+                    // Old def has more fields than new def. This usually shouldn't be the case.
+                    newCell = row_new.Cells[iField];
+                }
+                */
+
+                var newCell = row_new.Cells.FirstOrDefault(c => c.Def.InternalName == oldCell.Def.InternalName);
+                if (newCell == null)
+                {
+                    // Couldn't find field in old def within new def.
+                    Debug.WriteLine($"Unable to find field '{oldCell.Def.InternalName}' in new def '{row_old.Def.ParamType}'");
+                    continue;
                 }
 
                 var oldField = oldCell.Value;
